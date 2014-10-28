@@ -3,14 +3,12 @@ package View;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.util.Observable;
-import java.util.Observer;
 
 /**
  * @author Muntasir Syed
  */
 
-public class WelcomeFrame extends JFrame implements Observer {
+public class WelcomeFrame extends JFrame {
 
     private JLabel prompt;
     private JTextField enterName;
@@ -28,7 +26,6 @@ public class WelcomeFrame extends JFrame implements Observer {
         setResizable(false);
         setLocationRelativeTo(null); // centers window on screen, must be called after setSize()
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setVisible(true);
     }
 
 
@@ -90,12 +87,12 @@ public class WelcomeFrame extends JFrame implements Observer {
         connectButton.addActionListener(l);
     }
 
-    public static void main(String[] args) {
-        new WelcomeFrame();
+    public String getTextfieldText() {
+        return enterName.getText();
     }
 
-    @Override
-    public void update(Observable o, Object arg) {
-        // TODO - Observer update
+    public static void main(String[] args) {
+        new WelcomeFrame().setVisible(true);
     }
+
 }

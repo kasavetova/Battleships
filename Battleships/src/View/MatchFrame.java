@@ -1,5 +1,7 @@
 package View;
 
+import Model.Player;
+
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
@@ -15,9 +17,10 @@ import java.util.Observer;
 public class MatchFrame extends JFrame implements Observer {
 
     private JList<String> playerList; // string used as placeholder
+    private Player currentPlayer;
+
     private JScrollPane scrollPane;
     private JPanel listPanel;
-
 
     private JButton playButton;
     private JButton playRandButton;
@@ -28,15 +31,16 @@ public class MatchFrame extends JFrame implements Observer {
     /**
      * Constructor of the Match Making dialog.
      */
-    public MatchFrame() throws HeadlessException {
+    public MatchFrame(Player currentPlayer) throws HeadlessException {
 
         super("Match Making");
+
+        this.currentPlayer = currentPlayer;
 
         create();
         setMinimumSize(new Dimension(520, 370));
         setLocationRelativeTo(null); // centers window on screen, must be called after setSize()
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setVisible(true);
     }
 
     /**
@@ -49,8 +53,9 @@ public class MatchFrame extends JFrame implements Observer {
         listPanel = new JPanel(new GridBagLayout());
         add(listPanel, BorderLayout.CENTER);
 
-        playerList = new JList<String>();
+        playerList = new JList<>();
         playerList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        playerList.setModel(currentPlayer.getPlayersModel());
 
         scrollPane = new JScrollPane(playerList);
         TitledBorder b = new TitledBorder("Currently online:");
@@ -95,7 +100,9 @@ public class MatchFrame extends JFrame implements Observer {
         rightPanel.add(buttonPanel, gc);
     }
 
-    // TODO - defaultlistmodel & population of JList
+    public int getSelectedIndex() {
+        return playerList.getSelectedIndex();
+    }
 
     public void addPlayButtonListener(ActionListener l) {
         playButton.addActionListener(l);
@@ -109,12 +116,9 @@ public class MatchFrame extends JFrame implements Observer {
         playerList.addMouseListener(m);
     }
 
-    public static void main(String[] args) {
-        new MatchFrame();
-    }
-
     @Override
     public void update(Observable o, Object arg) {
-        // TODO - Observer update
+
+        playerList.setModel(currentPlayer.getPlayersModel());
     }
 }
