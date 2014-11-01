@@ -253,7 +253,6 @@ public class ShipPlacementUI extends JFrame implements ActionListener,MouseListe
 				if(shipsLeftToPlace == 0){
 					setVisible(false);
 					player.placementFinished(gameGrid, out, in, b);
-					//new GameUI(gameGrid, player, out, in).setVisible(true);
 					dispose();
 				}				
 			}
@@ -262,21 +261,21 @@ public class ShipPlacementUI extends JFrame implements ActionListener,MouseListe
 		content.add(pnlNorth, BorderLayout.NORTH);
 		content.add(pnlGrid, BorderLayout.CENTER);
 		content.add(btnConfirm, BorderLayout.SOUTH);
-		 this.addWindowListener(new WindowAdapter() {
-	            @Override
-	            public void windowClosing(WindowEvent e) {
+		this.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
 
-	                    try {
-	                    	System.out.println(name + " " + opponentName);
-	                    	out.writeObject(new Request("UserLeftGame", name, opponentName));
-	                    	//out.writeObject(new Request("UserClosed", name));
-	                       
-	                    } catch (IOException e1) {
-	                        e1.printStackTrace();
-	                    }
-	                }
+				try {
+					System.out.println(name + " " + opponentName);
+					out.writeObject(new Request("UserLeftGame", name, opponentName));
+					//out.writeObject(new Request("UserClosed", name));
 
-	        });
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+
+		});
 	}
 
 	public boolean validPathCheck(int col, int row) {

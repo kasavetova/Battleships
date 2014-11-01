@@ -6,6 +6,9 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
@@ -36,14 +39,14 @@ public class GameUI extends JFrame implements MouseListener{
 	private Player player;
 	private ObjectOutputStream out;
 	private ObjectInputStream in;
-	Board bo;
+	private Board bo;
 	
-	public GameUI(GameGrid myBoardGrid, ObjectOutputStream out, ObjectInputStream in, Player player, Board bo) {
+	public GameUI(GameGrid myBoardGrid, ObjectOutputStream outStream, ObjectInputStream inStream, Player player1, Board bo, final String opponentName) {
 		
 		super("Battleships");
-		this.player = player;
-		this.out = out;
-		this.in = in;
+		this.player = player1;
+		this.out = outStream;
+		this.in = inStream;
 		this.bo = bo;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -105,6 +108,21 @@ public class GameUI extends JFrame implements MouseListener{
 		
 		content.add(pnlPlayerText, BorderLayout.NORTH);
 		content.add(pnlBoards, BorderLayout.CENTER);
+		
+		this.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+
+				try {
+					out.writeObject(new Request("UserLeftGame2", player.getName(), opponentName));
+					//out.writeObject(new Request("UserClosed", name));
+
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+
+		});
 	}
 	
 
@@ -153,7 +171,6 @@ public class GameUI extends JFrame implements MouseListener{
 	@Override
 	public void mousePressed(MouseEvent e) {
 	}
-
 	@Override
 	public void mouseReleased(MouseEvent e) {
 	}

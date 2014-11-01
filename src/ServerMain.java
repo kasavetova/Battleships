@@ -9,9 +9,11 @@ public class ServerMain extends Thread {
         int portNumber = 4445;
         ServerSocket serverSocket = new ServerSocket(portNumber);
         System.out.println("Connecting players");
+        serverSocket.setReuseAddress(true);
         //Creates a thread for any new players
         while (true) {
             Socket clientSocket = serverSocket.accept();
+            clientSocket.setReuseAddress(true);
             ServerThread.addToList(new ServerThread(clientSocket));
         }
 

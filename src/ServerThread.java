@@ -121,28 +121,21 @@ public class ServerThread extends Thread {
                     in.close();
                     interrupt();
                 } else if (input.getActionType().startsWith("UserLeftGame")) {
-                	System.out.println("Recieved");
-                	if(input.getDestination().equals(username)){
-                		System.out.println("recieved" + input);
-                		setInGame(false);
-                		messageAllActive(new Request("UserJoinedLobby","SERVER", "ALL", username));
+                	System.out.println("Sending"+input);
+                	for (ServerThread st : serverThreads) {
+                		if (st.getPlayerName().equals(input.getDestination())) {
+                			st.message(input);
+                			st.setInGame(false);
+                			break;
+                		}
                 	}
-                	else{
-                		System.out.println("Sending"+input);
-                		for (ServerThread st : serverThreads) {
-                            if (st.getPlayerName().equals(input.getDestination())) {
-                            	st.message(input);
-                            }
-                        }
-                	}
-                    
-                    
-                    serverThreads.remove(this);
-                    messageAll(new Request("UserLeftLobby", "SERVER", "ALL", username));
-                    System.out.println(username + " has exited.");
-                    out.close();
-                    in.close();
-                    interrupt();
+
+                	serverThreads.remove(this);
+                	messageAll(new Request("UserLeftLobby", "SERVER", "ALL", username));
+                	System.out.println(username + " has exited.");
+                	out.close();
+                	in.close();
+                	interrupt();
                 }
                 else {
                     System.out.println(input);
@@ -168,7 +161,7 @@ public class ServerThread extends Thread {
         }
     }
 
-    public void messageAllActive (Request r ) throws IOException {
+    public void messageAllActive (Request r) throws IOException {
         for (ServerThread st : serverThreads) {
             if(st.inGame==false) {
                 st.message(r);
@@ -178,6 +171,7 @@ public class ServerThread extends Thread {
     public void setInGame(Boolean x) throws IOException {
         inGame = x;
     }
+   
 
     
 }

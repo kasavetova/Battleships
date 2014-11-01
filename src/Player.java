@@ -49,7 +49,9 @@ public class Player extends JFrame implements ActionListener{
     private JPanel buttonPanel;
     private JScrollPane scrollPane;
     private JPanel listPanel;
-
+    private ShipPlacementUI sui;
+    private GameUI gui;
+    
     public static void main(String[] args) {
         new Player().setVisible(true);
     }
@@ -61,10 +63,6 @@ public class Player extends JFrame implements ActionListener{
         setResizable(false);
         setLocationRelativeTo(null); // centers window on screen, must be called after setSize()
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-    }
-    public void placementFinished(GameGrid grid, ObjectOutputStream out,ObjectInputStream in, Board b){
-    	GameUI gui = new GameUI(grid, out, in, this, b);
-    	gui.setVisible(true);
     }
 
     public void newConnection() {
@@ -126,16 +124,34 @@ public class Player extends JFrame implements ActionListener{
                                     String newText = "<html>" + originalText + "<br><b>" + input.getOrigin() + ":</b> " +  input.getObject() + "</html>";
                                     chatArea.setText(newText);
                                 } else if (input.getActionType().equals("UserLeftGame")) {
+                                	//Quitting game on selection screen
+                                	mainGUI();
+                                	setVisible(true);
                                     opponentName = null;
-                                } else if (input.getActionType().equals("RandomGameRequestFail")) {
-                                    JOptionPane.showMessageDialog(null,
-                                            "We couldn't find any active players at the moment. Please try again later.",
-                                            "Error", JOptionPane.ERROR_MESSAGE);
-                                }
-                                
-                            } else {
+                                    sui.dispose();
+                                    out.writeObject(new Request("UserJoinedLobby", name));
+                                    out.writeObject(new Request("RetrieveLobby", name));
+                                    JOptionPane.showMessageDialog(null, "Your opponent quit! You win (by default)", "Opponent Quit", JOptionPane.INFORMATION_MESSAGE);
+
+                            	} else if (input.getActionType().equals("UserLeftGame2")) {
+                            		//Quitting game on game screen
+                            		mainGUI();
+                            		setVisible(true);
+                            		opponentName = null;
+                            		out.writeObject(new Request("UserJoinedLobby", name));
+                            		out.writeObject(new Request("RetrieveLobby", name));
+                            		gui.dispose();
+                            		JOptionPane.showMessageDialog(null, "Your opponent quit! You win (by default)", "Opponent Quit", JOptionPane.INFORMATION_MESSAGE);
+                            		
+                            	}else if (input.getActionType().equals("RandomGameRequestFail")) {
+                            		JOptionPane.showMessageDialog(null,
+                            			"We couldn't find any active players at the moment. Please try again later.",
+                            			"Error", JOptionPane.ERROR_MESSAGE);
+               
+                            	} else {
                                 System.out.println(input);
                             }
+                        }
                         }
                     } catch(EOFException e) {
                         //EOFException - if this input stream reaches the end before reading eight bytes
@@ -335,7 +351,8 @@ public class Player extends JFrame implements ActionListener{
     public void gameFrame(String opponentName) {
 
         setVisible(false);
-        new ShipPlacementUI(this, out, in, name, opponentName).setVisible(true);
+        sui = new ShipPlacementUI(this, out, in, name, opponentName);
+        sui.setVisible(true);
         /*
         setPreferredSize(new Dimension(500, 500));
         JPanel east = new JPanel(new BorderLayout());
@@ -395,6 +412,7 @@ public class Player extends JFrame implements ActionListener{
     }
 
     public void actionPerformed(ActionEvent e) {
+
         name = enterName.getText().toString();
         try {
             //TODO not have the portnumber and ip hardcoded
@@ -409,8 +427,12 @@ public class Player extends JFrame implements ActionListener{
         if(socket != null){
         	mainGUI();
         	newConnection();
-        }
-        
-       
+        	//TODO ensure no one has the same username
+        }   
+    }
+    
+    public void placementFinished(GameGrid grid, ObjectOutputStream out,ObjectInputStream in, Board b){
+    	gui = new GameUI(grid, out, in, this, b, opponentName);
+    	gui.setVisible(true);
     }
 }
