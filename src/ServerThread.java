@@ -14,6 +14,7 @@ public class ServerThread extends Thread {
     private ObjectOutputStream out;
     private ObjectInputStream in;
     private boolean inGame;
+    private Board gameBoard;
     private ArrayList<String> lobbyList;
 
     public ServerThread(Socket clientSocket) {
@@ -136,6 +137,17 @@ public class ServerThread extends Thread {
                 	out.close();
                 	in.close();
                 	interrupt();
+                } else if (input.getActionType().equals("GameBoard")) {
+                	gameBoard = (Board) input.getObject();                	                
+                } else if(input.getActionType().equals("Move")) {  
+                	GameMove gm = (GameMove) input.getObject();
+                	Point coordinates = gm.getMoveCoordinates();
+                	String playerName = gm.getPlayerName();
+                	String outcome = gameBoard.shoot(coordinates);
+                	GameMove gmToSend = new GameMove((Point) coordinates, playerName, outcome);
+                	
+                	messageAll(new Request("MoveResult", "SERVER", input.getOrigin(), gmToSend));
+                	messageAll(new Request("MoveResult", "SERVER", input.getDestination(), gmToSend));
                 }
                 else {
                     System.out.println(input);

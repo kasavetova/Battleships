@@ -1,13 +1,9 @@
-
-
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
@@ -15,21 +11,21 @@ import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 
-import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
-import javax.swing.ButtonModel;
+import javax.swing.DefaultButtonModel;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-public class ShipPlacementUI extends JFrame implements ActionListener,MouseListener {
+public class ShipPlacementUI extends JFrame implements ActionListener,
+		MouseListener {
 
 	private JPanel content;
 	private JPanel pnlNorth;
@@ -37,15 +33,16 @@ public class ShipPlacementUI extends JFrame implements ActionListener,MouseListe
 
 	private GameGrid gameGrid;
 	private JComponent[][] arrayGrid;
-	
+
 	private int rows = 10;
 	private int cols = 10;
 
 	private int shipSize = 5;
 	private int shipHorVert = 1;
 	private int shipsLeftToPlace = 5;
-	
+
 	private ButtonGroup btgShips;
+	private ArrayList<DefaultButtonModel> arrayShipButtons;
 	private JRadioButton btnShip5;
 	private JRadioButton btnShip4;
 	private JRadioButton btnShip3a;
@@ -62,33 +59,40 @@ public class ShipPlacementUI extends JFrame implements ActionListener,MouseListe
 	private ButtonGroup btgHorizontalVertical;
 	private JRadioButton btnHorizontal;
 	private JRadioButton btnVertical;
-	
+
 	private JPanel pnlHorizontalVertical;
-	
+
+	private String playerName;
+
 	private Color backroundColor;
 	private Color buttonColor;
 	private Color hoverColor;
 	private Color selectedColor;
-	
+
 	private JButton btnConfirm;
 	private Board b;
 
 	private Player player;
-	//public static void main(String args[]) {
-		//new ShipPlacementUI().setVisible(true);
-	//}
 
-	public ShipPlacementUI(final Player player, final ObjectOutputStream out, final ObjectInputStream in, final String name, final String opponentName) {
-		
+	// public static void main(String args[]) {
+	// new ShipPlacementUI().setVisible(true);
+	// }
+
+	public ShipPlacementUI(final Player player, final ObjectOutputStream out,
+			final ObjectInputStream in, final String name,
+			final String opponentName) {
+
 		super("Place Your Ships!");
 		this.player = player;
 		b = new Board();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		setSize(400, 550);
-		content = new JPanel(new BorderLayout(0,5));
+		content = new JPanel(new BorderLayout(0, 5));
 		content.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(content);
+
+		playerName = name;
 
 		btnShip5 = new JRadioButton();
 		btnShip5.setActionCommand("5");
@@ -110,6 +114,13 @@ public class ShipPlacementUI extends JFrame implements ActionListener,MouseListe
 		btnShip2 = new JRadioButton();
 		btnShip2.addActionListener(this);
 		btnShip2.setActionCommand("2");
+
+		arrayShipButtons = new ArrayList<DefaultButtonModel>();
+		arrayShipButtons.add((DefaultButtonModel) btnShip5.getModel());
+		arrayShipButtons.add((DefaultButtonModel) btnShip4.getModel());
+		arrayShipButtons.add((DefaultButtonModel) btnShip3a.getModel());
+		arrayShipButtons.add((DefaultButtonModel) btnShip3b.getModel());
+		arrayShipButtons.add((DefaultButtonModel) btnShip2.getModel());
 
 		btgShips = new ButtonGroup();
 		btgShips.add(btnShip5);
@@ -191,7 +202,7 @@ public class ShipPlacementUI extends JFrame implements ActionListener,MouseListe
 		ship2Array[4].setVisible(false);
 		pnlShip2.add(btnShip2);
 
-		pnlShipHolder = new JPanel(new GridLayout(3, 2, 0 ,5));
+		pnlShipHolder = new JPanel(new GridLayout(3, 2, 0, 5));
 
 		btnHorizontal = new JRadioButton();
 		btnHorizontal.addActionListener(this);
@@ -219,8 +230,10 @@ public class ShipPlacementUI extends JFrame implements ActionListener,MouseListe
 		pnlShipHolder.add(pnlShip2);
 		pnlShipHolder.add(pnlHorizontalVertical);
 
-		pnlNorth = new JPanel(new BorderLayout(0,5));
-		pnlNorth.add(new JLabel("<html><b>SELECT THE SHIP YOU WISH TO PLACE</b></html>",SwingConstants.CENTER), BorderLayout.NORTH);
+		pnlNorth = new JPanel(new BorderLayout(0, 5));
+		pnlNorth.add(new JLabel(
+				"<html><b>SELECT THE SHIP YOU WISH TO PLACE</b></html>",
+				SwingConstants.CENTER), BorderLayout.NORTH);
 		pnlNorth.add(pnlShipHolder, BorderLayout.CENTER);
 
 		gameGrid = new GameGrid(rows, cols);
@@ -228,16 +241,18 @@ public class ShipPlacementUI extends JFrame implements ActionListener,MouseListe
 
 		arrayGrid = new JComponent[11][11];
 		arrayGrid[0][0] = new JLabel("");
-		
+
 		for (int a = 1; a < 11; a++) {
-			arrayGrid[a][0] = new JLabel(Integer.toString(a),SwingConstants.CENTER);
-			arrayGrid[0][a] = new JLabel(Character.toString((char) (a + 64)),SwingConstants.CENTER);
+			arrayGrid[a][0] = new JLabel(Integer.toString(a),
+					SwingConstants.CENTER);
+			arrayGrid[0][a] = new JLabel(Character.toString((char) (a + 64)),
+					SwingConstants.CENTER);
 		}
-		
+
 		for (int a = 1; a < 11; a++) {
 			for (int b = 1; b < 11; b++) {
-				gameGrid.getButton(a-1, b-1).addMouseListener(this);
-				arrayGrid[a][b] = (gameGrid.getButton(a-1, b-1));
+				gameGrid.getButton(a - 1, b - 1).addMouseListener(this);
+				arrayGrid[a][b] = (gameGrid.getButton(a - 1, b - 1));
 			}
 		}
 
@@ -246,18 +261,18 @@ public class ShipPlacementUI extends JFrame implements ActionListener,MouseListe
 				pnlGrid.add(arrayGrid[a][b]);
 			}
 		}
-		
+
 		btnConfirm = new JButton("CONFIRM");
-		btnConfirm.addActionListener(new ActionListener(){
+		btnConfirm.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(shipsLeftToPlace == 0){
+				if (shipsLeftToPlace == 0) {
 					setVisible(false);
 					player.placementFinished(gameGrid, out, in, b);
 					dispose();
-				}				
+				}
 			}
 		});
-		
+
 		content.add(pnlNorth, BorderLayout.NORTH);
 		content.add(pnlGrid, BorderLayout.CENTER);
 		content.add(btnConfirm, BorderLayout.SOUTH);
@@ -267,8 +282,9 @@ public class ShipPlacementUI extends JFrame implements ActionListener,MouseListe
 
 				try {
 					System.out.println(name + " " + opponentName);
-					out.writeObject(new Request("UserLeftGame", name, opponentName));
-					//out.writeObject(new Request("UserClosed", name));
+					out.writeObject(new Request("UserLeftGame", name,
+							opponentName));
+					// out.writeObject(new Request("UserClosed", name));
 
 				} catch (IOException e1) {
 					e1.printStackTrace();
@@ -283,7 +299,7 @@ public class ShipPlacementUI extends JFrame implements ActionListener,MouseListe
 
 		if (shipSize == 0) {
 			validPath = false;
-		}else{
+		} else {
 			if (shipHorVert == 1) {
 				if (!(col < ((cols - shipSize) + 1))) {
 					validPath = false;
@@ -368,35 +384,48 @@ public class ShipPlacementUI extends JFrame implements ActionListener,MouseListe
 		int row = ((GameButton) e.getSource()).getRow();
 		int col = ((GameButton) e.getSource()).getColumn();
 
-
 		if (validPathCheck(col, row) == true) {
 			if (shipHorVert == 1) {
-				b.addShip(new Ship(new Point(row, col), new Point(row, col+shipSize-1), 'H'));
+				b.addShip(new Ship(new Point(row, col), new Point(row, col
+						+ shipSize - 1), 'H'));
 				for (int i = 0; i < shipSize; i++) {
 					gameGrid.getButton(row, col + i).removeMouseListener(this);
 					gameGrid.getButton(row, col + i).setEnabled(false);
-					gameGrid.getButton(row, col + i).setOccupied(true, shipSize);
+					gameGrid.getButton(row, col + i)
+							.setOccupied(true, shipSize);
 					gameGrid.getButton(row, col + i).setBackground(Color.BLUE);
 				}
 			} else if (shipHorVert == 0) {
-				b.addShip(new Ship(new Point(row, col), new Point(row+shipSize-1, col), 'V'));
+				b.addShip(new Ship(new Point(row, col), new Point(row
+						+ shipSize - 1, col), 'V'));
 				for (int i = 0; i < shipSize; i++) {
 					gameGrid.getButton(row + i, col).removeMouseListener(this);
 					gameGrid.getButton(row + i, col).setEnabled(false);
-					gameGrid.getButton(row + i, col).setOccupied(true,shipSize);
+					gameGrid.getButton(row + i, col)
+							.setOccupied(true, shipSize);
 					gameGrid.getButton(row + i, col).setBackground(Color.BLUE);
 				}
 			}
 			shipsLeftToPlace--;
-			
-			if(shipsLeftToPlace == 0){
+
+			int selectedButton = arrayShipButtons.indexOf(btgShips
+					.getSelection());
+
+			btgShips.getSelection().setEnabled(false);
+			btgShips.clearSelection();
+
+			arrayShipButtons.remove(selectedButton);
+
+			if (shipsLeftToPlace != 0) {
+				btgShips.setSelected(arrayShipButtons.get(0), true);
+				shipSize = Integer.parseInt(arrayShipButtons.get(0)
+						.getActionCommand());
+			} else {
+				shipSize = 0;
 				btgHorizontalVertical.clearSelection();
 				btnHorizontal.setEnabled(false);
 				btnVertical.setEnabled(false);
 			}
-			btgShips.getSelection().setEnabled(false);
-			btgShips.clearSelection();
-			shipSize = 0;
 		}
 	}
 
