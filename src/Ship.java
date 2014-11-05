@@ -1,6 +1,8 @@
+import java.io.Serializable;
 
 
-public class Ship {
+
+public class Ship implements Serializable{
 
 	Point start; //this is the point where the ship begins
 	Point end; //this is the point where the ship ends

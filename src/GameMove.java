@@ -1,5 +1,7 @@
+import java.io.Serializable;
+
 	
-	public class GameMove {
+	public class GameMove implements Serializable{
 		private Point coordinates;
 		private String playerName;
 		private String moveResult;
@@ -21,5 +23,8 @@
 		
 		public String getPlayerName() {			
 			return playerName;
+		}
+		public void setmoveResult(String result){
+			moveResult = result;
 		}
 	}

@@ -19,6 +19,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -56,6 +57,7 @@ public class GameUI extends JFrame implements MouseListener {
 	private JButton btnSend;
 
 	private String playerName;
+	private String opponentName;
 
 	public GameUI(GameGrid myBoardGrid, ObjectOutputStream outStream,
 			ObjectInputStream inStream, Player player1, Board bo,
@@ -66,6 +68,7 @@ public class GameUI extends JFrame implements MouseListener {
 		this.out = outStream;
 		this.in = inStream;
 		this.bo = bo;
+		this.opponentName = opponentName;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		setSize(900, 600);
@@ -184,7 +187,7 @@ public class GameUI extends JFrame implements MouseListener {
 	}
 
 	public void setChatText() {
-		if (txtAreaChat.getText().equals("")) {
+		/*if (txtAreaChat.getText().equals("")) {
 			txtAreaChat.setText(playerName + ": " + txtChat.getText());
 			txtChat.setText("");
 		} else {
@@ -192,6 +195,27 @@ public class GameUI extends JFrame implements MouseListener {
 					+ playerName + ": " + txtChat.getText());
 			txtChat.setText("");
 		}
+		*/
+		 if(txtAreaChat.getText().length()>0) {
+			 String originalText = txtAreaChat.getText().replaceAll("<html>", "").replaceAll("</html>","");
+			 String newText = null;
+			 if(originalText.indexOf("<br>")==0){
+				 originalText.replace("<br>", "");
+			 }
+			 if(originalText.length()==0) {
+				 newText = "<html>" + originalText + playerName + ": " +txtAreaChat.getText() + "</html>";
+			 } //this is to remove
+			 else{
+				 newText = "<html>" + originalText + "<br><b>" + playerName + ":</b> " + txtAreaChat.getText() + "</html>";
+			 } //br tags at start of message
+			 txtAreaChat.setText(newText);
+			 try {
+				 out.writeObject(new Request("SendMessage", playerName, opponentName, txtAreaChat.getText()));
+			 } catch (IOException e1) {
+				 e1.printStackTrace();
+			 }
+		}
+		 txtAreaChat.setText("");
 	}
 
 	@Override
@@ -216,21 +240,24 @@ public class GameUI extends JFrame implements MouseListener {
 	public void mouseClicked(MouseEvent e) {
 		int row = ((GameButton) e.getSource()).getRow();
 		int col = ((GameButton) e.getSource()).getColumn();
-
-		enemyBoardGrid.getButton(row, col).setEnabled(false);
-		enemyBoardGrid.getButton(row, col).removeMouseListener(this);
-		String x = bo.shoot(new Point(row, col));
+		try {
+			enemyBoardGrid.getButton(row, col).setEnabled(false);
+			enemyBoardGrid.getButton(row, col).removeMouseListener(this);
+			out.writeObject(new Request("Move", playerName, opponentName, new GameMove(new Point(row, col), playerName, null)));
+			//Disable Board
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		/*
 		if (x.equals("hit") || x.equals("destroyed")) {
 			enemyBoardGrid.getButton(row, col).setBackground(Color.RED);
 		} else {
 			enemyBoardGrid.getButton(row, col).setBackground(Color.CYAN);
 		}
+		*/
 
-		/*
-		 * if(enemyBoardGrid.getButton(row, col).isOccupied() == true){
-		 * enemyBoardGrid.getButton(row, col).setBackground(Color.RED); }else{
-		 * enemyBoardGrid.getButton(row, col).setBackground(Color.CYAN); }
-		 */
 
 	}
 
@@ -241,5 +268,20 @@ public class GameUI extends JFrame implements MouseListener {
 	@Override
 	public void mouseReleased(MouseEvent e) {
 	}
+	public void result(String x, Point p){
+		if (x.equals("hit")) {
+			enemyBoardGrid.getButton(p.getX(), p.getY()).setBackground(Color.RED);
+		} else if(x.equals("destroyed")){
+			enemyBoardGrid.getButton(p.getX(), p.getY()).setBackground(Color.RED);
+			//Tell which ship has been destroyed
+			txtAreaChat.append("Ship Destroyed");
+		} else {
+			enemyBoardGrid.getButton(p.getX(), p.getY()).setBackground(Color.CYAN);
+		}
+	}
+	public void chat(String message){
+		txtAreaChat.append(message);
+	}
+	
 
 }

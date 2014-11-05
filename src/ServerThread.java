@@ -70,28 +70,7 @@ public class ServerThread extends Thread {
                     messageAllActive(new Request("RetrieveLobby", "SERVER", input.getOrigin(), lobbyList));
 
                 } else if(input.getActionType().equals("RandomGameRequest")) {
-                    /*boolean search = true;
-                    while(search) {
-
-                        ListIterator<ServerThread>  it = serverThreads.listIterator();
-                        if(it.hasNext()) {
-                            ServerThread st = it.next();
-                            System.out.println(st.getPlayerName());
-                            if(st.inGame==false && !st.getPlayerName().equals(input.getOrigin())) {
-                                st.message(new Request("GameRequest", input.getOrigin(), st.getPlayerName()));
-                            }
-                        }
-
-                        int index = new Random().nextInt(serverThreads.size());
-                        if(serverThreads.get(index).inGame==false && !serverThreads.get(index).equals(input.getOrigin())) {
-                            for(ServerThread st: serverThreads) {
-                                if(!st.getPlayerName().equals(input.getOrigin())){
-                                    st.message(new Request("GameRequest", input.getOrigin(), serverThreads.get(index).getPlayerName()));
-                                }
-                            }
-                            //break;
-                        }
-                    }*/
+ 
                     int activePlayersCount = 0;
                     for(ServerThread st: serverThreads) {
                         if(st.inGame==false && !st.getPlayerName().equals(input.getOrigin())){
@@ -139,8 +118,10 @@ public class ServerThread extends Thread {
                 	interrupt();
                 } else if (input.getActionType().equals("GameBoard")) {
                 	gameBoard = (Board) input.getObject();                	                
-                } else if(input.getActionType().equals("Move")) {  
+                } else if(input.getActionType().equals("Move")) { 
+                	/*
                 	GameMove gm = (GameMove) input.getObject();
+                	
                 	Point coordinates = gm.getMoveCoordinates();
                 	String playerName = gm.getPlayerName();
                 	String outcome = gameBoard.shoot(coordinates);
@@ -148,6 +129,18 @@ public class ServerThread extends Thread {
                 	
                 	messageAll(new Request("MoveResult", "SERVER", input.getOrigin(), gmToSend));
                 	messageAll(new Request("MoveResult", "SERVER", input.getDestination(), gmToSend));
+                	*/
+                	if(!input.getDestination().equals(username)){
+                		System.out.println("messageMove");
+                		
+                		for(int i = 0; i<serverThreads.size(); i++){
+                			if(serverThreads.get(i).getPlayerName().equals(input.getDestination())){
+                				serverThreads.get(i).shoot(input);
+                				break;
+                			}
+                		}	
+                	}
+                	
                 }
                 else {
                     System.out.println(input);
@@ -182,6 +175,20 @@ public class ServerThread extends Thread {
     }
     public void setInGame(Boolean x) throws IOException {
         inGame = x;
+    }
+    public void shoot(Request input){
+    	System.out.println("recieved");
+    	GameMove gm = (GameMove) input.getObject();
+    	String outcome = gameBoard.shoot(gm.getMoveCoordinates());
+		gm.setmoveResult(outcome);
+		try {
+			message(new Request("MoveResult", input.getOrigin(), input.getDestination(), gm));
+			messageAll(new Request("MoveResult", input.getDestination(), input.getOrigin(), gm));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
     }
    
 

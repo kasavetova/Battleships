@@ -146,6 +146,7 @@ public class Player extends JFrame implements ActionListener {
 									}
 								} else if (input.getActionType().equals(
 										"ReceiveMessage")) {
+									/*
 									String originalText = chatArea.getText()
 											.replaceAll("<html>", "")
 											.replaceAll("</html>", "");
@@ -154,6 +155,9 @@ public class Player extends JFrame implements ActionListener {
 											+ ":</b> " + input.getObject()
 											+ "</html>";
 									chatArea.setText(newText);
+									 */
+									
+									gui.chat((String)input.getObject());
 								} else if (input.getActionType().equals(
 										"UserLeftGame")) {
 									// Quitting game on selection screen
@@ -207,8 +211,10 @@ public class Player extends JFrame implements ActionListener {
 				                	
 				                	if(name.equals(playerName)) {
 				                		//update own board
+				                		gui.result(outcome, coordinates);
 				                	} else if(name.equals(opponentName)) {				                		
 				                		//update opponent board
+				                		//gui.result(outcome, coordinates);
 				                	}				                	
 									isTheirTurn = true;
 								} else {

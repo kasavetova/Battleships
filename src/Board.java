@@ -1,10 +1,11 @@
 
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 //-4 is DESTROYED -3 is HIT -2 is MISSED -1 is EMPTY 0 is SHIP IS THERE
 
-public class Board {
+public class Board implements Serializable{
 	
 	int[][] board;
 	ArrayList<Ship> ships;
