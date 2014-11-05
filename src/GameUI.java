@@ -1,8 +1,5 @@
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.GridLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -15,16 +12,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 public class GameUI extends JFrame implements MouseListener {
@@ -50,7 +38,7 @@ public class GameUI extends JFrame implements MouseListener {
 
 	private JPanel pnlChatWindow;
 	private JScrollPane jspAreaChat;
-	private JTextArea txtAreaChat;
+	private JLabel txtAreaChat;
 
 	private JPanel pnlChatSender;
 	private JTextField txtChat;
@@ -135,10 +123,11 @@ public class GameUI extends JFrame implements MouseListener {
 		pnlPlayerText.add(lblPlayer2);
 
 		pnlChatWindow = new JPanel(new BorderLayout(5, 5));
-		txtAreaChat = new JTextArea(3, 0);
-		txtAreaChat.setEditable(false);
+		txtAreaChat = new JLabel();
+        txtAreaChat.setPreferredSize(new Dimension(500, 100));
 
 		jspAreaChat = new JScrollPane(txtAreaChat);
+        jspAreaChat.setViewportView(txtAreaChat);
 
 		pnlChatSender = new JPanel(new BorderLayout());
 		txtChat = new JTextField();
@@ -146,7 +135,7 @@ public class GameUI extends JFrame implements MouseListener {
 		txtChat.addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent evt) {
 				if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-					setChatText();
+					if (txtChat.getText().length()> 1) {setChatText(txtChat.getText());}
 				}
 			}
 		});
@@ -155,7 +144,7 @@ public class GameUI extends JFrame implements MouseListener {
 
 		btnSend.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				setChatText();
+				setChatText(txtChat.getText());
 			}
 		});
 
@@ -186,7 +175,7 @@ public class GameUI extends JFrame implements MouseListener {
 		});
 	}
 
-	public void setChatText() {
+	public void setChatText(String message) {
 		/*if (txtAreaChat.getText().equals("")) {
 			txtAreaChat.setText(playerName + ": " + txtChat.getText());
 			txtChat.setText("");
@@ -196,26 +185,17 @@ public class GameUI extends JFrame implements MouseListener {
 			txtChat.setText("");
 		}
 		*/
-		 if(txtAreaChat.getText().length()>0) {
 			 String originalText = txtAreaChat.getText().replaceAll("<html>", "").replaceAll("</html>","");
-			 String newText = null;
-			 if(originalText.indexOf("<br>")==0){
-				 originalText.replace("<br>", "");
-			 }
-			 if(originalText.length()==0) {
-				 newText = "<html>" + originalText + playerName + ": " +txtAreaChat.getText() + "</html>";
-			 } //this is to remove
-			 else{
-				 newText = "<html>" + originalText + "<br><b>" + playerName + ":</b> " + txtAreaChat.getText() + "</html>";
-			 } //br tags at start of message
+			 String newText = message;
+		     newText = "<html>" + originalText + "<b>" + playerName + ":</b> " + message + "<br></html>";
+
 			 txtAreaChat.setText(newText);
 			 try {
-				 out.writeObject(new Request("SendMessage", playerName, opponentName, txtAreaChat.getText()));
+				 out.writeObject(new Request("SendMessage", playerName, opponentName, message));
 			 } catch (IOException e1) {
 				 e1.printStackTrace();
 			 }
-		}
-		// txtAreaChat.setText("");
+		 txtChat.setText("");
 	}
 
 	@Override
@@ -275,7 +255,7 @@ public class GameUI extends JFrame implements MouseListener {
 		} else if(x.equals("destroyed")){
 			enemyBoardGrid.getButton(p.getX(), p.getY()).setBackground(Color.RED);
 			//Tell which ship has been destroyed
-			txtAreaChat.append("Ship Destroyed"); //add new line
+			chat("Enemy ship has been destroyed."); //add new line
 		} else {
 			enemyBoardGrid.getButton(p.getX(), p.getY()).setBackground(Color.CYAN);
 		}
@@ -287,16 +267,25 @@ public class GameUI extends JFrame implements MouseListener {
         } else if(x.equals("destroyed")){
             myBoardGrid.getButton(p.getX(), p.getY()).setBackground(Color.lightGray);
             //Tell which ship has been destroyed
-            txtAreaChat.append("Ship Destroyed");
+            chat("Your ship has been destroyed.");
         } else {
             myBoardGrid.getButton(p.getX(), p.getY()).setBackground(Color.CYAN);
         }
     }
 
 	public void chat(String message){
-
-        txtAreaChat.append(message);
+        if(message.length() > 0)  {
+            setChatText(message);
+        }
 	}
+
+    public void chatMessage(String message) {
+        if (message.length() > 0) {
+            String originalText = txtAreaChat.getText().replaceAll("<html>", "").replaceAll("</html>", "");
+            String newText = message;
+            newText = "<html>" + originalText + "<b>" + opponentName + ":</b> " + message + "<br></html>";
+        }
+    }
 	
 
 }

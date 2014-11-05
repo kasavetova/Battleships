@@ -45,8 +45,8 @@ public class ServerThread extends Thread {
                 } else if(input.getActionType().equals("UserLeftLobby")) {
                     messageAllActive(new Request("UserLeftLobby","SERVER", "ALL", input.getOrigin()));
                 } else if(input.getActionType().equals("SendMessage")) {
+
                     messageAll(new Request("ReceiveMessage", input.getOrigin(), input.getDestination(), input.getObject()));
-                	
                 }
 
                 else if (input.getActionType().startsWith("GameRequest")) {
@@ -131,7 +131,6 @@ public class ServerThread extends Thread {
                 	messageAll(new Request("MoveResult", "SERVER", input.getDestination(), gmToSend));
                 	*/
                 	if(!input.getDestination().equals(username)){
-                		System.out.println("messageMove");
                 		
                 		for(int i = 0; i<serverThreads.size(); i++){
                 			if(serverThreads.get(i).getPlayerName().equals(input.getDestination())){
@@ -176,8 +175,8 @@ public class ServerThread extends Thread {
     public void setInGame(Boolean x) throws IOException {
         inGame = x;
     }
+
     public void shoot(Request input){
-    	System.out.println("recieved");
     	GameMove gm = (GameMove) input.getObject();
     	String outcome = gameBoard.shoot(gm.getMoveCoordinates());
 		gm.setMoveResult(outcome);
