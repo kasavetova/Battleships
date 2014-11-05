@@ -24,7 +24,7 @@ import java.io.Serializable;
 		public String getPlayerName() {			
 			return playerName;
 		}
-		public void setmoveResult(String result){
+		public void setMoveResult(String result){
 			moveResult = result;
 		}
 	}

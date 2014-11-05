@@ -208,14 +208,17 @@ public class Player extends JFrame implements ActionListener {
 									Point coordinates = gm.getMoveCoordinates();
 									String playerName = gm.getPlayerName();
 				                	String outcome = gm.getMoveResult();
-				                	
+                                    System.out.println("I am player: " + name);
+                                    System.out.println("Player who sent move: " + playerName);
 				                	if(name.equals(playerName)) {
+				                		//update enemy board
+                                        System.out.println("Test1");
+				                		gui.updateEnemyBoard(outcome, coordinates);
+				                	} else {
 				                		//update own board
-				                		gui.result(outcome, coordinates);
-				                	} else if(name.equals(opponentName)) {				                		
-				                		//update opponent board
-				                		//gui.result(outcome, coordinates);
-				                	}				                	
+                                        System.out.println("Test2");
+                                        gui.updateOwnBoard(outcome, coordinates);
+				                	}
 									isTheirTurn = true;
 								} else {
 									System.out.println(input);

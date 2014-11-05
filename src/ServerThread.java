@@ -180,7 +180,7 @@ public class ServerThread extends Thread {
     	System.out.println("recieved");
     	GameMove gm = (GameMove) input.getObject();
     	String outcome = gameBoard.shoot(gm.getMoveCoordinates());
-		gm.setmoveResult(outcome);
+		gm.setMoveResult(outcome);
 		try {
 			message(new Request("MoveResult", input.getOrigin(), input.getDestination(), gm));
 			messageAll(new Request("MoveResult", input.getDestination(), input.getOrigin(), gm));
