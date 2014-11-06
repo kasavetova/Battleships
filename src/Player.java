@@ -192,7 +192,10 @@ public class Player extends JFrame implements ActionListener {
                                         }
                                         gui.updateOwnBoard(outcome, coordinates);
                                     }
-                                } else {
+                                } else if(input.getActionType().equals("GameStart")) {
+                                    sui.startGame();
+                                }
+                                else {
                                     System.out.println(input);
                                 }
                             }
@@ -399,56 +402,12 @@ public class Player extends JFrame implements ActionListener {
         setVisible(false);
         sui = new ShipPlacementUI(this, out, in, name, opponentName);
         sui.setVisible(true);
-        /*
-		 * setPreferredSize(new Dimension(500, 500)); JPanel east = new
-		 * JPanel(new BorderLayout()); JPanel eastSouth = new JPanel(new
-		 * BorderLayout()); chatArea = new JLabel(); final JTextField
-		 * appendMessage = new JTextField(); JButton sendButton = new
-		 * JButton("Send"); east.add(chatArea, BorderLayout.CENTER);
-		 * eastSouth.add(appendMessage, BorderLayout.CENTER);
-		 * eastSouth.add(sendButton, BorderLayout.EAST); east.add(eastSouth,
-		 * BorderLayout.SOUTH); east.setPreferredSize(new Dimension(200, 200));
-		 * add(east, BorderLayout.EAST); pack();
-		 * 
-		 * 
-		 * appendMessage.addActionListener(new ActionListener() {
-		 * 
-		 * @Override public void actionPerformed(ActionEvent e) {
-		 * if(appendMessage.getText().length()>0) { String originalText =
-		 * chatArea.getText().replaceAll("<html>", "").replaceAll("</html>",
-		 * ""); String newText = null; if(originalText.indexOf("<br>")==0)
-		 * {originalText.replace("<br>", "");} if(originalText.length()==0) {
-		 * newText = "<html>" + originalText + name + ": " +
-		 * appendMessage.getText() + "</html>"; } //this is to remove else {
-		 * newText = "<html>" + originalText + "<br><b>" + name + ":</b> " +
-		 * appendMessage.getText() + "</html>"; } //br tags at start of message
-		 * chatArea.setText(newText); try { out.writeObject(new
-		 * Request("SendMessage", name, opponentName, appendMessage.getText())); }
-		 * catch (IOException e1) { e1.printStackTrace(); }
-		 * appendMessage.setText(""); } } });
-		 * 
-		 * sendButton.addActionListener(new ActionListener() {
-		 * 
-		 * @Override public void actionPerformed(ActionEvent e) {
-		 * if(appendMessage.getText().length()>0) { String originalText =
-		 * chatArea.getText().replaceAll("<html>", "").replaceAll("</html>",
-		 * ""); String newText = null; if(originalText.indexOf("<br>")==0)
-		 * {originalText.replace("<br>", "");} if(originalText.length()==0) {
-		 * newText = "<html>" + originalText + name + ": " +
-		 * appendMessage.getText() + "</html>"; } //this is to remove else {
-		 * newText = "<html>" + originalText + "<br><b>" + name + ":</b> " +
-		 * appendMessage.getText() + "</html>"; } //br tags at start of message
-		 * chatArea.setText(newText); try { out.writeObject(new
-		 * Request("SendMessage", name, opponentName, appendMessage.getText())); }
-		 * catch (IOException e1) { e1.printStackTrace(); }
-		 * appendMessage.setText(""); } } });
-		 */
     }
 
     public void actionPerformed(ActionEvent e) {
 
         name = enterName.getText().toString();
-        this.setTitle("<html>You are logged in as <b>" + name + "<b></html>");
+        this.setTitle("You are logged in as: " + name);
         try {
             // TODO not have the portnumber and ip hardcoded
             socket = new Socket("localhost", 4446);
@@ -476,8 +435,7 @@ public class Player extends JFrame implements ActionListener {
         }
     }
 
-    public void placementFinished(GameGrid grid, ObjectOutputStream out,
-                                  ObjectInputStream in, Board b) {
+    public void placementFinished(GameGrid grid, Board b) {
         gui = new GameUI(grid, out, in, this, b, opponentName);
         gui.setVisible(true);
         try {
@@ -506,5 +464,4 @@ public class Player extends JFrame implements ActionListener {
     public String getName() {
         return name;
     }
-
 }

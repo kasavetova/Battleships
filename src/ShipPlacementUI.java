@@ -46,7 +46,7 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
     private JPanel pnlHorizontalVertical;
 
     private String playerName;
-
+    private String opponentName;
     private Color backroundColor;
     private Color buttonColor;
     private Color hoverColor;
@@ -76,7 +76,7 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
         setContentPane(content);
 
         playerName = name;
-
+        this.opponentName = opponentName;
         btnShip5 = new JRadioButton();
         btnShip5.setActionCommand("5");
         btnShip5.addActionListener(this);
@@ -249,9 +249,7 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
         btnConfirm.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (shipsLeftToPlace == 0) {
-                    setVisible(false);
-                    player.placementFinished(gameGrid, out, in, b);
-                    dispose();
+                    player.sendServerRequest(new Request("PlayerReady", playerName, opponentName));
                 }
             }
         });
@@ -262,16 +260,8 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-
-                try {
-                    System.out.println(name + " " + opponentName);
-                    out.writeObject(new Request("UserLeftGame", name,
+                    player.sendServerRequest(new Request("UserLeftGame", name,
                             opponentName));
-                    // out.writeObject(new Request("UserClosed", name));
-
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
             }
 
         });
@@ -418,5 +408,11 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
 
     @Override
     public void mouseReleased(MouseEvent e) {
+    }
+
+    public void startGame() {
+        setVisible(false);
+        player.placementFinished(gameGrid, b);
+        dispose();
     }
 }

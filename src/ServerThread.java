@@ -15,6 +15,7 @@ public class ServerThread extends Thread {
     private ObjectOutputStream out;
     private ObjectInputStream in;
     private boolean inGame;
+    private boolean isReady;
     private Board gameBoard;
     private ArrayList<String> lobbyList;
 
@@ -118,19 +119,7 @@ public class ServerThread extends Thread {
                 } else if (input.getActionType().equals("GameBoard")) {
                     gameBoard = (Board) input.getObject();
                 } else if (input.getActionType().equals("Move")) {
-                    /*
-                	GameMove gm = (GameMove) input.getObject();
-                	
-                	Point coordinates = gm.getMoveCoordinates();
-                	String playerName = gm.getPlayerName();
-                	String outcome = gameBoard.completeMove(coordinates);
-                	GameMove gmToSend = new GameMove((Point) coordinates, playerName, outcome);
-                	
-                	messageAll(new Request("MoveResult", "SERVER", input.getOrigin(), gmToSend));
-                	messageAll(new Request("MoveResult", "SERVER", input.getDestination(), gmToSend));
-                	*/
                     if (!input.getDestination().equals(username)) {
-
                         for (int i = 0; i < serverThreads.size(); i++) {
                             if (serverThreads.get(i).getPlayerName().equals(input.getDestination())) {
                                 serverThreads.get(i).completeMove(input);
@@ -139,6 +128,18 @@ public class ServerThread extends Thread {
                         }
                     }
 
+                } else if (input.getActionType().equals("PlayerReady")) {
+                    if(input.getOrigin().equals(username)) {
+                        isReady = true;
+                    }
+
+                    for(ServerThread st: serverThreads) {
+                        if(st.getPlayerName().equals(input.getDestination()) && st.getPlayerStatus()) {
+                            message(new Request("GameStart", input.getDestination(), username));
+                            st.message(new Request("GameStart", username, input.getDestination()));
+                            break;
+                        }
+                    }
                 } else {
                     System.out.println(input);
                 }
@@ -173,6 +174,14 @@ public class ServerThread extends Thread {
 
     public void setInGame(Boolean x) throws IOException {
         inGame = x;
+    }
+
+    public boolean getPlayerStatus () {
+        return isReady;
+    }
+
+    public void setPlayerStatus(Boolean status) {
+        isReady = status;
     }
 
     public void completeMove(Request input) {
