@@ -250,6 +250,8 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
             public void actionPerformed(ActionEvent e) {
                 if (shipsLeftToPlace == 0) {
                     player.sendServerRequest(new Request("PlayerReady", playerName, opponentName));
+                    //display UI for waiting for response.
+                    btnConfirm.setEnabled(false);
                 }
             }
         });

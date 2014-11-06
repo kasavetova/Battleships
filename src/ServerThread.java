@@ -106,6 +106,7 @@ public class ServerThread extends Thread {
                         if (st.getPlayerName().equals(input.getDestination())) {
                             st.message(input);
                             st.setInGame(false);
+                            st.setPlayerStatus(false);
                             break;
                         }
                     }
