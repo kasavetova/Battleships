@@ -118,7 +118,8 @@ public class GameUI extends JFrame implements MouseListener {
         txtAreaChat = new JEditorPane();
         txtAreaChat.setEditable(false);
         txtAreaChat.setContentType("text/html");
-        txtAreaChat.setSize(Integer.MAX_VALUE, 100);
+        txtAreaChat.setText("<i>Chat messages will appear here...</i>");
+        txtAreaChat.setMinimumSize(new Dimension(Integer.MAX_VALUE, 100));
 
         jspAreaChat = new JScrollPane(txtAreaChat);
 
@@ -191,9 +192,11 @@ public class GameUI extends JFrame implements MouseListener {
         int row = ((GameButton) e.getSource()).getRow();
         int col = ((GameButton) e.getSource()).getColumn();
         try {
-            enemyBoardGrid.getButton(row, col).setEnabled(false);
-            enemyBoardGrid.getButton(row, col).removeMouseListener(this);
-            out.writeObject(new Request("Move", playerName, opponentName, new GameMove(new Point(row, col), playerName, null)));
+            Request request = new Request("Move", playerName, opponentName, new GameMove(new Point(row, col), playerName, null));
+            if(player.makeMove(request)) {
+                enemyBoardGrid.getButton(row, col).setEnabled(false);
+                enemyBoardGrid.getButton(row, col).removeMouseListener(this);
+            }
             //Disable Board
         } catch (IOException e1) {
             // TODO Auto-generated catch block

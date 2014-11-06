@@ -181,12 +181,17 @@ public class Player extends JFrame implements ActionListener {
 
                                     if (name.equals(playerName)) {
                                         //update enemy board
+                                        if(outcome.equals("hit") || outcome.equals("destroyed")) {
+                                            isTheirTurn = true;
+                                        }
                                         gui.updateEnemyBoard(outcome, coordinates);
                                     } else {
                                         //update own board
+                                        if(!outcome.equals("hit") && !outcome.equals("destroyed")) {
+                                            isTheirTurn = true;
+                                        }
                                         gui.updateOwnBoard(outcome, coordinates);
                                     }
-                                    isTheirTurn = true;
                                 } else {
                                     System.out.println(input);
                                 }
@@ -443,6 +448,7 @@ public class Player extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
         name = enterName.getText().toString();
+        this.setTitle("<html>You are logged in as <b>" + name + "<b></html>");
         try {
             // TODO not have the portnumber and ip hardcoded
             socket = new Socket("localhost", 4446);
@@ -482,10 +488,18 @@ public class Player extends JFrame implements ActionListener {
         }
     }
 
-    public void makeMove(Point coordinates) throws IOException {
+    public boolean makeMove (Request request) throws IOException {
         if (isTheirTurn) {
-            out.writeObject(new Request("Move", name, opponentName, new GameMove(coordinates, name, null)));
+            out.writeObject(request);
             isTheirTurn = false;
+            return true;
+        }  else {
+            JOptionPane.showMessageDialog(
+                    gui,
+                    "It's not your turn yet! Please wait for your turn.",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return false;
         }
     }
 

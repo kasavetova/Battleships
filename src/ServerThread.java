@@ -123,7 +123,7 @@ public class ServerThread extends Thread {
                 	
                 	Point coordinates = gm.getMoveCoordinates();
                 	String playerName = gm.getPlayerName();
-                	String outcome = gameBoard.shoot(coordinates);
+                	String outcome = gameBoard.completeMove(coordinates);
                 	GameMove gmToSend = new GameMove((Point) coordinates, playerName, outcome);
                 	
                 	messageAll(new Request("MoveResult", "SERVER", input.getOrigin(), gmToSend));
@@ -133,7 +133,7 @@ public class ServerThread extends Thread {
 
                         for (int i = 0; i < serverThreads.size(); i++) {
                             if (serverThreads.get(i).getPlayerName().equals(input.getDestination())) {
-                                serverThreads.get(i).shoot(input);
+                                serverThreads.get(i).completeMove(input);
                                 break;
                             }
                         }
@@ -175,7 +175,7 @@ public class ServerThread extends Thread {
         inGame = x;
     }
 
-    public void shoot(Request input) {
+    public void completeMove(Request input) {
         GameMove gm = (GameMove) input.getObject();
         String outcome = gameBoard.shoot(gm.getMoveCoordinates());
         gm.setMoveResult(outcome);
