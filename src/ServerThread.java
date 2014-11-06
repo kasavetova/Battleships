@@ -1,7 +1,8 @@
-import java.io.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.ListIterator;
 import java.util.Random;
 
 
@@ -32,35 +33,33 @@ public class ServerThread extends Thread {
     public static void addToList(ServerThread s) {
         serverThreads.add(s);
     }
-    
+
     public void run() {
         try {
             out = new ObjectOutputStream(clientSocket.getOutputStream());
             in = new ObjectInputStream(clientSocket.getInputStream());
             Request input;
             while ((input = (Request) in.readObject()) != null) {
-                if(input.getActionType().equals("UserJoinedLobby")){
+                if (input.getActionType().equals("UserJoinedLobby")) {
                     username = input.getOrigin();
-                    messageAllActive(new Request("UserJoinedLobby","SERVER", "ALL", username));
-                } else if(input.getActionType().equals("UserLeftLobby")) {
-                    messageAllActive(new Request("UserLeftLobby","SERVER", "ALL", input.getOrigin()));
-                } else if(input.getActionType().equals("SendMessage")) {
+                    messageAllActive(new Request("UserJoinedLobby", "SERVER", "ALL", username));
+                } else if (input.getActionType().equals("UserLeftLobby")) {
+                    messageAllActive(new Request("UserLeftLobby", "SERVER", "ALL", input.getOrigin()));
+                } else if (input.getActionType().equals("SendMessage")) {
 
                     messageAll(new Request("ReceiveMessage", input.getOrigin(), input.getDestination(), input.getObject()));
-                }
-
-                else if (input.getActionType().startsWith("GameRequest")) {
+                } else if (input.getActionType().startsWith("GameRequest")) {
                     messageAllActive(input);
-                    if(input.getActionType().equals("GameRequestAnswer") && input.getObject().equals("Yes")) {
+                    if (input.getActionType().equals("GameRequestAnswer") && input.getObject().equals("Yes")) {
                         for (ServerThread st : serverThreads) {
-                            if(st.getPlayerName().equals(input.getOrigin())
+                            if (st.getPlayerName().equals(input.getOrigin())
                                     || st.getPlayerName().equals(input.getDestination())) {
                                 st.setInGame(true);
                                 messageAllActive(new Request("UserLeftLobby", "SERVER", "ALL", st.getPlayerName()));
                             }
                         }
                     }
-                } else if(input.getActionType().equals("RetrieveLobby")) {
+                } else if (input.getActionType().equals("RetrieveLobby")) {
                     lobbyList = new ArrayList<String>();
                     for (ServerThread st : serverThreads) {
                         if (st.inGame == false) {
@@ -69,16 +68,16 @@ public class ServerThread extends Thread {
                     }
                     messageAllActive(new Request("RetrieveLobby", "SERVER", input.getOrigin(), lobbyList));
 
-                } else if(input.getActionType().equals("RandomGameRequest")) {
- 
+                } else if (input.getActionType().equals("RandomGameRequest")) {
+
                     int activePlayersCount = 0;
-                    for(ServerThread st: serverThreads) {
-                        if(st.inGame==false && !st.getPlayerName().equals(input.getOrigin())){
-                           activePlayersCount++;
+                    for (ServerThread st : serverThreads) {
+                        if (st.inGame == false && !st.getPlayerName().equals(input.getOrigin())) {
+                            activePlayersCount++;
                         }
                     }
 
-                    if(activePlayersCount==0) {
+                    if (activePlayersCount == 0) {
                         messageAll(new Request("RandomGameRequestFail", "SERVER", input.getOrigin()));
                     } else {
                         int index = new Random().nextInt(serverThreads.size());
@@ -101,25 +100,25 @@ public class ServerThread extends Thread {
                     in.close();
                     interrupt();
                 } else if (input.getActionType().startsWith("UserLeftGame")) {
-                	System.out.println("Sending"+input);
-                	for (ServerThread st : serverThreads) {
-                		if (st.getPlayerName().equals(input.getDestination())) {
-                			st.message(input);
-                			st.setInGame(false);
-                			break;
-                		}
-                	}
+                    System.out.println("Sending" + input);
+                    for (ServerThread st : serverThreads) {
+                        if (st.getPlayerName().equals(input.getDestination())) {
+                            st.message(input);
+                            st.setInGame(false);
+                            break;
+                        }
+                    }
 
-                	serverThreads.remove(this);
-                	messageAll(new Request("UserLeftLobby", "SERVER", "ALL", username));
-                	System.out.println(username + " has exited.");
-                	out.close();
-                	in.close();
-                	interrupt();
+                    serverThreads.remove(this);
+                    messageAll(new Request("UserLeftLobby", "SERVER", "ALL", username));
+                    System.out.println(username + " has exited.");
+                    out.close();
+                    in.close();
+                    interrupt();
                 } else if (input.getActionType().equals("GameBoard")) {
-                	gameBoard = (Board) input.getObject();                	                
-                } else if(input.getActionType().equals("Move")) { 
-                	/*
+                    gameBoard = (Board) input.getObject();
+                } else if (input.getActionType().equals("Move")) {
+                    /*
                 	GameMove gm = (GameMove) input.getObject();
                 	
                 	Point coordinates = gm.getMoveCoordinates();
@@ -130,18 +129,17 @@ public class ServerThread extends Thread {
                 	messageAll(new Request("MoveResult", "SERVER", input.getOrigin(), gmToSend));
                 	messageAll(new Request("MoveResult", "SERVER", input.getDestination(), gmToSend));
                 	*/
-                	if(!input.getDestination().equals(username)){
-                		
-                		for(int i = 0; i<serverThreads.size(); i++){
-                			if(serverThreads.get(i).getPlayerName().equals(input.getDestination())){
-                				serverThreads.get(i).shoot(input);
-                				break;
-                			}
-                		}	
-                	}
-                	
-                }
-                else {
+                    if (!input.getDestination().equals(username)) {
+
+                        for (int i = 0; i < serverThreads.size(); i++) {
+                            if (serverThreads.get(i).getPlayerName().equals(input.getDestination())) {
+                                serverThreads.get(i).shoot(input);
+                                break;
+                            }
+                        }
+                    }
+
+                } else {
                     System.out.println(input);
                 }
             }
@@ -151,7 +149,7 @@ public class ServerThread extends Thread {
                     + " or listening for a connection");
             System.out.println("CATCH FROM MAIN THREAD" + e.getMessage());
         } catch (ClassNotFoundException e) {
-        	System.out.println("CATCH FROM MAIN THREAD2" + e.getMessage());
+            System.out.println("CATCH FROM MAIN THREAD2" + e.getMessage());
         }
     }
 
@@ -160,36 +158,36 @@ public class ServerThread extends Thread {
     }
 
     public void messageAll(Request r) throws IOException {
-        for(ServerThread st : serverThreads){
+        for (ServerThread st : serverThreads) {
             st.message(r);
         }
     }
 
-    public void messageAllActive (Request r) throws IOException {
+    public void messageAllActive(Request r) throws IOException {
         for (ServerThread st : serverThreads) {
-            if(st.inGame==false) {
+            if (st.inGame == false) {
                 st.message(r);
             }
         }
     }
+
     public void setInGame(Boolean x) throws IOException {
         inGame = x;
     }
 
-    public void shoot(Request input){
-    	GameMove gm = (GameMove) input.getObject();
-    	String outcome = gameBoard.shoot(gm.getMoveCoordinates());
-		gm.setMoveResult(outcome);
-		try {
-			message(new Request("MoveResult", input.getOrigin(), input.getDestination(), gm));
-			messageAll(new Request("MoveResult", input.getDestination(), input.getOrigin(), gm));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-    }
-   
+    public void shoot(Request input) {
+        GameMove gm = (GameMove) input.getObject();
+        String outcome = gameBoard.shoot(gm.getMoveCoordinates());
+        gm.setMoveResult(outcome);
+        try {
+            message(new Request("MoveResult", input.getOrigin(), input.getDestination(), gm));
+            messageAll(new Request("MoveResult", input.getDestination(), input.getOrigin(), gm));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
-    
+    }
+
+
 }
