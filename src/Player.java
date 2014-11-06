@@ -127,7 +127,7 @@ public class Player extends JFrame implements ActionListener {
                                     }
                                 } else if (input.getActionType().equals(
                                         "ReceiveMessage")) {
-                                    gui.receiveMessage((String) input.getObject(), input.getOrigin());
+                                    gui.appendMessage((String) input.getObject(), input.getOrigin());
                                 } else if (input.getActionType().equals(
                                         "UserLeftGame")) {
                                     // Quitting game on selection screen
@@ -370,16 +370,16 @@ public class Player extends JFrame implements ActionListener {
             // Repeated Code
             @Override
             public void actionPerformed(ActionEvent e) {
-                // need to disable clicked item until a response has been
-                // received.
-                String playerName = playersModel.getElementAt(players
-                        .getSelectedIndex());
-                if (!(name.equals(playerName))) {
-                    try {
-                        out.writeObject(new Request("GameRequest", name,
-                                playerName));
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
+                if (players.getSelectedIndex() >= 0) {
+                    String playerName = playersModel.getElementAt(players
+                            .getSelectedIndex());
+                    if (!(name.equals(playerName))) {
+                        try {
+                            out.writeObject(new Request("GameRequest", name,
+                                    playerName));
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
                     }
                 }
             }
@@ -398,45 +398,45 @@ public class Player extends JFrame implements ActionListener {
 		 * setPreferredSize(new Dimension(500, 500)); JPanel east = new
 		 * JPanel(new BorderLayout()); JPanel eastSouth = new JPanel(new
 		 * BorderLayout()); chatArea = new JLabel(); final JTextField
-		 * receiveMessage = new JTextField(); JButton sendButton = new
+		 * appendMessage = new JTextField(); JButton sendButton = new
 		 * JButton("Send"); east.add(chatArea, BorderLayout.CENTER);
-		 * eastSouth.add(receiveMessage, BorderLayout.CENTER);
+		 * eastSouth.add(appendMessage, BorderLayout.CENTER);
 		 * eastSouth.add(sendButton, BorderLayout.EAST); east.add(eastSouth,
 		 * BorderLayout.SOUTH); east.setPreferredSize(new Dimension(200, 200));
 		 * add(east, BorderLayout.EAST); pack();
 		 * 
 		 * 
-		 * receiveMessage.addActionListener(new ActionListener() {
+		 * appendMessage.addActionListener(new ActionListener() {
 		 * 
 		 * @Override public void actionPerformed(ActionEvent e) {
-		 * if(receiveMessage.getText().length()>0) { String originalText =
+		 * if(appendMessage.getText().length()>0) { String originalText =
 		 * chatArea.getText().replaceAll("<html>", "").replaceAll("</html>",
 		 * ""); String newText = null; if(originalText.indexOf("<br>")==0)
 		 * {originalText.replace("<br>", "");} if(originalText.length()==0) {
 		 * newText = "<html>" + originalText + name + ": " +
-		 * receiveMessage.getText() + "</html>"; } //this is to remove else {
+		 * appendMessage.getText() + "</html>"; } //this is to remove else {
 		 * newText = "<html>" + originalText + "<br><b>" + name + ":</b> " +
-		 * receiveMessage.getText() + "</html>"; } //br tags at start of message
+		 * appendMessage.getText() + "</html>"; } //br tags at start of message
 		 * chatArea.setText(newText); try { out.writeObject(new
-		 * Request("SendMessage", name, opponentName, receiveMessage.getText())); }
+		 * Request("SendMessage", name, opponentName, appendMessage.getText())); }
 		 * catch (IOException e1) { e1.printStackTrace(); }
-		 * receiveMessage.setText(""); } } });
+		 * appendMessage.setText(""); } } });
 		 * 
 		 * sendButton.addActionListener(new ActionListener() {
 		 * 
 		 * @Override public void actionPerformed(ActionEvent e) {
-		 * if(receiveMessage.getText().length()>0) { String originalText =
+		 * if(appendMessage.getText().length()>0) { String originalText =
 		 * chatArea.getText().replaceAll("<html>", "").replaceAll("</html>",
 		 * ""); String newText = null; if(originalText.indexOf("<br>")==0)
 		 * {originalText.replace("<br>", "");} if(originalText.length()==0) {
 		 * newText = "<html>" + originalText + name + ": " +
-		 * receiveMessage.getText() + "</html>"; } //this is to remove else {
+		 * appendMessage.getText() + "</html>"; } //this is to remove else {
 		 * newText = "<html>" + originalText + "<br><b>" + name + ":</b> " +
-		 * receiveMessage.getText() + "</html>"; } //br tags at start of message
+		 * appendMessage.getText() + "</html>"; } //br tags at start of message
 		 * chatArea.setText(newText); try { out.writeObject(new
-		 * Request("SendMessage", name, opponentName, receiveMessage.getText())); }
+		 * Request("SendMessage", name, opponentName, appendMessage.getText())); }
 		 * catch (IOException e1) { e1.printStackTrace(); }
-		 * receiveMessage.setText(""); } } });
+		 * appendMessage.setText(""); } } });
 		 */
     }
 
@@ -459,6 +459,14 @@ public class Player extends JFrame implements ActionListener {
             mainGUI();
             newConnection();
             // TODO ensure no one has the same username
+        }
+    }
+
+    public void sendServerRequest(Request request) {
+        try {
+            out.writeObject(request);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

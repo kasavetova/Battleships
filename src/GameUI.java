@@ -1,5 +1,6 @@
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
@@ -29,7 +30,7 @@ public class GameUI extends JFrame implements MouseListener {
 
     private JPanel pnlChatWindow;
     private JScrollPane jspAreaChat;
-    private JTextArea txtAreaChat;
+    private JEditorPane txtAreaChat;
 
     private JPanel pnlChatSender;
     private JTextField txtChat;
@@ -114,8 +115,10 @@ public class GameUI extends JFrame implements MouseListener {
         pnlPlayerText.add(lblPlayer2);
 
         pnlChatWindow = new JPanel(new BorderLayout(5, 5));
-        txtAreaChat = new JTextArea(3, 0);
+        txtAreaChat = new JEditorPane();
         txtAreaChat.setEditable(false);
+        txtAreaChat.setContentType("text/html");
+        txtAreaChat.setSize(Integer.MAX_VALUE, 100);
 
         jspAreaChat = new JScrollPane(txtAreaChat);
 
@@ -222,7 +225,7 @@ public class GameUI extends JFrame implements MouseListener {
         } else if (x.equals("destroyed")) {
             enemyBoardGrid.getButton(p.getX(), p.getY()).setBackground(Color.RED);
             //Tell which ship has been destroyed
-            txtAreaChat.append("\nEnemy ship has been destroyed."); //add new line
+            appendMessage("Enemy ship has been destroyed.", "GAME"); //add new line
         } else {
             enemyBoardGrid.getButton(p.getX(), p.getY()).setBackground(Color.CYAN);
         }
@@ -234,7 +237,7 @@ public class GameUI extends JFrame implements MouseListener {
         } else if (x.equals("destroyed")) {
             myBoardGrid.getButton(p.getX(), p.getY()).setBackground(Color.lightGray);
             //Tell which ship has been destroyed
-            txtAreaChat.append("\nYour ship has been destroyed.");
+            appendMessage("Your ship has been destroyed.", "GAME");
         } else {
             myBoardGrid.getButton(p.getX(), p.getY()).setBackground(Color.CYAN);
         }
@@ -242,21 +245,48 @@ public class GameUI extends JFrame implements MouseListener {
 
     public void sendMessage(String message) {
         if (message.length() > 0) {
-            txtAreaChat.append("\n" + playerName + ": " + message);
+           /* txtAreaChat.append("\n" + playerName + ": " + message);
             try {
                 out.writeObject(new Request("SendMessage", playerName, opponentName, message));
             } catch (IOException e1) {
                 e1.printStackTrace();
+            }*/
+            Document doc = txtAreaChat.getDocument();
+            SimpleAttributeSet attr = new SimpleAttributeSet();
+            StyleConstants.setForeground(attr, Color.darkGray);
+            StyleConstants.setBold(attr, true);
+            try {
+                doc.insertString(doc.getLength(), "\n" + playerName + ": " + message, attr);
+            } catch (BadLocationException e) {
+                e.printStackTrace();
             }
+            player.sendServerRequest(new Request("SendMessage", playerName, opponentName, message));
+            scrollToBottom();
             txtChat.setText("");
         }
     }
 
-    public void receiveMessage(String message, String username) {
+    public void appendMessage(String message, String username) {
         if (message.length() > 0) {
-            txtAreaChat.append("\n" + username + ": " + message);
+            Document doc = txtAreaChat.getDocument();
+            SimpleAttributeSet attr = new SimpleAttributeSet();
+            StyleConstants.setForeground(attr, Color.blue);
+            if (username.equals("GAME")) StyleConstants.setForeground(attr, Color.LIGHT_GRAY);
+            StyleConstants.setBold(attr, true);
+            try {
+                doc.insertString(doc.getLength(), "\n" + username + ": " + message, attr);
+            } catch (BadLocationException e) {
+                e.printStackTrace();
+            }
+            scrollToBottom();
         }
     }
 
-
+    public void scrollToBottom() {
+        jspAreaChat.getVerticalScrollBar().addAdjustmentListener(new AdjustmentListener() {
+            public void adjustmentValueChanged(AdjustmentEvent e) {
+                e.getAdjustable().setValue(e.getAdjustable().getMaximum());
+            }
+        });
+    }
 }
