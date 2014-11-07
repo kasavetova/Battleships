@@ -21,19 +21,54 @@ public class ServerThread extends Thread {
 
     public ServerThread(Socket clientSocket) {
         this.clientSocket = clientSocket;
-        playerNumber = threadInstances++;
-        System.out.println("Player " + playerNumber + " connected");
-        inGame = false;
-        this.start();
+        checkName();
+    }
+    public void checkName(){
+    	 try {
+    		 out = new ObjectOutputStream(clientSocket.getOutputStream());
+    		 lobbyList = new ArrayList<String>();
+    		 for (ServerThread st : serverThreads) {
+    			 if(st.getName() != null){
+    				 lobbyList.add(st.getPlayerName());
+    			 }
+             }
+    		 message(new Request("RetrieveLobby", "SERVER", "", lobbyList));
+    		 in = new ObjectInputStream(clientSocket.getInputStream());
+             Request input;
+             while ((input = (Request) in.readObject()) != null) {
+            	 if (input.getActionType().equals("Accepted")){
+            		 createPlayerThread();
+            		 break;
+            	 }
+            	 if (input.getActionType().equals("Rejected")){
+            		 out.close();
+            		 in.close();
+            		 clientSocket.close();
+            		 serverThreads.remove(this);
+            		 break;
+            	 }
+            	 
+             }
+             
+		} catch (IOException | ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+         
     }
 
     public String getPlayerName() {
         return username;
     }
-
-    public static void addToList(ServerThread s) {
-        serverThreads.add(s);
+    public void createPlayerThread(){
+    	playerNumber = threadInstances++;
+        System.out.println("Player " + playerNumber + " connected");
+        inGame = false;
+        serverThreads.add(this);
+        
+        this.start();
     }
+
 
     public void run() {
         try {

@@ -1,5 +1,6 @@
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.io.EOFException;
@@ -405,25 +406,34 @@ public class Player extends JFrame implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent e) {
-
-        name = enterName.getText().toString();
-        this.setTitle("You are logged in as: " + name);
         try {
             // TODO not have the portnumber and ip hardcoded
             socket = new Socket("localhost", 4446);
+            if(socket != null){
+        		String nameToCheck = enterName.getText().toString();
+        		boolean isUnique = checkName(nameToCheck);
+        		System.out.println(isUnique);
+        		if(isUnique == true){
+        			out.writeObject(new Request("Accepted"));
+        			name = nameToCheck;
+        			this.setTitle("You are logged in as: " + name);
+        			mainGUI();
+                    newConnection();
+        		}
+        		else{
+        			out.writeObject(new Request("Rejected"));
+        			out.close();in.close();
+        			socket.close();
+        			//Message Appears on screen telling user, name not unique
+        		}
+            }
+            
         } catch (UnknownHostException e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();
         } catch (IOException e1) {
             // TODO Auto-generated catch block
-            JOptionPane.showMessageDialog(null,
-                    "Failed to connect to the server", "Server Error",
-                    JOptionPane.WARNING_MESSAGE);
-        }
-        if (socket != null) {
-            mainGUI();
-            newConnection();
-            // TODO ensure no one has the same username
+            JOptionPane.showMessageDialog(null, "Failed to connect to the server", "Server Error", JOptionPane.WARNING_MESSAGE);
         }
     }
 
@@ -463,5 +473,31 @@ public class Player extends JFrame implements ActionListener {
 
     public String getName() {
         return name;
+    }
+    
+    public boolean checkName(String nameToCheck){
+    	try {
+			out = new ObjectOutputStream(socket.getOutputStream());
+			in = new ObjectInputStream(socket.getInputStream());
+			Request input;
+			while ((input = (Request) in.readObject()) != null) {
+				if (input.getActionType().equals("RetrieveLobby")) {
+					ArrayList<String> playersList = (ArrayList<String>) input.getObject();
+					if(playersList != null){
+						for (int i = 0; i < playersList.size(); i++) {
+							System.out.println(playersList);
+							if (playersList.get(i).equals(nameToCheck)) {
+								return false;
+							}
+						}	
+					}
+					break;
+				}
+			}
+		} catch (ClassNotFoundException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return true;
     }
 }

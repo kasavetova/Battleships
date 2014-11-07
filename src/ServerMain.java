@@ -14,7 +14,8 @@ public class ServerMain extends Thread {
         while (true) {
             Socket clientSocket = serverSocket.accept();
             clientSocket.setReuseAddress(true);
-            ServerThread.addToList(new ServerThread(clientSocket));
+            //ServerThread.addToList(new ServerThread(clientSocket));
+            new ServerThread(clientSocket);
         }
 
     }
