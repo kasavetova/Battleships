@@ -15,7 +15,6 @@ public class Player extends JFrame implements ActionListener {
     private static String name;
     private String opponentName;
     private boolean isTheirTurn;
-    private boolean isBusy;
     private ObjectOutputStream out;
     private ObjectInputStream in;
     private Socket socket;
@@ -56,7 +55,6 @@ public class Player extends JFrame implements ActionListener {
             in = new ObjectInputStream(socket.getInputStream());
             opponentName = null;
             isTheirTurn = false;
-            isBusy = false;
             out.writeObject(new Request("UserJoinedLobby", name));
             out.writeObject(new Request("RetrieveLobby", name));
 
@@ -78,46 +76,33 @@ public class Player extends JFrame implements ActionListener {
                                 playersModel.removeElement(input.getObject());
                             } else if (input.getDestination().equals(name)) {
                                 if (input.getActionType().equals("GameRequest")) {
-                                    if (!isBusy) {
-                                        isBusy = true;
-                                        playRandButton.setEnabled(false);
-                                        ConfirmDialog confirmDialog = new ConfirmDialog(Player.this, input);
-                                        confirmDialog.setVisible(true);
-
-                                       /* System.out.println("1: " + isBusy);
-                                        int requestAnswer = JOptionPane
-                                                .showConfirmDialog(null,
-                                                        "Do you want to play a game with "
-                                                                + input.getOrigin()
-                                                                + "?",
-                                                        "Game Request",
-                                                        JOptionPane.YES_NO_OPTION);
-                                        isBusy = false;
-                                        System.out.println("2: " + isBusy);
-                                        // no = 1, yes = 0
-                                        if (requestAnswer == 1) {
-                                            out.writeObject(new Request(
-                                                    "GameRequestAnswer", name,
-                                                    input.getOrigin(), "No"));
-                                            System.out.println("3: " + isBusy);
-                                        }
-                                        if (requestAnswer == 0) {
-                                            out.writeObject(new Request(
-                                                    "GameRequestAnswer", name,
-                                                    input.getOrigin(), "Yes"));
-                                            gameFrame(input.getOrigin());
-                                            opponentName = input.getOrigin();
-                                            System.out.println("4: " + isBusy);
-                                        }*/
-
-                                    } else {
-                                        out.writeObject(new Request("PlayerBusy", name, input.getOrigin()));
+                                    // check if there is already a dialog box
+                                    // opened.
+                                    // if user accepts one of the game requests
+                                    // - the other dialogs are closed
+                                    // and an answer 'no' is sent to the server
+                                    int requestAnswer = JOptionPane
+                                            .showConfirmDialog(null,
+                                                    "Do you want to play a game with "
+                                                            + input.getOrigin()
+                                                            + "?",
+                                                    "Game Request",
+                                                    JOptionPane.YES_NO_OPTION);
+                                    // no = 1, yes = 0
+                                    if (requestAnswer == 1) {
+                                        out.writeObject(new Request(
+                                                "GameRequestAnswer", name,
+                                                input.getOrigin(), "No"));
+                                    }
+                                    if (requestAnswer == 0) {
+                                        out.writeObject(new Request(
+                                                "GameRequestAnswer", name,
+                                                input.getOrigin(), "Yes"));
+                                        gameFrame(input.getOrigin());
+                                        opponentName = input.getOrigin();
                                     }
                                 } else if (input.getActionType().equals(
                                         "GameRequestAnswer")) {
-                                    isBusy = false;
-                                    playButton.setEnabled(true);
-                                    playRandButton.setEnabled(true);
                                     if (input.getObject().equals("Yes")) {
                                         gameFrame(input.getOrigin());
                                         opponentName = input.getOrigin();
@@ -148,16 +133,13 @@ public class Player extends JFrame implements ActionListener {
                                 } else if (input.getActionType().equals("UserLeftGame")) {
                                     // Quitting game     
                                     reshowLobby();
-                                    JOptionPane.showMessageDialog(null, "Your opponent quit! You win (by default)", "Opponent Quit", JOptionPane.INFORMATION_MESSAGE);
+                                    JOptionPane.showMessageDialog(null,"Your opponent quit! You win (by default)","Opponent Quit",JOptionPane.INFORMATION_MESSAGE);
                                 } else if (input.getActionType().equals("UserWentBackToLobby")) {
                                 	//Returning to lobby                              	
                                 	reshowLobby();
-                                    JOptionPane.showMessageDialog(null, "Your opponent went back to lobby", "Opponent Quit", JOptionPane.INFORMATION_MESSAGE);
+                                	JOptionPane.showMessageDialog(null,"Your opponent went back to lobby", "Opponent Quit", JOptionPane.INFORMATION_MESSAGE);
                                 } else if (input.getActionType().equals(
                                         "RandomGameRequestFail")) {
-                                    isBusy = false;
-                                    playButton.setEnabled(true);
-                                    playRandButton.setEnabled(true);
                                     JOptionPane
                                             .showMessageDialog(
                                                     null,
@@ -186,11 +168,6 @@ public class Player extends JFrame implements ActionListener {
                                     }
                                 } else if(input.getActionType().equals("GameStart")) {
                                     sui.startGame();
-                                } else if (input.getActionType().equals("PlayerBusy")) {
-                                    isBusy = false;
-                                    playButton.setEnabled(true);
-                                    playRandButton.setEnabled(true);
-                                    JOptionPane.showMessageDialog(null, "Player is busy. Please try again later", "Error", JOptionPane.ERROR_MESSAGE);
                                 }
                                 else {
                                     System.out.println(input);
@@ -343,10 +320,6 @@ public class Player extends JFrame implements ActionListener {
             public void actionPerformed(ActionEvent e) {
                 try {
                     System.out.println("here");
-                    isBusy = true;
-                    playButton.setEnabled(false);
-                    playRandButton.setEnabled(false);
-                    //UI WITH TIMER DISPLAYED HERE
                     out.writeObject(new Request("RandomGameRequest", name));
                 } catch (IOException e1) {
                     System.out.println("CATCH FROM RANDOM BTN"
@@ -355,6 +328,26 @@ public class Player extends JFrame implements ActionListener {
             }
         });
 
+        players.addMouseListener(new MouseAdapter() {
+            // Repeated Code
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                // need to disable clicked item until a response has been
+                // received.
+                if (evt.getClickCount() == 2) {
+                    String playerName = playersModel.getElementAt(players
+                            .getSelectedIndex());
+                    if (!(name.equals(playerName))) {
+                        try {
+                            out.writeObject(new Request("GameRequest", name,
+                                    playerName));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        });
         playButton.addActionListener(new ActionListener() {
             // Repeated Code
             @Override
@@ -364,10 +357,6 @@ public class Player extends JFrame implements ActionListener {
                             .getSelectedIndex());
                     if (!(name.equals(playerName))) {
                         try {
-                            isBusy = true;
-                            playButton.setEnabled(false);
-                            playRandButton.setEnabled(false);
-                            //UI WITH TIMER DISPLAYED HERE
                             out.writeObject(new Request("GameRequest", name,
                                     playerName));
                         } catch (IOException ex) {
@@ -429,34 +418,6 @@ public class Player extends JFrame implements ActionListener {
         }
     }
 
-    public void refuseRequest(Request input) {
-        isBusy = false;
-        playButton.setEnabled(true);
-        playRandButton.setEnabled(true);
-        try {
-            out.writeObject(new Request(
-                    "GameRequestAnswer", name,
-                    input.getOrigin(), "No"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void acceptRequest(Request input) {
-        isBusy = false;
-        playButton.setEnabled(true);
-        playRandButton.setEnabled(true);
-        try {
-            out.writeObject(new Request(
-                    "GameRequestAnswer", name,
-                    input.getOrigin(), "Yes"));
-            gameFrame(input.getOrigin());
-            opponentName = input.getOrigin();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     public void placementFinished(GameGrid grid, Board b) {
         gui = new GameUI(grid, out, in, this, b, opponentName);
         gui.setVisible(true);
@@ -506,13 +467,11 @@ public class Player extends JFrame implements ActionListener {
 					break;
 				}
 			}
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
+		} catch (ClassNotFoundException | IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return true;
+		}
+		return true;
     }
     public void reshowLobby(){
     	 mainGUI();

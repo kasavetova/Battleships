@@ -300,9 +300,10 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
         bdrLoweredButton = BorderFactory.createLoweredBevelBorder();
         
         btnConfirm = new JButton("<html><b>CONFIRM</b></html>");
+        btnConfirm.setEnabled(false);
         btnConfirm.setBackground(backroundColor);
-        btnConfirm.setForeground(textColor);
-        btnConfirm.setBorder(bdrRaisedButton);
+        btnConfirm.setForeground(Color.GRAY);
+        btnConfirm.setBorder(bdrLoweredButton);
         btnConfirm.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 
@@ -401,11 +402,13 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
             if (shipHorVert == 1) {
                 for (int i = 0; i < shipSize; i++) {
                     gameGrid.getButton(row, col + i).setEnabled(false);
+                    gameGrid.getButton(row, col + i).setIcon(null);
                     gameGrid.getButton(row, col + i).setBackground(Color.RED);
                 }
             } else if (shipHorVert == 0) {
                 for (int i = 0; i < shipSize; i++) {
                     gameGrid.getButton(row + i, col).setEnabled(false);
+                    gameGrid.getButton(row + i, col).setIcon(null);
                     gameGrid.getButton(row + i, col).setBackground(Color.RED);
                 }
             }
@@ -421,11 +424,13 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
             if (shipHorVert == 1) {
                 for (int i = 0; i < shipSize; i++) {
                     gameGrid.getButton(row, col + i).setEnabled(true);
+                    gameGrid.getButton(row, col + i).setDefaultIcon();
                     gameGrid.getButton(row, col + i).setBackground(null);
                 }
             } else if (shipHorVert == 0) {
                 for (int i = 0; i < shipSize; i++) {
                     gameGrid.getButton(row + i, col).setEnabled(true);
+                    gameGrid.getButton(row + i, col).setDefaultIcon();
                     gameGrid.getButton(row + i, col).setBackground(null);
                 }
             }
@@ -446,7 +451,8 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
                     gameGrid.getButton(row, col + i).setEnabled(false);
                     gameGrid.getButton(row, col + i)
                             .setOccupied(true, shipSize);
-                    gameGrid.getButton(row, col + i).setBackground(Color.BLUE);
+                    gameGrid.getButton(row, col + i).setIcon(null);
+                    gameGrid.getButton(row, col + i).setBackground(Color.GRAY);
                 }
             } else if (shipHorVert == 0) {
                 b.addShip(new Ship(new Point(row, col), new Point(row
@@ -456,7 +462,8 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
                     gameGrid.getButton(row + i, col).setEnabled(false);
                     gameGrid.getButton(row + i, col)
                             .setOccupied(true, shipSize);
-                    gameGrid.getButton(row + i, col).setBackground(Color.BLUE);
+                    gameGrid.getButton(row + i, col).setIcon(null);
+                    gameGrid.getButton(row + i, col).setBackground(Color.GRAY);
                 }
             }
             shipsLeftToPlace--;
@@ -478,6 +485,9 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
                 btgHorizontalVertical.clearSelection();
                 btnHorizontal.setEnabled(false);
                 btnVertical.setEnabled(false);
+                btnConfirm.setEnabled(true);
+                btnConfirm.setBorder(bdrRaisedButton);
+                btnConfirm.setForeground(textColor);
             }
         }
     }
