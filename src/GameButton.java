@@ -10,7 +10,7 @@ public class GameButton extends JButton {
     private int occupyingShipSize;
     
     private ImageIcon iiSea = new ImageIcon("res/sea.png");
-    private Color borderColor = new Color(45,190,209);
+    private Color borderColor = new Color(0, 66, 90);
     private Color shipColor = Color.GRAY;
     private Color shipBorder = new Color(46,46,46);
     
@@ -57,5 +57,9 @@ public class GameButton extends JButton {
 	public void setDefaultIcon() {
 		this.setIcon(iiSea);
 		
+	}
+	
+	public void setBorderToDark(){
+		this.setBorder(BorderFactory.createLineBorder(shipBorder, 1));
 	}
 }

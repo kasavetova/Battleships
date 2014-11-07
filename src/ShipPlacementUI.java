@@ -64,9 +64,12 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
 
     private Player player;
 
-    private Color backroundColor = new Color(0,24,42);
-    private Color textColor = new Color(45,190,209);
-	
+    //private Color backroundColor = new Color(0,24,42);
+    private Color backroundColor = new Color(44, 62, 80);
+    
+    //private Color textColor = new Color(45,190,209);
+    private Color textColor = new Color(236, 240, 241);
+    
     // public static void main(String args[]) {
     // new ShipPlacementUI().setVisible(true);
     // }
@@ -453,6 +456,7 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
                             .setOccupied(true, shipSize);
                     gameGrid.getButton(row, col + i).setIcon(null);
                     gameGrid.getButton(row, col + i).setBackground(Color.GRAY);
+                    gameGrid.getButton(row, col + i).setBorderToDark();
                 }
             } else if (shipHorVert == 0) {
                 b.addShip(new Ship(new Point(row, col), new Point(row
@@ -464,6 +468,7 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
                             .setOccupied(true, shipSize);
                     gameGrid.getButton(row + i, col).setIcon(null);
                     gameGrid.getButton(row + i, col).setBackground(Color.GRAY);
+                    gameGrid.getButton(row, col + i).setBorderToDark();
                 }
             }
             shipsLeftToPlace--;
