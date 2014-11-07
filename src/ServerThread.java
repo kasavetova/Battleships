@@ -49,9 +49,11 @@ public class ServerThread extends Thread {
             	 }
             	 
              }
-             
-		} catch (IOException | ClassNotFoundException e) {
-			// TODO Auto-generated catch block
+
+         } catch (IOException e) {
+             e.printStackTrace();
+         } catch (ClassNotFoundException e) {
+             // TODO Auto-generated catch block
 			e.printStackTrace();
 		}
          
@@ -188,6 +190,8 @@ public class ServerThread extends Thread {
                             break;
                         }
                     }
+                } else if (input.getActionType().equals("PlayerBusy")) {
+                    messageAll(input);
                 } else {
                     System.out.println(input);
                 }
