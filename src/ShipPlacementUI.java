@@ -47,12 +47,11 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
 
     private String playerName;
     private String opponentName;
-    private Color backroundColor;
-    private Color buttonColor;
-    private Color hoverColor;
-    private Color selectedColor;
 
+    private JPanel pnlConfirmHome;
     private JButton btnConfirm;
+    private JButton btnHome;
+   
     private Board b;
 
     private Player player;
@@ -245,6 +244,8 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
             }
         }
 
+        pnlConfirmHome = new JPanel(new GridLayout(1,2));
+        
         btnConfirm = new JButton("CONFIRM");
         btnConfirm.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -256,9 +257,14 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
             }
         });
 
+        btnHome = new JButton("HOME");
+        
+        pnlConfirmHome.add(btnConfirm);
+        pnlConfirmHome.add(btnHome);
+        
         content.add(pnlNorth, BorderLayout.NORTH);
         content.add(pnlGrid, BorderLayout.CENTER);
-        content.add(btnConfirm, BorderLayout.SOUTH);
+        content.add(pnlConfirmHome, BorderLayout.SOUTH);
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {

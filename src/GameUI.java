@@ -1,6 +1,7 @@
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.*;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
@@ -23,7 +24,12 @@ public class GameUI extends JFrame implements MouseListener {
     private JPanel pnlPlayerText;
     private JLabel lblPlayer1;
     private JLabel lblPlayer2;
-    private Player player;
+   
+    private JPanel pnlTimerHome;
+    private JLabel lblTimer;
+    private JButton btnHome;
+    
+    private Player player; 
     private ObjectOutputStream out;
     private ObjectInputStream in;
     private Board bo;
@@ -103,15 +109,28 @@ public class GameUI extends JFrame implements MouseListener {
         pnlBoards.add(pnlMyBoard);
         pnlBoards.add(pnlEnemyBoard);
 
-        pnlPlayerText = new JPanel(new GridLayout(1, 2));
+        pnlPlayerText = new JPanel(new GridLayout(1, 3));
 
         lblPlayer1 = new JLabel("MY BOARD", SwingConstants.CENTER);
         lblPlayer1.setFont(new Font("DejaVu Sans", Font.BOLD, 24));
 
-        lblPlayer2 = new JLabel("ENEMY BOARD", SwingConstants.CENTER);
+        lblPlayer2 = new JLabel(opponentName + "'s BOARD", SwingConstants.CENTER);
         lblPlayer2.setFont(new Font("DejaVu Sans", Font.BOLD, 24));
-
+        
+        pnlTimerHome = new JPanel(new GridLayout(1, 2));
+        
+        lblTimer = new JLabel("TIMER",SwingConstants.CENTER);
+        lblTimer.setFont(new Font("DejaVu Sans", Font.PLAIN, 18));
+        lblTimer.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
+        
+        btnHome = new JButton("HOME");
+        btnHome.setFont(new Font("DejaVu Sans", Font.PLAIN, 18));
+        
+        pnlTimerHome.add(lblTimer);
+        pnlTimerHome.add(btnHome);
+        
         pnlPlayerText.add(lblPlayer1);
+        pnlPlayerText.add(pnlTimerHome);  
         pnlPlayerText.add(lblPlayer2);
 
         pnlChatWindow = new JPanel(new BorderLayout(5, 5));
