@@ -7,33 +7,36 @@ import java.awt.event.ActionListener;
  * @author Muntasir Syed
  */
 
-public class CountdownGUITemp extends JFrame {
+public class CountdownManager {
 
-    private JLabel timeLabel = new JLabel("Timer");
+    private JLabel timeLabel;
+    private GameUI gameUI;
     
     private Countdown countdown = new Countdown();
     
-    public CountdownGUITemp() throws HeadlessException {
+    public CountdownManager(JLabel timeLabel, GameUI gameUI) throws HeadlessException {
+        this.timeLabel = timeLabel;
+        this.gameUI = gameUI;
         
-        super("tester");
-
-        add(timeLabel, BorderLayout.CENTER);
-        
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new Dimension(300, 300));
-        setVisible(true);
     }
 
     private void setTimer(String sTime) {
         timeLabel.setText(sTime);
     }
-    
+
+    /**
+     * Call this method to start the timer.
+     */
     private void startTimer() {
         countdown.startCount();
     }
-    
+
+    /**
+     * This method is called in line 63 when the timer finishes
+     */
     private void turnOver() {
         // called by the timer when it finishes
+        // call something in GameUI when turn finishes
     }
 
     private class Countdown implements ActionListener {
@@ -88,7 +91,7 @@ public class CountdownGUITemp extends JFrame {
         
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CountdownGUITemp();
+                // this is they ran this class
             }
         });
     }
