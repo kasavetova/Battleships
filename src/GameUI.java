@@ -124,6 +124,16 @@ public class GameUI extends JFrame implements MouseListener {
         lblTimer.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
         
         btnHome = new JButton("HOME");
+        btnHome.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				player.sendServerRequest(new Request("UserWentBackToLobby", player.getName(), opponentName));
+				player.sendServerRequest(new Request("UserJoinedLobby", player.getName()));
+				player.reshowLobby();
+				
+			}
+		});
         btnHome.setFont(new Font("DejaVu Sans", Font.PLAIN, 18));
         
         pnlTimerHome.add(lblTimer);
@@ -176,7 +186,7 @@ public class GameUI extends JFrame implements MouseListener {
             public void windowClosing(WindowEvent e) {
 
                 try {
-                    out.writeObject(new Request("UserLeftGame2", player
+                    out.writeObject(new Request("UserLeftGame", player
                             .getName(), opponentName));
                     // out.writeObject(new Request("UserClosed", name));
 

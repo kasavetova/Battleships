@@ -117,8 +117,9 @@ public class Player extends JFrame implements ActionListener {
                                     }
                                 } else if (input.getActionType().equals(
                                         "RetrieveLobby")) {
-                                    ArrayList<String> playersList = (ArrayList<String>) input
-                                            .getObject();
+                                	playersModel.clear();
+                                    ArrayList<String> playersList = (ArrayList<String>) input.getObject();
+                                    System.out.println(playersList);
                                     for (int i = 0; i < playersList.size(); i++) {
                                         if (!playersList.get(i).equals(name)) {
                                             // System.out.println(playersList.get(i));
@@ -129,42 +130,14 @@ public class Player extends JFrame implements ActionListener {
                                 } else if (input.getActionType().equals(
                                         "ReceiveMessage")) {
                                     gui.appendMessage((String) input.getObject(), input.getOrigin());
-                                } else if (input.getActionType().equals(
-                                        "UserLeftGame")) {
-                                    // Quitting game on selection screen
-                                    mainGUI();
-                                    setVisible(true);
-                                    opponentName = null;
-                                    sui.dispose();
-                                    out.writeObject(new Request(
-                                            "UserJoinedLobby", name));
-                                    out.writeObject(new Request(
-                                            "RetrieveLobby", name));
-                                    JOptionPane
-                                            .showMessageDialog(
-                                                    null,
-                                                    "Your opponent quit! You win (by default)",
-                                                    "Opponent Quit",
-                                                    JOptionPane.INFORMATION_MESSAGE);
-
-                                } else if (input.getActionType().equals(
-                                        "UserLeftGame2")) {
-                                    // Quitting game on game screen
-                                    mainGUI();
-                                    setVisible(true);
-                                    opponentName = null;
-                                    out.writeObject(new Request(
-                                            "UserJoinedLobby", name));
-                                    out.writeObject(new Request(
-                                            "RetrieveLobby", name));
-                                    gui.dispose();
-                                    JOptionPane
-                                            .showMessageDialog(
-                                                    null,
-                                                    "Your opponent quit! You win (by default)",
-                                                    "Opponent Quit",
-                                                    JOptionPane.INFORMATION_MESSAGE);
-
+                                } else if (input.getActionType().equals("UserLeftGame")) {
+                                    // Quitting game     
+                                    reshowLobby();
+                                    JOptionPane.showMessageDialog(null,"Your opponent quit! You win (by default)","Opponent Quit",JOptionPane.INFORMATION_MESSAGE);
+                                } else if (input.getActionType().equals("UserWentBackToLobby")) {
+                                	//Returning to lobby                              	
+                                	reshowLobby();
+                                	JOptionPane.showMessageDialog(null,"Your opponent went back to lobby", "Opponent Quit", JOptionPane.INFORMATION_MESSAGE);
                                 } else if (input.getActionType().equals(
                                         "RandomGameRequestFail")) {
                                     JOptionPane
@@ -499,5 +472,26 @@ public class Player extends JFrame implements ActionListener {
 			e.printStackTrace();
 		}
 		return true;
+    }
+    public void reshowLobby(){
+    	 mainGUI();
+         setVisible(true);
+         opponentName = null;
+         
+         if(sui !=null){
+         	sui.dispose();
+         }
+         if(gui !=null){
+         	gui.dispose();
+         }
+         playersModel.clear();
+         try {
+        	
+			out.writeObject(new Request(
+			         "RetrieveLobby", name));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 }

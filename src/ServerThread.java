@@ -145,13 +145,25 @@ public class ServerThread extends Thread {
                             break;
                         }
                     }
-
                     serverThreads.remove(this);
                     messageAll(new Request("UserLeftLobby", "SERVER", "ALL", username));
                     System.out.println(username + " has exited.");
                     out.close();
                     in.close();
+                    clientSocket.close();
                     interrupt();
+                } else if (input.getActionType().equals("UserWentBackToLobby")) {
+                	for (ServerThread st : serverThreads) {
+                        if (st.getPlayerName().equals(input.getDestination())) {	
+                        	st.setInGame(false);
+                        	st.setPlayerStatus(false);
+                            st.message(input);
+                            setInGame(false);
+                            setPlayerStatus(false);
+                            break;
+                            
+                        }
+                	}
                 } else if (input.getActionType().equals("GameBoard")) {
                     gameBoard = (Board) input.getObject();
                 } else if (input.getActionType().equals("Move")) {

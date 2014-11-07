@@ -1,5 +1,6 @@
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
@@ -258,9 +259,19 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
         });
 
         btnHome = new JButton("HOME");
-        
+        btnHome.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				player.sendServerRequest(new Request("UserWentBackToLobby", name, opponentName));
+				player.sendServerRequest(new Request("UserJoinedLobby", name));
+				player.reshowLobby();
+				
+			}
+		});
         pnlConfirmHome.add(btnConfirm);
         pnlConfirmHome.add(btnHome);
+        
         
         content.add(pnlNorth, BorderLayout.NORTH);
         content.add(pnlGrid, BorderLayout.CENTER);
