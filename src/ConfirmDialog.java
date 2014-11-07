@@ -15,13 +15,29 @@ public class ConfirmDialog extends JFrame implements ActionListener {
     private JButton noButton;
     private Player player;
     private Request input;
+    private Timer time;
+    
 
     public ConfirmDialog(final Player player, final Request input) {
 
         super("Game Request");
         this.player = player;
         this.input = input;
+        time = new Timer(10000, new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+				player.refuseRequest(input);
+				time.stop();
+                dispose();
+			}
+        	
+        });
+        time.start();
         textLabel = new JLabel("Would you like to play a game with " + input.getOrigin() + "?");
+        
         textLabel.setFont(new Font("", Font.PLAIN, 13));
         yesButton = new JButton("Yes");
         yesButton.addActionListener(this);
