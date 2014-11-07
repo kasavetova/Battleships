@@ -1,4 +1,5 @@
 import javax.swing.*;
+
 import java.awt.*;
 
 public class GameButton extends JButton {
@@ -7,22 +8,27 @@ public class GameButton extends JButton {
     private int col;
     private boolean cellState;
     private int occupyingShipSize;
-
+    
+    private ImageIcon iiSea = new ImageIcon("/Users/Lewis/Documents/Programming/Battleships Workspace/Battleships/res/sea.png");
+    private Color borderColor = new Color(45,190,209);
+    
     public GameButton() {
         super();
         cellState = false;
         setOpaque(true);
-        this.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
+        this.setBorder(BorderFactory.createLineBorder(borderColor, 1));
+        this.setBackground(borderColor);
     }
 
     public GameButton(int row, int col) {
         super();
         this.row = row;
         this.col = col;
-        cellState = false;
+        cellState = false; 
         occupyingShipSize = 0;
         setOpaque(true);
-        this.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
+        this.setBorder(BorderFactory.createLineBorder(borderColor, 1));
+        this.setIcon(iiSea);
     }
 
     public int getRow() {

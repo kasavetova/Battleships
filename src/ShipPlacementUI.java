@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
 import java.awt.*;
@@ -13,6 +14,8 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
 
     private JPanel content;
     private JPanel pnlNorth;
+    private JLabel lblTitle;
+    
     private JPanel pnlGrid;
 
     private GameGrid gameGrid;
@@ -45,18 +48,25 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
     private JRadioButton btnVertical;
 
     private JPanel pnlHorizontalVertical;
-
-    private String playerName;
+    private JLabel lblHorizontal;
+	private JLabel lblVertical;
+    
+	private String playerName;
     private String opponentName;
 
     private JPanel pnlConfirmHome;
     private JButton btnConfirm;
     private JButton btnHome;
-   
+    private Border bdrRaisedButton;
+    private Border bdrLoweredButton;
+    
     private Board b;
 
     private Player player;
 
+    private Color backroundColor = new Color(0,24,42);
+    private Color textColor = new Color(45,190,209);
+	
     // public static void main(String args[]) {
     // new ShipPlacementUI().setVisible(true);
     // }
@@ -70,9 +80,10 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
         b = new Board();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 450, 300);
-        setSize(400, 550);
+        setSize(500, 650);
         content = new JPanel(new BorderLayout(0, 5));
-        content.setBorder(new EmptyBorder(5, 5, 5, 5));
+        content.setBorder(BorderFactory.createLineBorder(backroundColor, 5));
+        content.setBackground(backroundColor);
         setContentPane(content);
 
         playerName = name;
@@ -81,23 +92,28 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
         btnShip5.setActionCommand("5");
         btnShip5.addActionListener(this);
         btnShip5.setSelected(true);
-
+        btnShip5.setBackground(backroundColor);
+        
         btnShip4 = new JRadioButton();
         btnShip4.addActionListener(this);
         btnShip4.setActionCommand("4");
-
+        btnShip4.setBackground(backroundColor);
+        
         btnShip3a = new JRadioButton();
         btnShip3a.addActionListener(this);
         btnShip3a.setActionCommand("3");
-
+        btnShip3a.setBackground(backroundColor);
+        
         btnShip3b = new JRadioButton();
         btnShip3b.addActionListener(this);
         btnShip3b.setActionCommand("3");
-
+        btnShip3b.setBackground(backroundColor);
+       
         btnShip2 = new JRadioButton();
         btnShip2.addActionListener(this);
         btnShip2.setActionCommand("2");
-
+        btnShip2.setBackground(backroundColor);
+        
         arrayShipButtons = new ArrayList<DefaultButtonModel>();
         arrayShipButtons.add((DefaultButtonModel) btnShip5.getModel());
         arrayShipButtons.add((DefaultButtonModel) btnShip4.getModel());
@@ -113,6 +129,7 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
         btgShips.add(btnShip2);
 
         pnlShip5 = new JPanel(new GridLayout(1, 6));
+        pnlShip5.setBackground(backroundColor);
         GameButton[] ship5Array = new GameButton[5];
         for (int a = 0; a < 5; a++) {
             ship5Array[a] = new GameButton();
@@ -126,6 +143,7 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
         pnlShip5.add(btnShip5);
 
         pnlShip4 = new JPanel(new GridLayout(1, 6));
+        pnlShip4.setBackground(backroundColor);
         GameButton[] ship4Array = new GameButton[5];
         for (int a = 0; a < 5; a++) {
             ship4Array[a] = new GameButton();
@@ -140,6 +158,7 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
         pnlShip4.add(btnShip4);
 
         pnlShip3a = new JPanel(new GridLayout(1, 6));
+        pnlShip3a.setBackground(backroundColor);
         GameButton[] ship3aArray = new GameButton[5];
         for (int a = 0; a < 5; a++) {
             ship3aArray[a] = new GameButton();
@@ -155,6 +174,7 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
         pnlShip3a.add(btnShip3a);
 
         pnlShip3b = new JPanel(new GridLayout(1, 6));
+        pnlShip3b.setBackground(backroundColor);
         GameButton[] ship3bArray = new GameButton[5];
         for (int a = 0; a < 5; a++) {
             ship3bArray[a] = new GameButton();
@@ -170,6 +190,7 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
         pnlShip3b.add(btnShip3b);
 
         pnlShip2 = new JPanel(new GridLayout(1, 6));
+        pnlShip2.setBackground(backroundColor);
         GameButton[] ship2Array = new GameButton[5];
         for (int a = 0; a < 5; a++) {
             ship2Array[a] = new GameButton();
@@ -186,24 +207,36 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
         pnlShip2.add(btnShip2);
 
         pnlShipHolder = new JPanel(new GridLayout(3, 2, 0, 5));
-
+        pnlShipHolder.setBackground(backroundColor);
+        
         btnHorizontal = new JRadioButton();
         btnHorizontal.addActionListener(this);
         btnHorizontal.setActionCommand("1");
         btnHorizontal.setSelected(true);
-
+        btnHorizontal.setBackground(backroundColor);
+        
         btnVertical = new JRadioButton();
         btnVertical.addActionListener(this);
         btnVertical.setActionCommand("0");
-
+        btnVertical.setBackground(backroundColor);
+        
         btgHorizontalVertical = new ButtonGroup();
         btgHorizontalVertical.add(btnHorizontal);
         btgHorizontalVertical.add(btnVertical);
 
+        lblHorizontal = new JLabel("<html><b>HORIZONTAL");
+        lblHorizontal.setBackground(backroundColor);
+        lblHorizontal.setForeground(textColor);
+        
+        lblVertical = new JLabel("<html><b>VERTICAL</b></html>");
+        lblVertical.setBackground(backroundColor);
+        lblVertical.setForeground(textColor);
+        
         pnlHorizontalVertical = new JPanel(new FlowLayout(FlowLayout.LEADING));
-        pnlHorizontalVertical.add(new JLabel("Horizontal"));
+        pnlHorizontalVertical.setBackground(backroundColor);
+        pnlHorizontalVertical.add(lblHorizontal);
         pnlHorizontalVertical.add(btnHorizontal);
-        pnlHorizontalVertical.add(new JLabel("Vertical"));
+        pnlHorizontalVertical.add(lblVertical);
         pnlHorizontalVertical.add(btnVertical);
 
         pnlShipHolder.add(pnlShip5);
@@ -214,22 +247,36 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
         pnlShipHolder.add(pnlHorizontalVertical);
 
         pnlNorth = new JPanel(new BorderLayout(0, 5));
-        pnlNorth.add(new JLabel(
-                "<html><b>SELECT THE SHIP YOU WISH TO PLACE</b></html>",
-                SwingConstants.CENTER), BorderLayout.NORTH);
+        pnlNorth.setBackground(backroundColor);
+       
+        lblTitle =  new JLabel("<html><b>SELECT THE SHIP YOU WISH TO PLACE</b></html>",SwingConstants.CENTER);
+        lblTitle.setForeground(textColor);
+        
+        pnlNorth.add(lblTitle,BorderLayout.NORTH);
         pnlNorth.add(pnlShipHolder, BorderLayout.CENTER);
 
         gameGrid = new GameGrid(rows, cols);
         pnlGrid = new JPanel(new GridLayout(11, 11));
-
+        pnlGrid.setBackground(backroundColor);
+        
         arrayGrid = new JComponent[11][11];
         arrayGrid[0][0] = new JLabel("");
-
+        arrayGrid[0][0].setBackground(backroundColor);
+        arrayGrid[0][0].setOpaque(true);
+        
         for (int a = 1; a < 11; a++) {
             arrayGrid[a][0] = new JLabel(Integer.toString(a),
                     SwingConstants.CENTER);
             arrayGrid[0][a] = new JLabel(Character.toString((char) (a + 64)),
                     SwingConstants.CENTER);
+            arrayGrid[a][0].setBackground(backroundColor);
+            arrayGrid[0][a].setBackground(backroundColor);
+            arrayGrid[a][0].setFont(new Font("DejaVu Sans", Font.BOLD,12));
+            arrayGrid[0][a].setFont(new Font("DejaVu Sans", Font.BOLD,12));
+            arrayGrid[a][0].setForeground(textColor);
+            arrayGrid[0][a].setForeground(textColor);
+            arrayGrid[a][0].setOpaque(true);
+            arrayGrid[0][a].setOpaque(true);
         }
 
         for (int a = 1; a < 11; a++) {
@@ -246,21 +293,34 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
         }
 
         pnlConfirmHome = new JPanel(new GridLayout(1,2));
+        pnlConfirmHome.setBackground(backroundColor);
+        pnlConfirmHome.setBorder(BorderFactory.createLineBorder(backroundColor, 2));
         
-        btnConfirm = new JButton("CONFIRM");
+        bdrRaisedButton = BorderFactory.createRaisedBevelBorder();
+        bdrLoweredButton = BorderFactory.createLoweredBevelBorder();
+        
+        btnConfirm = new JButton("<html><b>CONFIRM</b></html>");
+        btnConfirm.setBackground(backroundColor);
+        btnConfirm.setForeground(textColor);
+        btnConfirm.setBorder(bdrRaisedButton);
         btnConfirm.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                if (shipsLeftToPlace == 0) {
+                
+            	if (shipsLeftToPlace == 0) {
                     player.sendServerRequest(new Request("PlayerReady", playerName, opponentName));
                     //display UI for waiting for response.
                     btnConfirm.setEnabled(false);
+                    btnConfirm.setBorder(bdrLoweredButton);
+                    btnConfirm.setForeground(Color.GRAY);
                 }
             }
         });
-
-        btnHome = new JButton("HOME");
+        
+        btnHome = new JButton("<html><b>HOME</b></html>");
+        btnHome.setBackground(backroundColor);
+        btnHome.setForeground(textColor);
+        btnHome.setBorder(bdrRaisedButton);
         btnHome.addActionListener(new ActionListener() {
-			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				player.sendServerRequest(new Request("UserWentBackToLobby", name, opponentName));
@@ -269,6 +329,7 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
 				
 			}
 		});
+       
         pnlConfirmHome.add(btnConfirm);
         pnlConfirmHome.add(btnHome);
         
