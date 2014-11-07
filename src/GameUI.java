@@ -254,10 +254,10 @@ public class GameUI extends JFrame implements MouseListener {
     public void updateEnemyBoard(String x, Point p) {
         if (x.equals("hit")) {
             enemyBoardGrid.getButton(p.getX(), p.getY()).setBackground(Color.RED);
-        } else if (x.equals("destroyed")) {
+        } else if (x.startsWith("destroyed")) {
             enemyBoardGrid.getButton(p.getX(), p.getY()).setBackground(Color.RED);
             //Tell which ship has been destroyed
-            appendMessage("Enemy ship has been destroyed.", "GAME"); //add new line
+            appendMessage("Enemies "+x.substring(9)+" has been destroyed.", "GAME"); //add new line
         } else {
             enemyBoardGrid.getButton(p.getX(), p.getY()).setBackground(Color.CYAN);
         }
@@ -266,10 +266,10 @@ public class GameUI extends JFrame implements MouseListener {
     public void updateOwnBoard(String x, Point p) {
         if (x.equals("hit")) {
             myBoardGrid.getButton(p.getX(), p.getY()).setBackground(Color.lightGray);
-        } else if (x.equals("destroyed")) {
+        } else if (x.startsWith("destroyed")) {
             myBoardGrid.getButton(p.getX(), p.getY()).setBackground(Color.lightGray);
             //Tell which ship has been destroyed
-            appendMessage("Your ship has been destroyed.", "GAME");
+            appendMessage("Your "+x.substring(9)+" has been destroyed.", "GAME");
         } else {
             myBoardGrid.getButton(p.getX(), p.getY()).setBackground(Color.CYAN);
         }
@@ -321,4 +321,5 @@ public class GameUI extends JFrame implements MouseListener {
             }
         });
     }
+    
 }

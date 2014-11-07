@@ -131,13 +131,16 @@ public class ServerThread extends Thread {
                 }
                 //Handles closing connections
                 else if (input.getActionType().equals("UserClosed")) {
+                	//If user closes on lobby screen
                     serverThreads.remove(this);
                     messageAll(new Request("UserLeftLobby", "SERVER", "ALL", username));
                     System.out.println(username + " has exited.");
                     out.close();
                     in.close();
+                    clientSocket.close();
                     interrupt();
                 } else if (input.getActionType().startsWith("UserLeftGame")) {
+                	//if user closes during shipselection/gameui
                     System.out.println("Sending" + input);
                     for (ServerThread st : serverThreads) {
                         if (st.getPlayerName().equals(input.getDestination())) {

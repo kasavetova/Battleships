@@ -82,7 +82,8 @@ public class Board implements Serializable {
             ships.get(shot).shoot();
             if (ships.get(shot).isDestroyed()) {
                 board[point.getX()][point.getY()] = -4;
-                return "destroyed";
+                return "destroyed" + ships.get(shot).getName();
+                
             }
 
             board[point.getX()][point.getY()] = -3;

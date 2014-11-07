@@ -9,6 +9,9 @@ public class Ship implements Serializable {
     int size; //this is the size of the ship, that will be calculated automatically
     int life; //this is the life of the ship. Every time the ship gets hit but not destroyed, it will reduce from its life,when life==0 shis is destroyed
     char orientation;//H-horizontal , V-vertical
+    String name;
+    static boolean thirdShip = false;
+    
 
     /**
      * This initializes a new ship that starts at Point start and ends at Point end.
@@ -35,6 +38,7 @@ public class Ship implements Serializable {
         size = start.getDistance(end) + 1; //calculates the size of the ship
         destroyed = false; //ship is initially not destroyed
         life = size; // the life of the ship is initially equal to its size
+        name = getShipName();
 
 
     }
@@ -142,7 +146,26 @@ public class Ship implements Serializable {
             this.setDestroyed(true);
         return life;
 
+    }
+    public String getShipName(){
 
+    	switch(size){
+    		case 2: return "Patrol Boat";
+    		case 3:	if(thirdShip == false){
+    					thirdShip = true;
+    					return "Destroyer";
+    				}
+    				else{
+    					thirdShip = false;
+    					return "Submarine";
+    				}
+    		case 4:	return "Battleship";
+    		case 5:	return "Aircraft Carrier";
+    	}
+		return "Ship";
+    }
+    public String getName(){
+    	return name;
     }
 
 }

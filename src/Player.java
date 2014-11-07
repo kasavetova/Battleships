@@ -173,7 +173,7 @@ public class Player extends JFrame implements ActionListener {
 
                                     if (name.equals(playerName)) {
                                         //update enemy board
-                                        if(outcome.equals("hit") || outcome.equals("destroyed")) {
+                                        if(outcome.equals("hit") || outcome.startsWith("destroyed")) {
                                             isTheirTurn = true;
                                         }
                                         gui.updateEnemyBoard(outcome, coordinates);
@@ -267,9 +267,7 @@ public class Player extends JFrame implements ActionListener {
 
                 if (socket != null) {
                     try {
-
                         out.writeObject(new Request("UserClosed", name));
-
                     } catch (IOException e1) {
                         e1.printStackTrace();
                     }
@@ -456,7 +454,7 @@ public class Player extends JFrame implements ActionListener {
             e.printStackTrace();
         }
     }
-
+    
     public void placementFinished(GameGrid grid, Board b) {
         gui = new GameUI(grid, out, in, this, b, opponentName);
         gui.setVisible(true);
