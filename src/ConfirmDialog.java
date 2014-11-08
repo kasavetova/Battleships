@@ -16,7 +16,7 @@ public class ConfirmDialog extends JFrame implements ActionListener {
     private Player player;
     private Request input;
     private Timer time;
-    private int timeRemaining = 10;
+    private int timeRemaining = 11;
 
     public ConfirmDialog(final Player player, final Request input) {
 
@@ -33,7 +33,6 @@ public class ConfirmDialog extends JFrame implements ActionListener {
                 } else {
                     player.refuseRequest(input);
                     time.stop();
-                    dispose();
                 }
             }
         });
@@ -78,21 +77,6 @@ public class ConfirmDialog extends JFrame implements ActionListener {
             }
         });
 
-        time = new Timer(1000, new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String text = textLabel.getText();
-                if (--timeRemaining > 0) {
-                    textLabel.setText(text.substring(0, text.lastIndexOf('(') + 1) + timeRemaining + ")</p></div></html>");
-                } else {
-                    player.refuseRequest(input);
-                    time.stop();
-                    dispose();
-                }
-            }
-        });
-        time.start();
 
     }
 
