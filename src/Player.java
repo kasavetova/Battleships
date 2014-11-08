@@ -227,11 +227,10 @@ public class Player extends JFrame implements ActionListener {
         gc.insets = new Insets(5, 5, 10, 5);
         add(connectButton, gc);
 
-        // Handles any players closing their game
+        // Handles any players closing their game on lobby screen
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-
                 if (socket != null) {
                     try {
                         out.writeObject(new Request("UserClosed", name));
@@ -382,6 +381,7 @@ public class Player extends JFrame implements ActionListener {
                         out.close();
                         in.close();
                         socket.close();
+                        socket = null;
                         prompt.setText("<html>" + "<div style=\"text-align: center;\">"
                                 + "<h2>" + "Welcome to Battleship" + "</h2>" + "<p>"
                                 + "Enter a nickname for players to identify you with, "
