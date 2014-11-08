@@ -160,7 +160,6 @@ public class ServerThread extends Thread {
 
                 } else if (input.getActionType().equals("MoveEnded")) {
                     messageAll(input);
-
                 } else if (input.getActionType().equals("PlayerReady")) {
                     if (input.getOrigin().equals(username)) {
                         isReady = true;

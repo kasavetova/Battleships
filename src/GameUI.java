@@ -7,6 +7,9 @@ import java.awt.event.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class GameUI extends JFrame implements MouseListener {
 
@@ -319,12 +322,15 @@ public class GameUI extends JFrame implements MouseListener {
 
     public void sendMessage(String message) {
         if (message.length() > 0) {
+            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            Date date = new Date();
+            String timeStamp = dateFormat.format(date).substring(11);
             Document doc = txtAreaChat.getDocument();
             SimpleAttributeSet attr = new SimpleAttributeSet();
             StyleConstants.setForeground(attr, Color.darkGray);
             StyleConstants.setBold(attr, true);
             try {
-                doc.insertString(doc.getLength(), "\n" + playerName + ": " + message, attr);
+                doc.insertString(doc.getLength(), "\n" + "[" + timeStamp + "] " + playerName + ": " + message, attr);
             } catch (BadLocationException e) {
                 e.printStackTrace();
             }
@@ -336,13 +342,16 @@ public class GameUI extends JFrame implements MouseListener {
 
     public void appendMessage(String message, String username) {
         if (message.length() > 0) {
+            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            Date date = new Date();
+            String timeStamp = dateFormat.format(date).substring(11);
             Document doc = txtAreaChat.getDocument();
             SimpleAttributeSet attr = new SimpleAttributeSet();
             StyleConstants.setForeground(attr, Color.blue);
-            if (username.equals("GAME")) StyleConstants.setForeground(attr, Color.LIGHT_GRAY);
+            if (username.equals("GAME")) StyleConstants.setForeground(attr, Color.ORANGE);
             StyleConstants.setBold(attr, true);
             try {
-                doc.insertString(doc.getLength(), "\n" + username + ": " + message, attr);
+                doc.insertString(doc.getLength(), "\n" + "[" + timeStamp + "] " + username + ": " + message, attr);
             } catch (BadLocationException e) {
                 e.printStackTrace();
             }
@@ -363,6 +372,7 @@ public class GameUI extends JFrame implements MouseListener {
     }
 
     public void endTurn() throws IOException {
+        appendMessage("Your time ran out. You missed your turn.", "GAME");
         Request request = new Request("MoveEnded", playerName, opponentName);
         player.finishMove(request);
     }

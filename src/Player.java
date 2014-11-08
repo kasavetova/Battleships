@@ -12,7 +12,11 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Player extends JFrame implements ActionListener {
     private static String name;
@@ -144,13 +148,14 @@ public class Player extends JFrame implements ActionListener {
                                         //update own board
                                         if(!outcome.equals("hit") && !outcome.equals("destroyed")) {
                                             isTheirTurn = true;
+                                            gui.appendMessage("It's your turn to play.", "GAME");
                                             gui.startTimer();
                                         }
                                         gui.updateOwnBoard(outcome, coordinates);
                                     }
                                 } else if (input.getActionType().equals("MoveEnded")) {
-                                    System.out.println("received");
                                     isTheirTurn = true;
+                                    gui.appendMessage("Enemy ran out of time.", "GAME");
                                     gui.startTimer();
                                 } else if(input.getActionType().equals("GameStart")) {
                                     sui.startGame();
@@ -167,6 +172,10 @@ public class Player extends JFrame implements ActionListener {
                     } catch (EOFException e) {
                         // EOFException - if this input stream reaches the end
                         // before reading eight bytes
+                    } catch (ClassCastException e) {
+                        e.printStackTrace();
+                        System.out.println("An error occurred.");
+                        System.exit(1);
                     } catch (ClassNotFoundException e) {
                         e.printStackTrace();
                     } catch (IOException e) {
