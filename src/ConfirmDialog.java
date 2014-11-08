@@ -49,7 +49,7 @@ public class ConfirmDialog extends JFrame implements ActionListener {
 
         pack();
         getContentPane().add(mainPanel);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setSize(new Dimension(450, 140));
         setResizable(false);
