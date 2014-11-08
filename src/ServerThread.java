@@ -114,9 +114,8 @@ public class ServerThread extends Thread {
                     messageAll(new Request("UserLeftLobby", "SERVER", "ALL", username));
                     System.out.println(username + " has exited.");
                     out.close();
-                    in.close();
-                    clientSocket.close();
-                    interrupt();
+                    break;
+                    
                 } else if (input.getActionType().startsWith("UserLeftGame")) {
                     //if user closes during shipselection/gameui
                     System.out.println("Sending" + input);
@@ -131,10 +130,9 @@ public class ServerThread extends Thread {
                     serverThreads.remove(this);
                     messageAll(new Request("UserLeftLobby", "SERVER", "ALL", username));
                     System.out.println(username + " has exited.");
-                    out.close();
-                    in.close();
-                    clientSocket.close();
-                    interrupt();
+                    out.close();  
+                    break;
+                    
                 } else if (input.getActionType().equals("UserWentBackToLobby")) {
                     for (ServerThread st : serverThreads) {
                         if (st.getPlayerName().equals(input.getDestination())) {
@@ -181,13 +179,14 @@ public class ServerThread extends Thread {
                     System.out.println(input);
                 }
             }
+            in.close();
+            clientSocket.close();
 
         } catch (IOException e) {
             System.out.println("Exception caught when trying to listen on port "
                     + " or listening for a connection");
-            System.out.println("CATCH FROM MAIN THREAD" + e.getMessage());
         } catch (ClassNotFoundException e) {
-            System.out.println("CATCH FROM MAIN THREAD2" + e.getMessage());
+ 
         }
     }
 

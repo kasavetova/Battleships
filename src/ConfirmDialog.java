@@ -33,7 +33,6 @@ public class ConfirmDialog extends JFrame implements ActionListener {
                 } else {
                     player.refuseRequest(input);
                     time.stop();
-                    dispose();
                 }
             }
         });
@@ -75,7 +74,6 @@ public class ConfirmDialog extends JFrame implements ActionListener {
             @Override
             public void windowClosing(WindowEvent e) {
                 player.refuseRequest(input);
-                dispose();
             }
         });
 
@@ -85,10 +83,9 @@ public class ConfirmDialog extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == yesButton) {
             player.acceptRequest(input);
-            dispose();
 
         } else if (e.getSource() == noButton) {
-            dispose();
+        	player.refuseRequest(input);
         }
     }
 

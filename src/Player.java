@@ -36,6 +36,7 @@ public class Player extends JFrame implements ActionListener {
     private JPanel listPanel;
     private ShipPlacementUI sui;
     private GameUI gui;
+    private ConfirmDialog confirmDialog;
 
     public static void main(String[] args) {
         new Player().setVisible(true);
@@ -83,7 +84,7 @@ public class Player extends JFrame implements ActionListener {
                                     if (!isBusy) {
                                         isBusy = true;
 
-                                        ConfirmDialog confirmDialog = new ConfirmDialog(Player.this, input);
+                                        confirmDialog = new ConfirmDialog(Player.this, input);
                                         confirmDialog.setVisible(true);
 
                                     } else {
@@ -109,10 +110,8 @@ public class Player extends JFrame implements ActionListener {
                                         "RetrieveLobby")) {
                                 	playersModel.clear();
                                     ArrayList<String> playersList = (ArrayList<String>) input.getObject();
-                                    System.out.println(playersList);
                                     for (String aPlayersList : playersList) {
                                         if (!aPlayersList.equals(name)) {
-                                            // System.out.println(playersList.get(i));
                                             playersModel.addElement(aPlayersList);
                                         }
                                     }
@@ -196,7 +195,6 @@ public class Player extends JFrame implements ActionListener {
                 + "<h2>" + "Welcome to Battleship" + "</h2>" + "<p>"
                 + "Enter a nickname for players to identify you with, "
                 + "then hit connect!" + "</p></div></html>");
-        System.out.println(prompt.getText());
         gc.gridx = 0;
         gc.gridy = 0;
         gc.weightx = 0;
@@ -311,7 +309,6 @@ public class Player extends JFrame implements ActionListener {
         rightPanel.add(buttonPanel, gc);
 
         playButton.addActionListener(new ActionListener() {
-            // Repeated Code
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (players.getSelectedIndex() >= 0) {
@@ -418,6 +415,7 @@ public class Player extends JFrame implements ActionListener {
             out.writeObject(new Request(
                     "GameRequestAnswer", name,
                     input.getOrigin(), "No"));
+            confirmDialog.dispose();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -432,6 +430,7 @@ public class Player extends JFrame implements ActionListener {
                     input.getOrigin(), "Yes"));
             gameFrame(input.getOrigin());
             opponentName = input.getOrigin();
+            confirmDialog.dispose();
         } catch (IOException e) {
             e.printStackTrace();
         }
