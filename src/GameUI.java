@@ -162,7 +162,7 @@ public class GameUI extends JFrame implements MouseListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				player.sendServerRequest(new Request("UserWentBackToLobby", player.getName(), opponentName));
-				player.sendServerRequest(new Request("UserJoinedLobby", player.getName()));
+				//player.sendServerRequest(new Request("UserJoinedLobby", player.getName()));
 				player.reshowLobby();
 				
 			}

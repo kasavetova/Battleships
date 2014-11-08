@@ -124,6 +124,7 @@ public class ServerThread extends Thread {
                             st.message(input);
                             st.setInGame(false);
                             st.setPlayerStatus(false);
+                           
                             break;
                         }
                     }
@@ -136,6 +137,8 @@ public class ServerThread extends Thread {
                 } else if (input.getActionType().equals("UserWentBackToLobby")) {
                     for (ServerThread st : serverThreads) {
                         if (st.getPlayerName().equals(input.getDestination())) {
+                        	messageAllActive(new Request("UserJoinedLobby", "SERVER", "ALL", username));
+                        	messageAllActive(new Request("UserJoinedLobby", "SERVER", "ALL", st.getPlayerName()));
                             st.setInGame(false);
                             st.setPlayerStatus(false);
                             st.message(input);
