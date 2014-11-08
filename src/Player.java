@@ -161,7 +161,9 @@ public class Player extends JFrame implements ActionListener {
                     } catch (EOFException e) {
                         // EOFException - if this input stream reaches the end
                         // before reading eight bytes
-                    } catch (IOException | ClassNotFoundException e) {
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
@@ -470,9 +472,11 @@ public class Player extends JFrame implements ActionListener {
 					break;
 				}
 			}
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (ClassNotFoundException e) {
             // TODO Auto-generated catch block
 			e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return true;
     }

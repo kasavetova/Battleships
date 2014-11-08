@@ -50,7 +50,9 @@ public class ServerThread extends Thread {
 
             }
 
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
