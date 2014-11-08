@@ -329,8 +329,8 @@ public class Player extends JFrame implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent e) {
-        String name = enterName.getText().toString();
-        String nameToCheck = name.replaceAll("\\s+", "");
+        String text = enterName.getText().toString();
+        String nameToCheck = text.replaceAll("\\s+", "");
         if (nameToCheck.length() < 1) {
             prompt.setText("<html>" + "<div style=\"text-align: center;\">"
                     + "<h2>" + "Welcome to Battleship" + "</h2>" + "<p>"
