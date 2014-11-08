@@ -61,7 +61,7 @@ public class ConfirmDialog extends JFrame implements ActionListener {
 
         pack();
         getContentPane().add(mainPanel);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setSize(new Dimension(450, 140));
         setResizable(false);
@@ -84,7 +84,6 @@ public class ConfirmDialog extends JFrame implements ActionListener {
             dispose();
 
         } else if (e.getSource() == noButton) {
-            player.refuseRequest(input);
             dispose();
         }
     }

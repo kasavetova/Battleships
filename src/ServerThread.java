@@ -3,7 +3,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Random;
 
 
 public class ServerThread extends Thread {
@@ -23,51 +22,53 @@ public class ServerThread extends Thread {
         this.clientSocket = clientSocket;
         checkName();
     }
-    public void checkName(){
-    	 try {
-    		 out = new ObjectOutputStream(clientSocket.getOutputStream());
-    		 lobbyList = new ArrayList<String>();
-    		 for (ServerThread st : serverThreads) {
-    			 if(st.getName() != null){
-    				 lobbyList.add(st.getPlayerName());
-    			 }
-             }
-    		 message(new Request("RetrieveLobby", "SERVER", "", lobbyList));
-    		 in = new ObjectInputStream(clientSocket.getInputStream());
-             Request input;
-             while ((input = (Request) in.readObject()) != null) {
-            	 if (input.getActionType().equals("Accepted")){
-            		 createPlayerThread();
-            		 break;
-            	 }
-            	 if (input.getActionType().equals("Rejected")){
-            		 out.close();
-            		 in.close();
-            		 clientSocket.close();
-            		 serverThreads.remove(this);
-            		 break;
-            	 }
-            	 
-             }
 
-         } catch (IOException e) {
-             e.printStackTrace();
-         } catch (ClassNotFoundException e) {
-             // TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-         
+    public void checkName() {
+        try {
+            out = new ObjectOutputStream(clientSocket.getOutputStream());
+            lobbyList = new ArrayList<String>();
+            for (ServerThread st : serverThreads) {
+                if (st.getName() != null) {
+                    lobbyList.add(st.getPlayerName());
+                }
+            }
+            message(new Request("RetrieveLobby", "SERVER", "", lobbyList));
+            in = new ObjectInputStream(clientSocket.getInputStream());
+            Request input;
+            while ((input = (Request) in.readObject()) != null) {
+                if (input.getActionType().equals("Accepted")) {
+                    createPlayerThread();
+                    break;
+                }
+                if (input.getActionType().equals("Rejected")) {
+                    out.close();
+                    in.close();
+                    clientSocket.close();
+                    serverThreads.remove(this);
+                    break;
+                }
+
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
     }
 
     public String getPlayerName() {
         return username;
     }
-    public void createPlayerThread(){
-    	playerNumber = threadInstances++;
+
+    public void createPlayerThread() {
+        playerNumber = threadInstances++;
         System.out.println("Player " + playerNumber + " connected");
         inGame = false;
         serverThreads.add(this);
-        
+
         this.start();
     }
 
@@ -106,32 +107,10 @@ public class ServerThread extends Thread {
                     }
                     messageAllActive(new Request("RetrieveLobby", "SERVER", input.getOrigin(), lobbyList));
 
-                } else if (input.getActionType().equals("RandomGameRequest")) {
-
-                    int activePlayersCount = 0;
-                    for (ServerThread st : serverThreads) {
-                        if (st.inGame == false && !st.getPlayerName().equals(input.getOrigin())) {
-                            activePlayersCount++;
-                        }
-                    }
-
-                    if (activePlayersCount == 0) {
-                        messageAll(new Request("RandomGameRequestFail", "SERVER", input.getOrigin()));
-                    } else {
-                        int index = new Random().nextInt(serverThreads.size());
-                        if (serverThreads.get(index).inGame == false && !serverThreads.get(index).getPlayerName().equals(input.getOrigin())) {
-                            for (ServerThread st : serverThreads) {
-                                if (!st.getPlayerName().equals(input.getOrigin())) {
-                                    st.messageAll(new Request("GameRequest", input.getOrigin(), serverThreads.get(index).getPlayerName()));
-                                    break;
-                                }
-                            }
-                        }
-                    }
                 }
                 //Handles closing connections
                 else if (input.getActionType().equals("UserClosed")) {
-                	//If user closes on lobby screen
+                    //If user closes on lobby screen
                     serverThreads.remove(this);
                     messageAll(new Request("UserLeftLobby", "SERVER", "ALL", username));
                     System.out.println(username + " has exited.");
@@ -140,7 +119,7 @@ public class ServerThread extends Thread {
                     clientSocket.close();
                     interrupt();
                 } else if (input.getActionType().startsWith("UserLeftGame")) {
-                	//if user closes during shipselection/gameui
+                    //if user closes during shipselection/gameui
                     System.out.println("Sending" + input);
                     for (ServerThread st : serverThreads) {
                         if (st.getPlayerName().equals(input.getDestination())) {
@@ -158,17 +137,17 @@ public class ServerThread extends Thread {
                     clientSocket.close();
                     interrupt();
                 } else if (input.getActionType().equals("UserWentBackToLobby")) {
-                	for (ServerThread st : serverThreads) {
-                        if (st.getPlayerName().equals(input.getDestination())) {	
-                        	st.setInGame(false);
-                        	st.setPlayerStatus(false);
+                    for (ServerThread st : serverThreads) {
+                        if (st.getPlayerName().equals(input.getDestination())) {
+                            st.setInGame(false);
+                            st.setPlayerStatus(false);
                             st.message(input);
                             setInGame(false);
                             setPlayerStatus(false);
                             break;
-                            
+
                         }
-                	}
+                    }
                 } else if (input.getActionType().equals("GameBoard")) {
                     gameBoard = (Board) input.getObject();
                 } else if (input.getActionType().equals("Move")) {
@@ -182,12 +161,12 @@ public class ServerThread extends Thread {
                     }
 
                 } else if (input.getActionType().equals("PlayerReady")) {
-                    if(input.getOrigin().equals(username)) {
+                    if (input.getOrigin().equals(username)) {
                         isReady = true;
                     }
 
-                    for(ServerThread st: serverThreads) {
-                        if(st.getPlayerName().equals(input.getDestination()) && st.getPlayerStatus()) {
+                    for (ServerThread st : serverThreads) {
+                        if (st.getPlayerName().equals(input.getDestination()) && st.getPlayerStatus()) {
                             message(new Request("GameStart", input.getDestination(), username));
                             st.message(new Request("GameStart", username, input.getDestination()));
                             break;
@@ -231,7 +210,7 @@ public class ServerThread extends Thread {
         inGame = x;
     }
 
-    public boolean getPlayerStatus () {
+    public boolean getPlayerStatus() {
         return isReady;
     }
 

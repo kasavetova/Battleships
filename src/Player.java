@@ -26,7 +26,6 @@ public class Player extends JFrame implements ActionListener {
     private JTextField enterName;
     private JButton connectButton;
     private JButton playButton;
-    private JButton playRandButton;
     private JPanel rightPanel;
     private JPanel infoPanel;
     private JPanel buttonPanel;
@@ -80,35 +79,9 @@ public class Player extends JFrame implements ActionListener {
                                 if (input.getActionType().equals("GameRequest")) {
                                     if (!isBusy) {
                                         isBusy = true;
-                                        playRandButton.setEnabled(false);
+
                                         ConfirmDialog confirmDialog = new ConfirmDialog(Player.this, input);
                                         confirmDialog.setVisible(true);
-
-                                       /* System.out.println("1: " + isBusy);
-                                        int requestAnswer = JOptionPane
-                                                .showConfirmDialog(null,
-                                                        "Do you want to play a game with "
-                                                                + input.getOrigin()
-                                                                + "?",
-                                                        "Game Request",
-                                                        JOptionPane.YES_NO_OPTION);
-                                        isBusy = false;
-                                        System.out.println("2: " + isBusy);
-                                        // no = 1, yes = 0
-                                        if (requestAnswer == 1) {
-                                            out.writeObject(new Request(
-                                                    "GameRequestAnswer", name,
-                                                    input.getOrigin(), "No"));
-                                            System.out.println("3: " + isBusy);
-                                        }
-                                        if (requestAnswer == 0) {
-                                            out.writeObject(new Request(
-                                                    "GameRequestAnswer", name,
-                                                    input.getOrigin(), "Yes"));
-                                            gameFrame(input.getOrigin());
-                                            opponentName = input.getOrigin();
-                                            System.out.println("4: " + isBusy);
-                                        }*/
 
                                     } else {
                                         out.writeObject(new Request("PlayerBusy", name, input.getOrigin()));
@@ -117,7 +90,6 @@ public class Player extends JFrame implements ActionListener {
                                         "GameRequestAnswer")) {
                                     isBusy = false;
                                     playButton.setEnabled(true);
-                                    playRandButton.setEnabled(true);
                                     if (input.getObject().equals("Yes")) {
                                         gameFrame(input.getOrigin());
                                         opponentName = input.getOrigin();
@@ -153,18 +125,6 @@ public class Player extends JFrame implements ActionListener {
                                 	//Returning to lobby                              	
                                 	reshowLobby();
                                     JOptionPane.showMessageDialog(null, "Your opponent went back to lobby", "Opponent Quit", JOptionPane.INFORMATION_MESSAGE);
-                                } else if (input.getActionType().equals(
-                                        "RandomGameRequestFail")) {
-                                    isBusy = false;
-                                    playButton.setEnabled(true);
-                                    playRandButton.setEnabled(true);
-                                    JOptionPane
-                                            .showMessageDialog(
-                                                    null,
-                                                    "We couldn't find any active players at the moment. Please try again later.",
-                                                    "Error",
-                                                    JOptionPane.ERROR_MESSAGE);
-
                                 } else if (input.getActionType().equals("MoveResult")) {
                                     GameMove gm = (GameMove) input.getObject();
                                     Point coordinates = gm.getMoveCoordinates();
@@ -189,7 +149,6 @@ public class Player extends JFrame implements ActionListener {
                                 } else if (input.getActionType().equals("PlayerBusy")) {
                                     isBusy = false;
                                     playButton.setEnabled(true);
-                                    playRandButton.setEnabled(true);
                                     JOptionPane.showMessageDialog(null, "Player is busy. Please try again later", "Error", JOptionPane.ERROR_MESSAGE);
                                 }
                                 else {
@@ -229,7 +188,8 @@ public class Player extends JFrame implements ActionListener {
         prompt.setText("<html>" + "<div style=\"text-align: center;\">"
                 + "<h2>" + "Welcome to Battleship" + "</h2>" + "<p>"
                 + "Enter a nickname for players to identify you with, "
-                + "then hit connect!" + "</p></html>");
+                + "then hit connect!" + "</p></div></html>");
+        System.out.println(prompt.getText());
         gc.gridx = 0;
         gc.gridy = 0;
         gc.weightx = 0;
@@ -323,9 +283,7 @@ public class Player extends JFrame implements ActionListener {
 
         buttonPanel = new JPanel(new GridLayout());
         playButton = new JButton("Play");
-        playRandButton = new JButton("Play Random");
         buttonPanel.add(playButton);
-        buttonPanel.add(playRandButton);
 
         gc.gridx = 0;
         gc.gridy = 1;
@@ -335,23 +293,6 @@ public class Player extends JFrame implements ActionListener {
         gc.fill = GridBagConstraints.BOTH;
         gc.insets = new Insets(5, 5, 5, 5);
         rightPanel.add(buttonPanel, gc);
-
-        playRandButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    System.out.println("here");
-                    isBusy = true;
-                    playButton.setEnabled(false);
-                    playRandButton.setEnabled(false);
-                    //UI WITH TIMER DISPLAYED HERE
-                    out.writeObject(new Request("RandomGameRequest", name));
-                } catch (IOException e1) {
-                    System.out.println("CATCH FROM RANDOM BTN"
-                            + e1.getMessage());
-                }
-            }
-        });
 
         playButton.addActionListener(new ActionListener() {
             // Repeated Code
@@ -364,7 +305,7 @@ public class Player extends JFrame implements ActionListener {
                         try {
                             isBusy = true;
                             playButton.setEnabled(false);
-                            playRandButton.setEnabled(false);
+
                             //UI WITH TIMER DISPLAYED HERE
                             out.writeObject(new Request("GameRequest", name,
                                     playerName));
@@ -388,34 +329,49 @@ public class Player extends JFrame implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent e) {
-        try {
-            // TODO not have the portnumber and ip hardcoded
-            socket = new Socket("localhost", 4446);
-            if(socket != null){
-        		String nameToCheck = enterName.getText().toString();
-        		boolean isUnique = checkName(nameToCheck);
-        		System.out.println(isUnique);
-        		if(isUnique == true){
-        			out.writeObject(new Request("Accepted"));
-        			name = nameToCheck;
-        			this.setTitle("You are logged in as: " + name);
-        			mainGUI();
-                    newConnection();
-        		}
-        		else{
-        			out.writeObject(new Request("Rejected"));
-        			out.close();in.close();
-        			socket.close();
-        			//Message Appears on screen telling user, name not unique
-        		}
+        String name = enterName.getText().toString();
+        String nameToCheck = name.replaceAll("\\s+", "");
+        if (nameToCheck.length() < 1) {
+            prompt.setText("<html>" + "<div style=\"text-align: center;\">"
+                    + "<h2>" + "Welcome to Battleship" + "</h2>" + "<p>"
+                    + "Enter a nickname for players to identify you with, "
+                    + "then hit connect!" + "</p><br><p style=\"color:red\">" +
+                    "Please enter a name.</p></div></html>");
+            enterName.setText("");
+        } else {
+            try {
+                // TODO not have the portnumber and ip hardcoded
+                socket = new Socket("localhost", 4446);
+                if (socket != null) {
+                    boolean isUnique = checkName(nameToCheck);
+                    System.out.println(isUnique);
+                    if (isUnique == true) {
+                        out.writeObject(new Request("Accepted"));
+                        name = nameToCheck;
+                        this.setTitle("You are logged in as: " + name);
+                        mainGUI();
+                        newConnection();
+                    } else {
+                        out.writeObject(new Request("Rejected"));
+                        out.close();
+                        in.close();
+                        socket.close();
+                        prompt.setText("<html>" + "<div style=\"text-align: center;\">"
+                                + "<h2>" + "Welcome to Battleship" + "</h2>" + "<p>"
+                                + "Enter a nickname for players to identify you with, "
+                                + "then hit connect!" + "</p><br><p style=\"color:red\">This " +
+                                "username has been taken. Please pick another.</p></div></html>");
+                        enterName.setText("");
+                    }
+                }
+
+            } catch (UnknownHostException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            } catch (IOException e1) {
+                // TODO Auto-generated catch block
+                JOptionPane.showMessageDialog(null, "Failed to connect to the server", "Server Error", JOptionPane.WARNING_MESSAGE);
             }
-            
-        } catch (UnknownHostException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        } catch (IOException e1) {
-            // TODO Auto-generated catch block
-            JOptionPane.showMessageDialog(null, "Failed to connect to the server", "Server Error", JOptionPane.WARNING_MESSAGE);
         }
     }
 
@@ -430,7 +386,6 @@ public class Player extends JFrame implements ActionListener {
     public void refuseRequest(Request input) {
         isBusy = false;
         playButton.setEnabled(true);
-        playRandButton.setEnabled(true);
         try {
             out.writeObject(new Request(
                     "GameRequestAnswer", name,
@@ -443,7 +398,6 @@ public class Player extends JFrame implements ActionListener {
     public void acceptRequest(Request input) {
         isBusy = false;
         playButton.setEnabled(true);
-        playRandButton.setEnabled(true);
         try {
             out.writeObject(new Request(
                     "GameRequestAnswer", name,
