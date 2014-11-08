@@ -16,28 +16,13 @@ public class ConfirmDialog extends JFrame implements ActionListener {
     private Player player;
     private Request input;
     private Timer time;
-    private int timeRemaining = 11;
+    private int timeRemaining = 10;
 
     public ConfirmDialog(final Player player, final Request input) {
 
         super("Game Request");
         this.player = player;
         this.input = input;
-        time = new Timer(1000, new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-                String text = textLabel.getText();
-                if (--timeRemaining > 0) {
-                    textLabel.setText(text.substring(0, text.lastIndexOf('(') + 1) + timeRemaining + ")</p></div></html>");
-                } else {
-                    player.refuseRequest(input);
-                    time.stop();
-                }
-            }
-        });
-        time.setInitialDelay(1000);
-        time.start();
         textLabel = new JLabel("<html><div style=\"text-align:center\"><p>Would you like to play a game with <b>"
                 + input.getOrigin() + "</b>?   (10)</p></div></html>");
 
@@ -77,7 +62,20 @@ public class ConfirmDialog extends JFrame implements ActionListener {
             }
         });
 
+        time = new Timer(1000, new ActionListener() {
 
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String text = textLabel.getText();
+                if (--timeRemaining > 0) {
+                    textLabel.setText(text.substring(0, text.lastIndexOf('(') + 1) + timeRemaining + ")</p></div></html>");
+                } else {
+                    player.refuseRequest(input);
+                    time.stop();
+                }
+            }
+        });
+        time.start();
     }
 
     @Override
