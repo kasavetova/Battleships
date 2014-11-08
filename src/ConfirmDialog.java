@@ -24,7 +24,7 @@ public class ConfirmDialog extends JFrame implements ActionListener {
         this.player = player;
         this.input = input;
         textLabel = new JLabel("<html><div style=\"text-align:center\"><p>Would you like to play a game with <b>"
-                + input.getOrigin() + "</b>?   (10)</p></div></html>");
+                + input.getOrigin() + "</b>?   (20)</p></div></html>");
 
         textLabel.setFont(new Font("", Font.PLAIN, 13));
         yesButton = new JButton("Yes");
