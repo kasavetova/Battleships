@@ -2,21 +2,18 @@ import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class Player extends JFrame implements ActionListener {
     private static String name;
@@ -145,7 +142,7 @@ public class Player extends JFrame implements ActionListener {
                                         gui.updateEnemyBoard(outcome, coordinates);
                                     } else {
                                         //update own board
-                                        if(!outcome.equals("hit") && !outcome.equals("destroyed")) {
+                                        if(!outcome.equals("hit") && !outcome.startsWith("destroyed")) {
                                             isTheirTurn = true;
                                             gui.appendMessage("It's your turn to play.", "GAME");
                                             gui.startTimer();
