@@ -16,7 +16,7 @@ public class ConfirmDialog extends JFrame implements ActionListener {
     private Player player;
     private Request input;
     private Timer time;
-    private int timeRemaining = 10;
+    private int timeRemaining = 20;
 
     public ConfirmDialog(final Player player, final Request input) {
 
