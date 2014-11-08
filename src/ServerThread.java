@@ -159,9 +159,7 @@ public class ServerThread extends Thread {
                     }
 
                 } else if (input.getActionType().equals("MoveEnded")) {
-                    if (input.getOrigin().equals(username)) {
-                        message(input);
-                    }
+                    messageAll(input);
 
                 } else if (input.getActionType().equals("PlayerReady")) {
                     if (input.getOrigin().equals(username)) {

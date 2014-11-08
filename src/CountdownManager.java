@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 /**
  * @author Muntasir Syed
@@ -21,6 +22,7 @@ public class CountdownManager {
     }
 
     public void start() {
+        timeRemaining = 11;
         timeLabel.setText("TIMER: (10)");
         countdownTimer = new Timer(1000, new TimerListener());
         countdownTimer.start();
@@ -33,6 +35,11 @@ public class CountdownManager {
                 timeLabel.setText(currentText.substring(0, currentText.lastIndexOf('(') + 1) + timeRemaining + ")");
             } else {
                 end();
+                try {
+                    gui.endTurn();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
             }
         }
     }

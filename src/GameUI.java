@@ -263,6 +263,7 @@ public class GameUI extends JFrame implements MouseListener {
             if(player.makeMove(request)) {
                 //enemyBoardGrid.getButton(row, col).setEnabled(false);
                 enemyBoardGrid.getButton(row, col).removeMouseListener(this);
+                cm.end();
             }
             //Disable Board
         } catch (IOException e1) {
@@ -361,10 +362,9 @@ public class GameUI extends JFrame implements MouseListener {
         cm.start();
     }
 
-    public void endTurn() {
+    public void endTurn() throws IOException {
         Request request = new Request("MoveEnded", playerName, opponentName);
-        player.sendServerRequest(request);
-        cm.end();
+        player.finishMove(request);
     }
     
 }

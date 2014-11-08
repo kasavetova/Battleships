@@ -149,6 +149,7 @@ public class Player extends JFrame implements ActionListener {
                                         gui.updateOwnBoard(outcome, coordinates);
                                     }
                                 } else if (input.getActionType().equals("MoveEnded")) {
+                                    System.out.println("received");
                                     isTheirTurn = true;
                                     gui.startTimer();
                                 } else if(input.getActionType().equals("GameStart")) {
@@ -440,15 +441,16 @@ public class Player extends JFrame implements ActionListener {
     public void placementFinished(GameGrid grid, Board b) {
         gui = new GameUI(grid, out, in, this, b, opponentName);
         gui.setVisible(true);
-        if (isTheirTurn) {
-            gui.startTimer();
-        }
         try {
             out.writeObject(new Request("GameBoard", name, "SERVER", b));
+            if (isTheirTurn) {
+                gui.startTimer();
+            }
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+
     }
 
     public boolean makeMove (Request request) throws IOException {
