@@ -52,6 +52,8 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
     private String opponentName;
 
     private JPanel pnlConfirmHome;
+    private JPanel buttonGroup;
+    private JLabel placementStatus;
     private JButton btnConfirm;
     private JButton btnHome;
     private Border bdrRaisedButton;
@@ -292,13 +294,16 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
             }
         }
 
-        pnlConfirmHome = new JPanel(new GridLayout(1,2));
+        buttonGroup = new JPanel(new GridLayout(1, 2));
+        pnlConfirmHome = new JPanel(new GridLayout(2, 1));
         pnlConfirmHome.setBackground(backroundColor);
         pnlConfirmHome.setBorder(BorderFactory.createLineBorder(backroundColor, 2));
         
         bdrRaisedButton = BorderFactory.createRaisedBevelBorder();
         bdrLoweredButton = BorderFactory.createLoweredBevelBorder();
-        
+
+        placementStatus = new JLabel("<html><p style=\"color:white; font-size:16px;\"><b>Place your ships!</b></p><br></html>");
+        placementStatus.setHorizontalAlignment(JLabel.CENTER);
         btnConfirm = new JButton("<html><b>CONFIRM</b></html>");
         btnConfirm.setEnabled(false);
         btnConfirm.setBackground(backroundColor);
@@ -309,7 +314,7 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
                 
             	if (shipsLeftToPlace == 0) {
                     player.sendServerRequest(new Request("PlayerReady", playerName, opponentName));
-                    //display UI for waiting for response.
+                    placementStatus.setText("<html><p style=\"color:white; font-size:16px;\"><b>Waiting for opponent...</b></p><br></html>");
                     btnConfirm.setEnabled(false);
                     btnConfirm.setBorder(bdrLoweredButton);
                     btnConfirm.setForeground(Color.GRAY);
@@ -330,10 +335,11 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
 				
 			}
 		});
-       
-        pnlConfirmHome.add(btnConfirm);
-        pnlConfirmHome.add(btnHome);
-        
+
+        buttonGroup.add(btnConfirm);
+        buttonGroup.add(btnHome);
+        pnlConfirmHome.add(placementStatus);
+        pnlConfirmHome.add(buttonGroup);
         
         content.add(pnlNorth, BorderLayout.NORTH);
         content.add(pnlGrid, BorderLayout.CENTER);
@@ -482,11 +488,13 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
                 btgShips.setSelected(arrayShipButtons.get(0), true);
                 shipSize = Integer.parseInt(arrayShipButtons.get(0)
                         .getActionCommand());
+                placementStatus.setText("<html><p style=\"color:white; font-size:16px;\"><b> (" + shipsLeftToPlace + ") ships left to place.</b></p><br></html>");
             } else {
                 shipSize = 0;
                 btgHorizontalVertical.clearSelection();
                 btnHorizontal.setEnabled(false);
                 btnVertical.setEnabled(false);
+                placementStatus.setText("<html><p style=\"color:white; font-size:16px;\"><b>Finished! Press confirm to continue.</b></p><br></html>");
                 btnConfirm.setEnabled(true);
                 btnConfirm.setBorder(bdrRaisedButton);
                 btnConfirm.setForeground(textColor);
