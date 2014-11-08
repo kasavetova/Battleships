@@ -348,8 +348,17 @@ public class Player extends JFrame implements ActionListener {
                     + "<h2>" + "Welcome to Battleship" + "</h2>" + "<p>"
                     + "Enter a nickname for players to identify you with, "
                     + "then hit connect!" + "</p><br><p style=\"color:red\">" +
-                    "Please enter a name.</p></div></html>");
+                    "Please enter a username.</p></div></html>");
             enterName.setText("");
+
+        } else if (nameToCheck.length() > 16) {
+            prompt.setText("<html>" + "<div style=\"text-align: center;\">"
+                    + "<h2>" + "Welcome to Battleship" + "</h2>" + "<p>"
+                    + "Enter a nickname for players to identify you with, "
+                    + "then hit connect!" + "</p><br><p style=\"color:red\">" +
+                    "Your username can't be longer than 16 characters.</p></div></html>");
+            enterName.setText("");
+
         } else {
             try {
                 // TODO not have the portnumber and ip hardcoded
@@ -440,11 +449,7 @@ public class Player extends JFrame implements ActionListener {
             isTheirTurn = false;
             return true;
         }  else {
-            JOptionPane.showMessageDialog(
-                    gui,
-                    "It's not your turn yet! Please wait for your turn.",
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
+            gui.appendMessage("It's not your turn yet! Please wait for your opponent.", "GAME");
             return false;
         }
     }

@@ -136,8 +136,8 @@ public class GameUI extends JFrame implements MouseListener {
         lblPlayer1.setFont(new Font("DejaVu Sans", Font.BOLD, 24));
         lblPlayer1.setBackground(backroundColor);
         lblPlayer1.setForeground(textColor);
-        
-        lblPlayer2 = new JLabel(opponentName + "'s BOARD", SwingConstants.CENTER);
+
+        lblPlayer2 = new JLabel(opponentName.toUpperCase() + "'s BOARD", SwingConstants.CENTER);
         lblPlayer2.setFont(new Font("DejaVu Sans", Font.BOLD, 24));
         lblPlayer2.setBackground(backroundColor);
         lblPlayer2.setForeground(textColor);
@@ -294,7 +294,7 @@ public class GameUI extends JFrame implements MouseListener {
         	enemyBoardGrid.getButton(p.getX(), p.getY()).setIcon(null);
         	enemyBoardGrid.getButton(p.getX(), p.getY()).setBackground(Color.RED);
             //Tell which ship has been destroyed
-            appendMessage("Enemies "+x.substring(9)+" has been destroyed.", "GAME"); //add new line
+            appendMessage("Enemy's " + x.substring(9) + " has been destroyed.", "GAME"); //add new line
         } else {
         	enemyBoardGrid.getButton(p.getX(), p.getY()).setIcon(null);
         	enemyBoardGrid.getButton(p.getX(), p.getY()).setBackground(Color.CYAN);
@@ -315,12 +315,6 @@ public class GameUI extends JFrame implements MouseListener {
 
     public void sendMessage(String message) {
         if (message.length() > 0) {
-           /* txtAreaChat.append("\n" + playerName + ": " + message);
-            try {
-                out.writeObject(new Request("SendMessage", playerName, opponentName, message));
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }*/
             Document doc = txtAreaChat.getDocument();
             SimpleAttributeSet attr = new SimpleAttributeSet();
             StyleConstants.setForeground(attr, Color.darkGray);
@@ -348,7 +342,7 @@ public class GameUI extends JFrame implements MouseListener {
             } catch (BadLocationException e) {
                 e.printStackTrace();
             }
-            //scrollToBottom();
+            scrollToBottom();
         }
     }
 
