@@ -13,7 +13,7 @@ public class CountdownManager {
     private GameUI gui;
     private String opponentName;
     private Timer countdownTimer;
-    private int timeRemaining = 60;
+    private int timeRemaining = 15;
 
     public CountdownManager(JLabel timeLabel, GameUI gui, String opponentName) {
         this.timeLabel = timeLabel;
@@ -22,8 +22,8 @@ public class CountdownManager {
     }
 
     public void start() {
-        timeRemaining = 60;
-        timeLabel.setText("Timer: (60)");
+        timeRemaining = 15;
+        timeLabel.setText("Timer: (15)");
         countdownTimer = new Timer(1000, new TimerListener());
         countdownTimer.start();
     }
