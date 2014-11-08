@@ -1,5 +1,7 @@
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -8,6 +10,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
@@ -253,6 +256,15 @@ public class Player extends JFrame implements ActionListener {
         playersModel = new DefaultListModel<String>();
         final JList<String> players = new JList<String>(playersModel);
         players.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        players.addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent event) {
+                if (!event.getValueIsAdjusting()) {
+                    JList source = (JList) event.getSource();
+                    int index = source.getSelectedIndex();
+                    if (index > -1) playButton.setEnabled(true);
+                }
+            }
+        });
 
         scrollPane = new JScrollPane(players);
         TitledBorder b = new TitledBorder("Currently online:");
@@ -283,6 +295,7 @@ public class Player extends JFrame implements ActionListener {
 
         buttonPanel = new JPanel(new GridLayout());
         playButton = new JButton("Play");
+        playButton.setEnabled(false);
         buttonPanel.add(playButton);
 
         gc.gridx = 0;
@@ -362,6 +375,8 @@ public class Player extends JFrame implements ActionListener {
                                 + "then hit connect!" + "</p><br><p style=\"color:red\">This " +
                                 "username has been taken. Please pick another.</p></div></html>");
                         enterName.setText("");
+                        //need to catch java.net.SocketException: Socket closed if user closes
+                        //at this stage without proceeding to lobby.
                     }
                 }
 
