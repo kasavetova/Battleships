@@ -120,12 +120,12 @@ public class Player extends JFrame implements ActionListener {
                                         "ReceiveMessage")) {
                                     gui.appendMessage((String) input.getObject(), input.getOrigin());
                                 } else if (input.getActionType().equals("UserLeftGame")) {
-                                    // Quitting game     
+                                    // Quitting game
                                     reshowLobby();
                                     JOptionPane.showMessageDialog(null, "Your opponent quit! You win (by default)", "Opponent Quit", JOptionPane.INFORMATION_MESSAGE);
                                 } else if (input.getActionType().equals("UserWentBackToLobby")) {
-                                	//Returning to lobby                              	
-                                	reshowLobby();
+                                    //Returning to lobby
+                                    reshowLobby();
                                     JOptionPane.showMessageDialog(null, "Your opponent went back to lobby", "Opponent Quit", JOptionPane.INFORMATION_MESSAGE);
                                 } else if (input.getActionType().equals("MoveResult")) {
                                     GameMove gm = (GameMove) input.getObject();
@@ -137,15 +137,20 @@ public class Player extends JFrame implements ActionListener {
                                         //update enemy board
                                         if(outcome.equals("hit") || outcome.startsWith("destroyed")) {
                                             isTheirTurn = true;
+                                            gui.startTimer();
                                         }
                                         gui.updateEnemyBoard(outcome, coordinates);
                                     } else {
                                         //update own board
                                         if(!outcome.equals("hit") && !outcome.equals("destroyed")) {
                                             isTheirTurn = true;
+                                            gui.startTimer();
                                         }
                                         gui.updateOwnBoard(outcome, coordinates);
                                     }
+                                } else if (input.getActionType().equals("MoveEnded")) {
+                                    isTheirTurn = true;
+                                    gui.startTimer();
                                 } else if(input.getActionType().equals("GameStart")) {
                                     sui.startGame();
                                 } else if (input.getActionType().equals("PlayerBusy")) {
@@ -435,6 +440,9 @@ public class Player extends JFrame implements ActionListener {
     public void placementFinished(GameGrid grid, Board b) {
         gui = new GameUI(grid, out, in, this, b, opponentName);
         gui.setVisible(true);
+        if (isTheirTurn) {
+            gui.startTimer();
+        }
         try {
             out.writeObject(new Request("GameBoard", name, "SERVER", b));
         } catch (IOException e) {
@@ -452,6 +460,11 @@ public class Player extends JFrame implements ActionListener {
             gui.appendMessage("It's not your turn yet! Please wait for your opponent.", "GAME");
             return false;
         }
+    }
+
+    public void finishMove(Request request) throws IOException {
+        out.writeObject(request);
+        isTheirTurn = false;
     }
 
     public String getName() {

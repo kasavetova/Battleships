@@ -47,7 +47,9 @@ public class GameUI extends JFrame implements MouseListener {
 
     private Color backroundColor = new Color(44, 62, 80);
     private Color textColor = new Color(236, 240, 241);
-    
+
+    private CountdownManager cm;
+
     public GameUI(GameGrid myBoardGrid, ObjectOutputStream outStream,
                   ObjectInputStream inStream, Player player1, Board bo,
                   final String opponentName) {
@@ -150,8 +152,8 @@ public class GameUI extends JFrame implements MouseListener {
         lblTimer.setBorder(BorderFactory.createLineBorder(textColor, 1));
         lblTimer.setBackground(backroundColor);
         lblTimer.setForeground(textColor);
-        
-        btnHome = new JButton("HOME");
+
+        btnHome = new JButton("QUIT");
         btnHome.addActionListener(new ActionListener() {
 			
 			@Override
@@ -231,6 +233,7 @@ public class GameUI extends JFrame implements MouseListener {
             }
 
         });
+        cm = new CountdownManager(lblTimer, this, opponentName);
     }
 
     @Override
@@ -352,6 +355,16 @@ public class GameUI extends JFrame implements MouseListener {
                 e.getAdjustable().setValue(e.getAdjustable().getMaximum());
             }
         });
+    }
+
+    public void startTimer() {
+        cm.start();
+    }
+
+    public void endTurn() {
+        Request request = new Request("MoveEnded", playerName, opponentName);
+        player.sendServerRequest(request);
+        cm.end();
     }
     
 }

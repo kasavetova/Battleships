@@ -144,7 +144,6 @@ public class ServerThread extends Thread {
                             setInGame(false);
                             setPlayerStatus(false);
                             break;
-
                         }
                     }
                 } else if (input.getActionType().equals("GameBoard")) {
@@ -157,6 +156,11 @@ public class ServerThread extends Thread {
                                 break;
                             }
                         }
+                    }
+
+                } else if (input.getActionType().equals("MoveEnded")) {
+                    if (input.getOrigin().equals(username)) {
+                        message(input);
                     }
 
                 } else if (input.getActionType().equals("PlayerReady")) {
