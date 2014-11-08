@@ -50,10 +50,7 @@ public class ServerThread extends Thread {
 
             }
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
 
@@ -101,7 +98,7 @@ public class ServerThread extends Thread {
                 } else if (input.getActionType().equals("RetrieveLobby")) {
                     lobbyList = new ArrayList<String>();
                     for (ServerThread st : serverThreads) {
-                        if (st.inGame == false) {
+                        if (!st.inGame) {
                             lobbyList.add(st.getPlayerName());
                         }
                     }
@@ -152,9 +149,9 @@ public class ServerThread extends Thread {
                     gameBoard = (Board) input.getObject();
                 } else if (input.getActionType().equals("Move")) {
                     if (!input.getDestination().equals(username)) {
-                        for (int i = 0; i < serverThreads.size(); i++) {
-                            if (serverThreads.get(i).getPlayerName().equals(input.getDestination())) {
-                                serverThreads.get(i).completeMove(input);
+                        for (ServerThread serverThread : serverThreads) {
+                            if (serverThread.getPlayerName().equals(input.getDestination())) {
+                                serverThread.completeMove(input);
                                 break;
                             }
                         }
@@ -200,7 +197,7 @@ public class ServerThread extends Thread {
 
     public void messageAllActive(Request r) throws IOException {
         for (ServerThread st : serverThreads) {
-            if (st.inGame == false) {
+            if (!st.inGame) {
                 st.message(r);
             }
         }

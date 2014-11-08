@@ -107,11 +107,10 @@ public class Player extends JFrame implements ActionListener {
                                 	playersModel.clear();
                                     ArrayList<String> playersList = (ArrayList<String>) input.getObject();
                                     System.out.println(playersList);
-                                    for (int i = 0; i < playersList.size(); i++) {
-                                        if (!playersList.get(i).equals(name)) {
+                                    for (String aPlayersList : playersList) {
+                                        if (!aPlayersList.equals(name)) {
                                             // System.out.println(playersList.get(i));
-                                            playersModel.addElement(playersList
-                                                    .get(i).toString());
+                                            playersModel.addElement(aPlayersList);
                                         }
                                     }
                                 } else if (input.getActionType().equals(
@@ -159,9 +158,7 @@ public class Player extends JFrame implements ActionListener {
                     } catch (EOFException e) {
                         // EOFException - if this input stream reaches the end
                         // before reading eight bytes
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (ClassNotFoundException e) {
+                    } catch (IOException | ClassNotFoundException e) {
                         e.printStackTrace();
                     }
                 }
@@ -329,7 +326,7 @@ public class Player extends JFrame implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent e) {
-        String text = enterName.getText().toString();
+        String text = enterName.getText();
         String nameToCheck = text.replaceAll("\\s+", "");
         if (nameToCheck.length() < 1) {
             prompt.setText("<html>" + "<div style=\"text-align: center;\">"
@@ -458,11 +455,9 @@ public class Player extends JFrame implements ActionListener {
 					break;
 				}
 			}
-        } catch (IOException e) {
+        } catch (IOException | ClassNotFoundException e) {
             // TODO Auto-generated catch block
 			e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         }
         return true;
     }

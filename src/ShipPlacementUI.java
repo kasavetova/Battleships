@@ -1,10 +1,7 @@
 import javax.swing.*;
 import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
-
 import java.awt.*;
 import java.awt.event.*;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
@@ -362,7 +359,7 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
                     validPath = false;
                 } else {
                     for (int i = 0; i < shipSize; i++) {
-                        if (gameGrid.getButton(row, col + i).isOccupied() == true) {
+                        if (gameGrid.getButton(row, col + i).isOccupied()) {
                             validPath = false;
                         }
                     }
@@ -372,7 +369,7 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
                     validPath = false;
                 } else {
                     for (int i = 0; i < shipSize; i++) {
-                        if (gameGrid.getButton(row + i, col).isOccupied() == true) {
+                        if (gameGrid.getButton(row + i, col).isOccupied()) {
                             validPath = false;
                         }
                     }
@@ -401,7 +398,7 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
         int row = ((GameButton) e.getSource()).getRow();
         int col = ((GameButton) e.getSource()).getColumn();
 
-        if (validPathCheck(col, row) == true) {
+        if (validPathCheck(col, row)) {
             if (shipHorVert == 1) {
                 for (int i = 0; i < shipSize; i++) {
                     gameGrid.getButton(row, col + i).setEnabled(false);
@@ -423,7 +420,7 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
         int row = ((GameButton) e.getSource()).getRow();
         int col = ((GameButton) e.getSource()).getColumn();
 
-        if (validPathCheck(col, row) == true) {
+        if (validPathCheck(col, row)) {
             if (shipHorVert == 1) {
                 for (int i = 0; i < shipSize; i++) {
                     gameGrid.getButton(row, col + i).setEnabled(true);
@@ -445,7 +442,7 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
         int row = ((GameButton) e.getSource()).getRow();
         int col = ((GameButton) e.getSource()).getColumn();
 
-        if (validPathCheck(col, row) == true) {
+        if (validPathCheck(col, row)) {
             if (shipHorVert == 1) {
                 b.addShip(new Ship(new Point(row, col), new Point(row, col
                         + shipSize - 1), 'H'));

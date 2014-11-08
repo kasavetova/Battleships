@@ -151,7 +151,7 @@ public class Ship implements Serializable {
 
     	switch(size){
     		case 2: return "Patrol Boat";
-    		case 3:	if(thirdShip == false){
+    		case 3:	if(!thirdShip){
     					thirdShip = true;
     					return "Destroyer";
     				}
