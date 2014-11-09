@@ -51,9 +51,9 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
 	private String playerName;
     private String opponentName;
 
+    private JPanel pnlSouth;
     private JPanel pnlConfirmHome;
-    private JPanel buttonGroup;
-    private JLabel placementStatus;
+    private JLabel lblPlacementStatus;
     private JButton btnConfirm;
     private JButton btnHome;
     private Border bdrRaisedButton;
@@ -80,7 +80,7 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
         b = new Board();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 450, 300);
-        setSize(500, 650);
+        setSize(470, 650);
         content = new JPanel(new BorderLayout(0, 5));
         content.setBorder(BorderFactory.createLineBorder(backroundColor, 5));
         content.setBackground(backroundColor);
@@ -250,8 +250,9 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
         pnlNorth = new JPanel(new BorderLayout(0, 5));
         pnlNorth.setBackground(backroundColor);
        
-        lblTitle =  new JLabel("<html><b>SELECT THE SHIP YOU WISH TO PLACE</b></html>",SwingConstants.CENTER);
+        lblTitle =  new JLabel("SELECT THE SHIP YOU WISH TO PLACE",SwingConstants.CENTER);
         lblTitle.setForeground(textColor);
+        lblTitle.setFont(new Font("DejaVu Sans", Font.BOLD,14));
         
         pnlNorth.add(lblTitle,BorderLayout.NORTH);
         pnlNorth.add(pnlShipHolder, BorderLayout.CENTER);
@@ -293,30 +294,36 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
             }
         }
 
-        buttonGroup = new JPanel(new GridLayout(1, 2));
-        pnlConfirmHome = new JPanel(new GridLayout(2, 1));
-        pnlConfirmHome.setBackground(backroundColor);
-        pnlConfirmHome.setBorder(BorderFactory.createLineBorder(backroundColor, 2));
+        pnlConfirmHome = new JPanel(new GridLayout(1, 2));
+        pnlConfirmHome.setBorder(BorderFactory.createLineBorder(backroundColor, 5));
+        
+        pnlSouth = new JPanel(new GridLayout(2, 1));
+        pnlSouth.setBackground(backroundColor);
         
         bdrRaisedButton = BorderFactory.createRaisedBevelBorder();
         bdrLoweredButton = BorderFactory.createLoweredBevelBorder();
 
-        placementStatus = new JLabel("<html><p style=\"color:white; font-size:16px;\"><b>Place your ships!</b></p><br></html>");
-        placementStatus.setHorizontalAlignment(JLabel.CENTER);
+        lblPlacementStatus = new JLabel("PLACE YOUR SHIPS!",SwingConstants.CENTER);
+        lblPlacementStatus.setFont(new Font("DejaVu Sans", Font.BOLD,14));
+        lblPlacementStatus.setForeground(textColor);
+        lblPlacementStatus.setBorder(BorderFactory.createLineBorder(backroundColor, 2));
+        
         btnConfirm = new JButton("<html><b>CONFIRM</b></html>");
         btnConfirm.setEnabled(false);
         btnConfirm.setBackground(backroundColor);
         btnConfirm.setForeground(Color.GRAY);
         btnConfirm.setBorder(bdrLoweredButton);
+        btnConfirm.setOpaque(true);
         btnConfirm.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 
             	if (shipsLeftToPlace == 0) {
                     player.sendServerRequest(new Request("PlayerReady", playerName, opponentName));
-                    placementStatus.setText("<html><p style=\"color:white; font-size:16px;\"><b>Waiting for opponent...</b></p><br></html>");
+                    lblPlacementStatus.setText("WAITING FOR OPPONENT...");
+                    
                     btnConfirm.setEnabled(false);
                     btnConfirm.setBorder(bdrLoweredButton);
-                    btnConfirm.setForeground(Color.GRAY);
+                    btnConfirm.setForeground(textColor);
                 }
             }
         });
@@ -325,6 +332,7 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
         btnHome.setBackground(backroundColor);
         btnHome.setForeground(textColor);
         btnHome.setBorder(bdrRaisedButton);
+        btnHome.setOpaque(true);
         btnHome.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -334,14 +342,14 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
 			}
 		});
 
-        buttonGroup.add(btnConfirm);
-        buttonGroup.add(btnHome);
-        pnlConfirmHome.add(placementStatus);
-        pnlConfirmHome.add(buttonGroup);
+        pnlConfirmHome.add(btnConfirm);
+        pnlConfirmHome.add(btnHome);
+        pnlSouth.add(lblPlacementStatus);
+        pnlSouth.add(pnlConfirmHome);
         
         content.add(pnlNorth, BorderLayout.NORTH);
         content.add(pnlGrid, BorderLayout.CENTER);
-        content.add(pnlConfirmHome, BorderLayout.SOUTH);
+        content.add(pnlSouth, BorderLayout.SOUTH);
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -469,7 +477,7 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
                             .setOccupied(true, shipSize);
                     gameGrid.getButton(row + i, col).setIcon(null);
                     gameGrid.getButton(row + i, col).setBackground(Color.GRAY);
-                    gameGrid.getButton(row, col + i).setBorderToDark();
+                    gameGrid.getButton(row + i, col).setBorderToDark();
                 }
             }
             shipsLeftToPlace--;
@@ -486,13 +494,15 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
                 btgShips.setSelected(arrayShipButtons.get(0), true);
                 shipSize = Integer.parseInt(arrayShipButtons.get(0)
                         .getActionCommand());
-                placementStatus.setText("<html><p style=\"color:white; font-size:16px;\"><b> (" + shipsLeftToPlace + ") ships left to place.</b></p><br></html>");
+                lblPlacementStatus.setText("(" + shipsLeftToPlace + ")" + " SHIPS LEFT TO PLACE");
+                lblPlacementStatus.setText(lblPlacementStatus.getText().toUpperCase());
             } else {
                 shipSize = 0;
                 btgHorizontalVertical.clearSelection();
                 btnHorizontal.setEnabled(false);
                 btnVertical.setEnabled(false);
-                placementStatus.setText("<html><p style=\"color:white; font-size:16px;\"><b>Finished! Press confirm to continue.</b></p><br></html>");
+                lblPlacementStatus.setText("FINISHED! PRESS CONFIRM TO CONTINUE");
+                lblPlacementStatus.setText(lblPlacementStatus.getText().toUpperCase());
                 btnConfirm.setEnabled(true);
                 btnConfirm.setBorder(bdrRaisedButton);
                 btnConfirm.setForeground(textColor);
