@@ -386,30 +386,28 @@ public class Player extends JFrame implements ActionListener {
             try {
                 // TODO not have the portnumber and ip hardcoded
                 socket = new Socket("localhost", 4446);
-                if (socket != null) {
-                    boolean isUnique = checkName(nameToCheck);
-                    System.out.println(isUnique);
-                    if (isUnique) {
-                        out.writeObject(new Request("Accepted"));
-                        name = nameToCheck;
-                        this.setTitle("You are logged in as: " + name);
-                        mainGUI();
-                        newConnection();
-                    } else {
-                        out.writeObject(new Request("Rejected"));
-                        out.close();
-                        in.close();
-                        socket.close();
-                        socket = null;
-                        prompt.setText("<html>" + "<div style=\"text-align: center;\">"
-                                + "<h2>" + "Welcome to Battleship" + "</h2>" + "<p>"
-                                + "Enter a nickname for players to identify you with, "
-                                + "then hit connect!" + "</p><br><p style=\"color:red\">This " +
-                                "username has been taken. Please pick another.</p></div></html>");
-                        enterName.setText("");
-                        //need to catch java.net.SocketException: Socket closed if user closes
-                        //at this stage without proceeding to lobby.
-                    }
+                boolean isUnique = checkName(nameToCheck);
+                System.out.println(isUnique);
+                if (isUnique) {
+                    out.writeObject(new Request("Accepted"));
+                    name = nameToCheck;
+                    this.setTitle("You are logged in as: " + name);
+                    mainGUI();
+                    newConnection();
+                } else {
+                    out.writeObject(new Request("Rejected"));
+                    out.close();
+                    in.close();
+                    socket.close();
+                    socket = null;
+                    prompt.setText("<html>" + "<div style=\"text-align: center;\">"
+                            + "<h2>" + "Welcome to Battleship" + "</h2>" + "<p>"
+                            + "Enter a nickname for players to identify you with, "
+                            + "then hit connect!" + "</p><br><p style=\"color:red\">This " +
+                            "username has been taken. Please pick another.</p></div></html>");
+                    enterName.setText("");
+                    //need to catch java.net.SocketException: Socket closed if user closes
+                    //at this stage without proceeding to lobby.
                 }
 
             } catch (UnknownHostException e1) {
@@ -512,11 +510,9 @@ public class Player extends JFrame implements ActionListener {
 					break;
 				}
 			}
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException | IOException e) {
             // TODO Auto-generated catch block
 			e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
         return true;
     }
