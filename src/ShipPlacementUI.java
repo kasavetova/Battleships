@@ -1,10 +1,7 @@
 import javax.swing.*;
 import javax.swing.border.Border;
-
 import java.awt.*;
 import java.awt.event.*;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 public class ShipPlacementUI extends JFrame implements ActionListener,
@@ -13,7 +10,7 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
     private JPanel content;
     private JPanel pnlNorth;
     private JLabel lblTitle;
-    
+
     private JPanel pnlGrid;
 
     private GameGrid gameGrid;
@@ -47,9 +44,9 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
 
     private JPanel pnlHorizontalVertical;
     private JLabel lblHorizontal;
-	private JLabel lblVertical;
-    
-	private String playerName;
+    private JLabel lblVertical;
+
+    private String playerName;
     private String opponentName;
 
     private JPanel pnlSouth;
@@ -59,13 +56,13 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
     private JButton btnHome;
     private Border bdrRaisedButton;
     private Border bdrLoweredButton;
-    
+
     private Board b;
     private Player player;
 
     private Color backgroundColor = new Color(44, 62, 80);
     private Color textColor = new Color(236, 240, 241);
-    
+
     public ShipPlacementUI(final Player player) {
 
         super("Place Your Ships!");
@@ -82,33 +79,33 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
 
         playerName = player.getName();
         opponentName = player.getOpponentName();
-        
+
         btnShip5 = new JRadioButton();
         btnShip5.setActionCommand("5");
         btnShip5.addActionListener(this);
         btnShip5.setSelected(true);
         btnShip5.setBackground(backgroundColor);
-        
+
         btnShip4 = new JRadioButton();
         btnShip4.addActionListener(this);
         btnShip4.setActionCommand("4");
         btnShip4.setBackground(backgroundColor);
-        
+
         btnShip3a = new JRadioButton();
         btnShip3a.addActionListener(this);
         btnShip3a.setActionCommand("3");
         btnShip3a.setBackground(backgroundColor);
-        
+
         btnShip3b = new JRadioButton();
         btnShip3b.addActionListener(this);
         btnShip3b.setActionCommand("3");
         btnShip3b.setBackground(backgroundColor);
-       
+
         btnShip2 = new JRadioButton();
         btnShip2.addActionListener(this);
         btnShip2.setActionCommand("2");
         btnShip2.setBackground(backgroundColor);
-        
+
         arrayShipButtons = new ArrayList<DefaultButtonModel>();
         arrayShipButtons.add((DefaultButtonModel) btnShip5.getModel());
         arrayShipButtons.add((DefaultButtonModel) btnShip4.getModel());
@@ -203,18 +200,18 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
 
         pnlShipHolder = new JPanel(new GridLayout(3, 2, 0, 5));
         pnlShipHolder.setBackground(backgroundColor);
-        
+
         btnHorizontal = new JRadioButton();
         btnHorizontal.addActionListener(this);
         btnHorizontal.setActionCommand("1");
         btnHorizontal.setSelected(true);
         btnHorizontal.setBackground(backgroundColor);
-        
+
         btnVertical = new JRadioButton();
         btnVertical.addActionListener(this);
         btnVertical.setActionCommand("0");
         btnVertical.setBackground(backgroundColor);
-        
+
         btgHorizontalVertical = new ButtonGroup();
         btgHorizontalVertical.add(btnHorizontal);
         btgHorizontalVertical.add(btnVertical);
@@ -222,13 +219,13 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
         lblHorizontal = new JLabel("HORIZONTAL");
         lblHorizontal.setBackground(backgroundColor);
         lblHorizontal.setForeground(textColor);
-        lblHorizontal.setFont(new Font("EUROSTILE", Font.BOLD,12));
-        
+        lblHorizontal.setFont(new Font("EUROSTILE", Font.BOLD, 12));
+
         lblVertical = new JLabel("VERTICAL");
         lblVertical.setBackground(backgroundColor);
         lblVertical.setForeground(textColor);
-        lblVertical.setFont(new Font("EUROSTILE", Font.BOLD,12));
-        
+        lblVertical.setFont(new Font("EUROSTILE", Font.BOLD, 12));
+
         pnlHorizontalVertical = new JPanel(new FlowLayout(FlowLayout.LEADING));
         pnlHorizontalVertical.setBackground(backgroundColor);
         pnlHorizontalVertical.add(lblHorizontal);
@@ -245,23 +242,23 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
 
         pnlNorth = new JPanel(new BorderLayout(0, 5));
         pnlNorth.setBackground(backgroundColor);
-       
-        lblTitle =  new JLabel("SELECT THE SHIP YOU WISH TO PLACE",SwingConstants.CENTER);
+
+        lblTitle = new JLabel("SELECT THE SHIP YOU WISH TO PLACE", SwingConstants.CENTER);
         lblTitle.setForeground(textColor);
-        lblTitle.setFont(new Font("EUROSTILE", Font.BOLD,14));
-        
-        pnlNorth.add(lblTitle,BorderLayout.NORTH);
+        lblTitle.setFont(new Font("EUROSTILE", Font.BOLD, 14));
+
+        pnlNorth.add(lblTitle, BorderLayout.NORTH);
         pnlNorth.add(pnlShipHolder, BorderLayout.CENTER);
 
         gameGrid = new GameGrid(rows, cols);
         pnlGrid = new JPanel(new GridLayout(11, 11));
         pnlGrid.setBackground(backgroundColor);
-        
+
         arrayGrid = new JComponent[11][11];
         arrayGrid[0][0] = new JLabel("");
         arrayGrid[0][0].setBackground(backgroundColor);
         arrayGrid[0][0].setOpaque(true);
-        
+
         for (int a = 1; a < 11; a++) {
             arrayGrid[a][0] = new JLabel(Integer.toString(a),
                     SwingConstants.CENTER);
@@ -269,8 +266,8 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
                     SwingConstants.CENTER);
             arrayGrid[a][0].setBackground(backgroundColor);
             arrayGrid[0][a].setBackground(backgroundColor);
-            arrayGrid[a][0].setFont(new Font("EUROSTILE", Font.BOLD,12));
-            arrayGrid[0][a].setFont(new Font("EUROSTILE", Font.BOLD,12));
+            arrayGrid[a][0].setFont(new Font("EUROSTILE", Font.BOLD, 12));
+            arrayGrid[0][a].setFont(new Font("EUROSTILE", Font.BOLD, 12));
             arrayGrid[a][0].setForeground(textColor);
             arrayGrid[0][a].setForeground(textColor);
             arrayGrid[a][0].setOpaque(true);
@@ -292,67 +289,67 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
 
         pnlConfirmHome = new JPanel(new GridLayout(1, 2));
         pnlConfirmHome.setBorder(BorderFactory.createLineBorder(backgroundColor, 5));
-        
+
         pnlSouth = new JPanel(new GridLayout(2, 1));
         pnlSouth.setBackground(backgroundColor);
-        
+
         bdrRaisedButton = BorderFactory.createRaisedBevelBorder();
         bdrLoweredButton = BorderFactory.createLoweredBevelBorder();
 
-        lblPlacementStatus = new JLabel("PLACE YOUR SHIPS!",SwingConstants.CENTER);
-        lblPlacementStatus.setFont(new Font("EUROSTILE", Font.BOLD,14));
+        lblPlacementStatus = new JLabel("PLACE YOUR SHIPS!", SwingConstants.CENTER);
+        lblPlacementStatus.setFont(new Font("EUROSTILE", Font.BOLD, 14));
         lblPlacementStatus.setForeground(textColor);
         lblPlacementStatus.setBorder(BorderFactory.createLineBorder(backgroundColor, 2));
-        
+
         btnConfirm = new JButton("CONFIRM");
         btnConfirm.setEnabled(false);
         btnConfirm.setBackground(backgroundColor);
         btnConfirm.setForeground(Color.GRAY);
-        btnConfirm.setFont(new Font("EUROSTILE", Font.BOLD,14));
+        btnConfirm.setFont(new Font("EUROSTILE", Font.BOLD, 14));
         btnConfirm.setBorder(bdrLoweredButton);
         btnConfirm.setOpaque(true);
         btnConfirm.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                
-            	if (shipsLeftToPlace == 0) {
+
+                if (shipsLeftToPlace == 0) {
                     player.sendServerRequest(new Request("PlayerReady", playerName, opponentName));
                     lblPlacementStatus.setText("WAITING FOR OPPONENT...");
-                    
+
                     btnConfirm.setEnabled(false);
                     btnConfirm.setBorder(bdrLoweredButton);
                     btnConfirm.setForeground(textColor);
                 }
             }
         });
-        
+
         btnHome = new JButton("<html><b>HOME</b></html>");
         btnHome.setBackground(backgroundColor);
         btnHome.setForeground(textColor);
-        btnHome.setFont(new Font("EUROSTILE", Font.BOLD,14));
+        btnHome.setFont(new Font("EUROSTILE", Font.BOLD, 14));
         btnHome.setBorder(bdrRaisedButton);
         btnHome.setOpaque(true);
         btnHome.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				player.sendServerRequest(new Request("UserWentBackToLobby", player.getName(), opponentName));
-				player.reshowLobby();
-				
-			}
-		});
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                player.sendServerRequest(new Request("UserWentBackToLobby", player.getName(), opponentName));
+                player.reshowLobby();
+
+            }
+        });
 
         pnlConfirmHome.add(btnConfirm);
         pnlConfirmHome.add(btnHome);
         pnlSouth.add(lblPlacementStatus);
         pnlSouth.add(pnlConfirmHome);
-        
+
         content.add(pnlNorth, BorderLayout.NORTH);
         content.add(pnlGrid, BorderLayout.CENTER);
         content.add(pnlSouth, BorderLayout.SOUTH);
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                    player.sendServerRequest(new Request("UserLeftGame", player.getName(),
-                            opponentName));
+                player.sendServerRequest(new Request("UserLeftGame", player.getName(),
+                        opponentName));
             }
 
         });

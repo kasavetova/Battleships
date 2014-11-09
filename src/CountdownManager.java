@@ -16,9 +16,8 @@ public class CountdownManager {
     private int timeRemaining = 20;
 
     /**
-     * 
-     * @param timeLabel The label in which to display the ticker
-     * @param gui The contextual GameUI in which this ticker is being displayed
+     * @param timeLabel    The label in which to display the ticker
+     * @param gui          The contextual GameUI in which this ticker is being displayed
      * @param opponentName The name of the opponent of the current Player
      */
     public CountdownManager(JLabel timeLabel, GameUI gui, String opponentName) {

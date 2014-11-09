@@ -1,12 +1,11 @@
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.text.*;
-
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -27,12 +26,12 @@ public class GameUI extends JFrame implements MouseListener {
     private JPanel pnlPlayerText;
     private JLabel lblPlayer1;
     private JLabel lblPlayer2;
-   
+
     private JPanel pnlTimerHome;
     private JLabel lblTimer;
     private JButton btnHome;
-    
-    private Player player; 
+
+    private Player player;
 
     private Board bo;
 
@@ -73,13 +72,13 @@ public class GameUI extends JFrame implements MouseListener {
 
         pnlBoards = new JPanel(new GridLayout(1, 2, 25, 0));
         pnlBoards.setBackground(backroundColor);
-    
+
         pnlMyBoard = new JPanel(new GridLayout(11, 11));
         pnlMyBoard.setBackground(backroundColor);
-        
+
         pnlEnemyBoard = new JPanel(new GridLayout(11, 11));
         pnlEnemyBoard.setBackground(backroundColor);
-        
+
         this.myBoardGrid = myBoardGrid;
         enemyBoardGrid = new GameGrid(10, 10);
 
@@ -88,7 +87,7 @@ public class GameUI extends JFrame implements MouseListener {
 
         myBoardArray[0][0] = new JLabel("");
         enemyBoardArray[0][10] = new JLabel("");
-        
+
         for (int a = 1; a < 11; a++) {
             myBoardArray[a][0] = new JLabel(Integer.toString(a),
                     SwingConstants.CENTER);
@@ -98,16 +97,16 @@ public class GameUI extends JFrame implements MouseListener {
             myBoardArray[a][0].setForeground(textColor);
             myBoardArray[0][a].setBackground(backroundColor);
             myBoardArray[0][a].setForeground(textColor);
-            
-            
+
+
             enemyBoardArray[a][10] = new JLabel(Integer.toString(a),
                     SwingConstants.CENTER);
             enemyBoardArray[0][a - 1] = new JLabel(
                     Character.toString((char) (a + 64)), SwingConstants.CENTER);
             enemyBoardArray[a][10].setBackground(backroundColor);
             enemyBoardArray[a][10].setForeground(textColor);
-            enemyBoardArray[0][a-1].setBackground(backroundColor);
-            enemyBoardArray[0][a-1].setForeground(textColor);
+            enemyBoardArray[0][a - 1].setBackground(backroundColor);
+            enemyBoardArray[0][a - 1].setForeground(textColor);
         }
 
         for (int a = 1; a < 11; a++) {
@@ -128,7 +127,7 @@ public class GameUI extends JFrame implements MouseListener {
 
         pnlPlayerText = new JPanel(new GridLayout(1, 3));
         pnlPlayerText.setBackground(backroundColor);
-        
+
         lblPlayer1 = new JLabel("MY BOARD", SwingConstants.CENTER);
         lblPlayer1.setFont(new Font("EUROSTILE", Font.BOLD, 24));
         lblPlayer1.setBackground(backroundColor);
@@ -138,11 +137,11 @@ public class GameUI extends JFrame implements MouseListener {
         lblPlayer2.setFont(new Font("EUROSTILE", Font.BOLD, 24));
         lblPlayer2.setBackground(backroundColor);
         lblPlayer2.setForeground(textColor);
-        
+
         pnlTimerHome = new JPanel(new GridLayout(1, 2));
         pnlTimerHome.setBackground(backroundColor);
-        
-        lblTimer = new JLabel("TIMER",SwingConstants.CENTER);
+
+        lblTimer = new JLabel("TIMER", SwingConstants.CENTER);
         lblTimer.setFont(new Font("EUROSTILE", Font.BOLD, 18));
         lblTimer.setBorder(BorderFactory.createLineBorder(textColor, 1));
         lblTimer.setBackground(backroundColor);
@@ -150,27 +149,27 @@ public class GameUI extends JFrame implements MouseListener {
 
         btnHome = new JButton("QUIT");
         btnHome.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				player.sendServerRequest(new Request("UserWentBackToLobby", player.getName(), opponentName));
-				//player.sendServerRequest(new Request("UserJoinedLobby", player.getName()));
-				player.reshowLobby();
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                player.sendServerRequest(new Request("UserWentBackToLobby", player.getName(), opponentName));
+                //player.sendServerRequest(new Request("UserJoinedLobby", player.getName()));
+                player.reshowLobby();
 				
-			}
-		});
+            }
+        });
         btnHome.setFont(new Font("EUROSTILE", Font.BOLD, 18));
-        
+
         pnlTimerHome.add(lblTimer);
         pnlTimerHome.add(btnHome);
-        
+
         pnlPlayerText.add(lblPlayer1);
-        pnlPlayerText.add(pnlTimerHome);  
+        pnlPlayerText.add(pnlTimerHome);
         pnlPlayerText.add(lblPlayer2);
 
         pnlChatWindow = new JPanel(new BorderLayout(5, 5));
         pnlChatWindow.setBackground(backroundColor);
-        
+
         txtAreaChat = new JEditorPane();
         txtAreaChat.setEditable(false);
         txtAreaChat.setContentType("text/html");
@@ -181,9 +180,9 @@ public class GameUI extends JFrame implements MouseListener {
 
         pnlChatSender = new JPanel(new BorderLayout());
         pnlChatSender.setBackground(backroundColor);
-        
+
         txtChat = new JTextField();
-        
+
         txtChat.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent evt) {
                 if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -193,8 +192,8 @@ public class GameUI extends JFrame implements MouseListener {
         });
 
         btnSend = new JButton("SEND");
-        btnSend.setFont(new Font("EUROSTILE", Font.BOLD,14));
-        
+        btnSend.setFont(new Font("EUROSTILE", Font.BOLD, 14));
+
         btnSend.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 sendMessage(txtChat.getText());
@@ -210,7 +209,7 @@ public class GameUI extends JFrame implements MouseListener {
         pnlBoards.add(pnlMyBoard);
         pnlBoards.add(pnlChatWindow);
         pnlBoards.add(pnlEnemyBoard);
-        
+
         content.add(pnlPlayerText, BorderLayout.NORTH);
         content.add(pnlBoards, BorderLayout.CENTER);
 
@@ -248,15 +247,15 @@ public class GameUI extends JFrame implements MouseListener {
         int row = ((GameButton) e.getSource()).getRow();
         int col = ((GameButton) e.getSource()).getColumn();
         Request request = new Request("Move", playerName, opponentName, new GameMove(new Point(row, col), playerName, null));
-		if(player.makeMove(request)) {
-		    //enemyBoardGrid.getButton(row, col).setEnabled(false);
-		    enemyBoardGrid.getButton(row, col).removeMouseListener(this);
-		    cm.end();
-		}
-		//Disable Board
+        if (player.makeMove(request)) {
+            //enemyBoardGrid.getButton(row, col).setEnabled(false);
+            enemyBoardGrid.getButton(row, col).removeMouseListener(this);
+            cm.end();
+        }
+        //Disable Board
 
 		/*
-		if (x.equals("hit") || x.equals("destroyed")) {
+        if (x.equals("hit") || x.equals("destroyed")) {
 			enemyBoardGrid.getButton(row, col).setBackground(Color.RED);
 		} else {
 			enemyBoardGrid.getButton(row, col).setBackground(Color.CYAN);
@@ -276,16 +275,16 @@ public class GameUI extends JFrame implements MouseListener {
 
     public void updateEnemyBoard(String x, Point p) {
         if (x.equals("hit")) {
-        	enemyBoardGrid.getButton(p.getX(), p.getY()).setIcon(null);
-        	enemyBoardGrid.getButton(p.getX(), p.getY()).setBackground(Color.RED);
+            enemyBoardGrid.getButton(p.getX(), p.getY()).setIcon(null);
+            enemyBoardGrid.getButton(p.getX(), p.getY()).setBackground(Color.RED);
         } else if (x.startsWith("destroyed")) {
-        	enemyBoardGrid.getButton(p.getX(), p.getY()).setIcon(null);
-        	enemyBoardGrid.getButton(p.getX(), p.getY()).setBackground(Color.RED);
+            enemyBoardGrid.getButton(p.getX(), p.getY()).setIcon(null);
+            enemyBoardGrid.getButton(p.getX(), p.getY()).setBackground(Color.RED);
             //Tell which ship has been destroyed
             appendMessage("Enemy's " + x.substring(9) + " has been destroyed.", "GAME"); //add new line
         } else {
-        	enemyBoardGrid.getButton(p.getX(), p.getY()).setIcon(null);
-        	enemyBoardGrid.getButton(p.getX(), p.getY()).setBackground(Color.CYAN);
+            enemyBoardGrid.getButton(p.getX(), p.getY()).setIcon(null);
+            enemyBoardGrid.getButton(p.getX(), p.getY()).setBackground(Color.CYAN);
         }
     }
 
@@ -295,7 +294,7 @@ public class GameUI extends JFrame implements MouseListener {
         } else if (x.startsWith("destroyed")) {
             myBoardGrid.getButton(p.getX(), p.getY()).setBackground(Color.lightGray);
             //Tell which ship has been destroyed
-            appendMessage("Your "+x.substring(9)+" has been destroyed.", "GAME");
+            appendMessage("Your " + x.substring(9) + " has been destroyed.", "GAME");
         } else {
             myBoardGrid.getButton(p.getX(), p.getY()).setBackground(Color.CYAN);
         }
@@ -351,8 +350,9 @@ public class GameUI extends JFrame implements MouseListener {
     public void startTimer() {
         cm.start();
     }
-    public void setLabelText(){
-    	lblTimer.setText(opponentName + "'s turn.");
+
+    public void setLabelText() {
+        lblTimer.setText(opponentName + "'s turn.");
     }
 
     public void endTurn() throws IOException {
@@ -360,5 +360,5 @@ public class GameUI extends JFrame implements MouseListener {
         Request request = new Request("MoveEnded", playerName, opponentName);
         player.finishMove(request);
     }
-    
+
 }

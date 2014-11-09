@@ -28,7 +28,7 @@ public class Board implements Serializable {
             }
 
 			/*
-			for(int i = ship.getStart().getY();i<ship.getEnd().getY();i++)
+            for(int i = ship.getStart().getY();i<ship.getEnd().getY();i++)
 			{
 				if(board[ship.getStart().getX()][i] != -1)
 					return false;
@@ -44,8 +44,8 @@ public class Board implements Serializable {
                 board[i][ship.getStart().getY()] = indexOfShips;
 
             }
-			/*
-			for(int i = ship.getStart().getX();i<ship.getEnd().getX();i++)
+            /*
+            for(int i = ship.getStart().getX();i<ship.getEnd().getX();i++)
 			{	
 				if(board[i][ship.getStart().getY()] != 0)
 					return false;
@@ -83,7 +83,7 @@ public class Board implements Serializable {
             if (ships.get(shot).isDestroyed()) {
                 board[point.getX()][point.getY()] = -4;
                 return "destroyed" + ships.get(shot).getName();
-                
+
             }
 
             board[point.getX()][point.getY()] = -3;

@@ -8,12 +8,12 @@ public class GameButton extends JButton {
     private int col;
     private boolean cellState;
     private int occupyingShipSize;
-    
+
     private ImageIcon iiSea = new ImageIcon("res/sea.png");
     private Color borderColor = new Color(0, 66, 90);
     private Color shipColor = Color.GRAY;
-    private Color shipBorder = new Color(46,46,46);
-    
+    private Color shipBorder = new Color(46, 46, 46);
+
     public GameButton() {
         super();
         cellState = false;
@@ -26,7 +26,7 @@ public class GameButton extends JButton {
         super();
         this.row = row;
         this.col = col;
-        cellState = false; 
+        cellState = false;
         occupyingShipSize = 0;
         setOpaque(true);
         this.setBorder(BorderFactory.createLineBorder(borderColor, 1));
@@ -54,12 +54,12 @@ public class GameButton extends JButton {
         return occupyingShipSize;
     }
 
-	public void setDefaultIcon() {
-		this.setIcon(iiSea);
-		
-	}
-	
-	public void setBorderToDark(){
-		this.setBorder(BorderFactory.createLineBorder(shipBorder, 1));
-	}
+    public void setDefaultIcon() {
+        this.setIcon(iiSea);
+
+    }
+
+    public void setBorderToDark() {
+        this.setBorder(BorderFactory.createLineBorder(shipBorder, 1));
+    }
 }

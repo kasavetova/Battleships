@@ -11,7 +11,7 @@ public class Ship implements Serializable {
     char orientation;//H-horizontal , V-vertical
     String name;
     static boolean thirdShip = false;
-    
+
 
     /**
      * This initializes a new ship that starts at Point start and ends at Point end.
@@ -26,7 +26,7 @@ public class Ship implements Serializable {
         this.orientation = orientation;
         //the following if will tell if the ship is vertical or horizontal
         /*
-		if(start.getX()-end.getX() == 0)
+        if(start.getX()-end.getX() == 0)
 			{
 			orientation = 'H';
 			}
@@ -147,25 +147,30 @@ public class Ship implements Serializable {
         return life;
 
     }
-    public String getShipName(){
 
-    	switch(size){
-    		case 2: return "Patrol Boat";
-    		case 3:	if(!thirdShip){
-    					thirdShip = true;
-    					return "Destroyer";
-    				}
-    				else{
-    					thirdShip = false;
-    					return "Submarine";
-    				}
-    		case 4:	return "Battleship";
-    		case 5:	return "Aircraft Carrier";
-    	}
-		return "Ship";
+    public String getShipName() {
+
+        switch (size) {
+            case 2:
+                return "Patrol Boat";
+            case 3:
+                if (!thirdShip) {
+                    thirdShip = true;
+                    return "Destroyer";
+                } else {
+                    thirdShip = false;
+                    return "Submarine";
+                }
+            case 4:
+                return "Battleship";
+            case 5:
+                return "Aircraft Carrier";
+        }
+        return "Ship";
     }
-    public String getName(){
-    	return name;
+
+    public String getName() {
+        return name;
     }
 
 }

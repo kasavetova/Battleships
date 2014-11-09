@@ -85,8 +85,8 @@ public class ConfirmDialog extends JFrame implements ActionListener {
             time.stop();
 
         } else if (e.getSource() == noButton) {
-        	player.refuseRequest(input);
-        	time.stop();
+            player.refuseRequest(input);
+            time.stop();
         }
     }
 

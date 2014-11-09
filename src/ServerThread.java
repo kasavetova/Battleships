@@ -3,10 +3,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+
 /**
  * Handles the connection of an individual player
- * @author Team 1-O
  *
+ * @author Team 1-O
  */
 
 public class ServerThread extends Thread {
@@ -81,20 +82,20 @@ public class ServerThread extends Thread {
             in = new ObjectInputStream(clientSocket.getInputStream());
             Request input;
             while ((input = (Request) in.readObject()) != null) {
-            	String actionType = input.getActionType();
-            	switch(actionType){
-            		case "UserJoinedLobby":
-            			username = input.getOrigin();
-            			messageAllActive(new Request("UserJoinedLobby", "SERVER", "ALL", username));
-            			break;
-            		case "UserLeftLobby":
-            			messageAllActive(new Request("UserLeftLobby", "SERVER", "ALL", input.getOrigin()));
-            			break;
-            		case "SendMessage":
-            			messageAll(new Request("ReceiveMessage", input.getOrigin(), input.getDestination(), input.getObject()));
-           			 	break;
-            		case "RetrieveLobby":
-            			lobbyList = new ArrayList<String>();
+                String actionType = input.getActionType();
+                switch (actionType) {
+                    case "UserJoinedLobby":
+                        username = input.getOrigin();
+                        messageAllActive(new Request("UserJoinedLobby", "SERVER", "ALL", username));
+                        break;
+                    case "UserLeftLobby":
+                        messageAllActive(new Request("UserLeftLobby", "SERVER", "ALL", input.getOrigin()));
+                        break;
+                    case "SendMessage":
+                        messageAll(new Request("ReceiveMessage", input.getOrigin(), input.getDestination(), input.getObject()));
+                        break;
+                    case "RetrieveLobby":
+                        lobbyList = new ArrayList<String>();
                         for (ServerThread st : serverThreads) {
                             if (!st.inGame) {
                                 lobbyList.add(st.getPlayerName());
@@ -102,12 +103,12 @@ public class ServerThread extends Thread {
                         }
                         messageAllActive(new Request("RetrieveLobby", "SERVER", input.getOrigin(), lobbyList));
                         break;
-            		case "UserWentBackToLobby":
-            			System.out.println("backtolobby");
-            			for (ServerThread st : serverThreads) {
+                    case "UserWentBackToLobby":
+                        System.out.println("backtolobby");
+                        for (ServerThread st : serverThreads) {
                             if (st.getPlayerName().equals(input.getDestination())) {
-                            	messageAllActive(new Request("UserJoinedLobby", "SERVER", "ALL", username));
-                            	messageAllActive(new Request("UserJoinedLobby", "SERVER", "ALL", st.getPlayerName()));
+                                messageAllActive(new Request("UserJoinedLobby", "SERVER", "ALL", username));
+                                messageAllActive(new Request("UserJoinedLobby", "SERVER", "ALL", st.getPlayerName()));
                                 st.setInGame(false);
                                 st.setPlayerStatus(false);
                                 st.message(input);
@@ -116,12 +117,12 @@ public class ServerThread extends Thread {
                                 break;
                             }
                         }
-            			break;
-            		case "GameBoard":
-            			 gameBoard = (Board) input.getObject();
-            			 break;
-            		case "Move":
-            			if (!input.getDestination().equals(username)) {
+                        break;
+                    case "GameBoard":
+                        gameBoard = (Board) input.getObject();
+                        break;
+                    case "Move":
+                        if (!input.getDestination().equals(username)) {
                             for (ServerThread serverThread : serverThreads) {
                                 if (serverThread.getPlayerName().equals(input.getDestination())) {
                                     serverThread.completeMove(input);
@@ -129,27 +130,27 @@ public class ServerThread extends Thread {
                                 }
                             }
                         }
-            			break;
-            		case "MoveEnded":
-            			messageAll(input);
-            			break;
-            		case "PlayerReady":
-            			if (input.getOrigin().equals(username)) {
-            				isReady = true;
-            			}
-            			for (ServerThread st : serverThreads) {
-            				if (st.getPlayerName().equals(input.getDestination()) && st.getPlayerStatus()) {
-            					message(new Request("GameStart", input.getDestination(), username));
-            					st.message(new Request("GameStart", username, input.getDestination()));
-            					break;
-            				}
+                        break;
+                    case "MoveEnded":
+                        messageAll(input);
+                        break;
+                    case "PlayerReady":
+                        if (input.getOrigin().equals(username)) {
+                            isReady = true;
                         }
-            			break;
-            		case "PlayerBusy":
-            			messageAll(input);
-            			break;
-            	}
-            	if (input.getActionType().startsWith("GameRequest")) {
+                        for (ServerThread st : serverThreads) {
+                            if (st.getPlayerName().equals(input.getDestination()) && st.getPlayerStatus()) {
+                                message(new Request("GameStart", input.getDestination(), username));
+                                st.message(new Request("GameStart", username, input.getDestination()));
+                                break;
+                            }
+                        }
+                        break;
+                    case "PlayerBusy":
+                        messageAll(input);
+                        break;
+                }
+                if (input.getActionType().startsWith("GameRequest")) {
                     messageAllActive(input);
                     if (input.getActionType().equals("GameRequestAnswer") && input.getObject().equals("Yes")) {
                         for (ServerThread st : serverThreads) {
@@ -160,18 +161,17 @@ public class ServerThread extends Thread {
                             }
                         }
                     }
-            	}
-            	//Handles closing connections
-            	else if (input.getActionType().equals("UserClosed")) {
+                }
+                //Handles closing connections
+                else if (input.getActionType().equals("UserClosed")) {
                     //If user closes on lobby screen
-            		
+
                     serverThreads.remove(this);
                     messageAll(new Request("UserLeftLobby", "SERVER", "ALL", username));
                     System.out.println(username + " has exited.");
                     out.close();
-                    break; 
-                }
-            	else if (input.getActionType().equals("UserLeftGame")) {
+                    break;
+                } else if (input.getActionType().equals("UserLeftGame")) {
                     //If user closes during shipselection/gameui
                     System.out.println("Sending" + input);
                     for (ServerThread st : serverThreads) {
@@ -185,9 +185,9 @@ public class ServerThread extends Thread {
                     serverThreads.remove(this);
                     messageAll(new Request("UserLeftLobby", "SERVER", "ALL", username));
                     System.out.println(username + " has exited.");
-                    out.close();  
+                    out.close();
                     break;
-                    
+
                 }
             }
             in.close();
@@ -197,7 +197,7 @@ public class ServerThread extends Thread {
             System.out.println("Exception caught when trying to listen on port "
                     + " or listening for a connection");
         } catch (ClassNotFoundException e) {
- 
+
         }
     }
 

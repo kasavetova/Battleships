@@ -6,10 +6,10 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 
-public class Player{
-	private int portNumber = 4446;
-	private String serverIP = "localhost";
-	
+public class Player {
+    private int portNumber = 4446;
+    private String serverIP = "localhost";
+
     private static String name;
     private String opponentName;
     private boolean isTheirTurn;
@@ -23,14 +23,14 @@ public class Player{
     private ShipPlacementUI shipPlacement;
     private GameUI gameUI;
     private ConfirmDialog confirmDialog;
-    
+
     public static void main(String[] args) {
-    	new Player();
+        new Player();
     }
 
     public Player() {
-    	welcomeFrame = new WelcomeFrame(this);
-    	welcomeFrame.setVisible(true);
+        welcomeFrame = new WelcomeFrame(this);
+        welcomeFrame.setVisible(true);
     }
 
     public void newConnection() {
@@ -56,7 +56,7 @@ public class Player{
 
         }
     }
-    
+
     class ReceivingThread extends Thread {
         Request input;
 
@@ -69,13 +69,9 @@ public class Player{
                         if (!input.getObject().equals(name)) {
                             lobbyFrame.addItem((String) input.getObject());
                         }
-                    }
-
-                    else if (input.getActionType().equals("UserLeftLobby")) {
-                        lobbyFrame.deleteItem((String)input.getObject());
-                    }
-
-                    else if (input.getDestination().equals(name)) {
+                    } else if (input.getActionType().equals("UserLeftLobby")) {
+                        lobbyFrame.deleteItem((String) input.getObject());
+                    } else if (input.getDestination().equals(name)) {
 
                         String actionType = input.getActionType();
                         switch (actionType) {
@@ -183,7 +179,7 @@ public class Player{
     }
 
     public void gameFrame() {
-    	lobbyFrame.dispose();
+        lobbyFrame.dispose();
         shipPlacement = new ShipPlacementUI(this);
         shipPlacement.setVisible(true);
     }
@@ -200,115 +196,114 @@ public class Player{
         isBusy = false;
         lobbyFrame.enablePlayButton(true);
         sendServerRequest(new Request(
-		        "GameRequestAnswer", name,
-		        input.getOrigin(), "No"));
-		confirmDialog.dispose();
+                "GameRequestAnswer", name,
+                input.getOrigin(), "No"));
+        confirmDialog.dispose();
     }
 
     public void acceptRequest(Request input) {
         isBusy = false;
         lobbyFrame.enablePlayButton(true);
         sendServerRequest(new Request(
-		        "GameRequestAnswer", name,
-		        input.getOrigin(), "Yes"));
+                "GameRequestAnswer", name,
+                input.getOrigin(), "Yes"));
         opponentName = input.getOrigin();
-		gameFrame();
-		confirmDialog.dispose();
+        gameFrame();
+        confirmDialog.dispose();
     }
-    
+
     public void placementFinished(GameGrid grid, Board b) {
         gameUI = new GameUI(grid, this, b);
         gameUI.setVisible(true);
         sendServerRequest(new Request("GameBoard", name, "SERVER", b));
-		if (isTheirTurn) {
-		    gameUI.startTimer();
-		}
-		else{
-			gameUI.setLabelText();
-		}
+        if (isTheirTurn) {
+            gameUI.startTimer();
+        } else {
+            gameUI.setLabelText();
+        }
     }
 
-    public boolean makeMove (Request request){
+    public boolean makeMove(Request request) {
         if (isTheirTurn) {
-        	sendServerRequest(request);
+            sendServerRequest(request);
             isTheirTurn = false;
             return true;
-        }  else {
+        } else {
             gameUI.appendMessage("It's not your turn yet! Please wait for your opponent.", "GAME");
             return false;
         }
     }
 
-    public void finishMove(Request request){
-    	sendServerRequest(request);
+    public void finishMove(Request request) {
+        sendServerRequest(request);
         isTheirTurn = false;
     }
 
     public String getName() {
         return name;
     }
-    
-    public boolean checkName(String nameToCheck){
-    	try {
-    		socket = new Socket(serverIP, portNumber);
-			out = new ObjectOutputStream(socket.getOutputStream());
-			in = new ObjectInputStream(socket.getInputStream());
-			Request input;
-			while ((input = (Request) in.readObject()) != null) {
-				if (input.getActionType().equals("RetrieveLobby")) {
-					ArrayList<String> playersList = (ArrayList<String>) input.getObject();
-					if(playersList != null){
-						for (int i = 0; i < playersList.size(); i++) {
-							System.out.println(playersList);
-							if (playersList.get(i).toUpperCase().equals(nameToCheck.toUpperCase())) {
-								sendServerRequest(new Request("Rejected"));
-								out.close();
-								in.close();
-								socket.close();
-								socket = null;
-								return false;
-							}
-						}	
-					}
-					break;
-				}
-			}
+
+    public boolean checkName(String nameToCheck) {
+        try {
+            socket = new Socket(serverIP, portNumber);
+            out = new ObjectOutputStream(socket.getOutputStream());
+            in = new ObjectInputStream(socket.getInputStream());
+            Request input;
+            while ((input = (Request) in.readObject()) != null) {
+                if (input.getActionType().equals("RetrieveLobby")) {
+                    ArrayList<String> playersList = (ArrayList<String>) input.getObject();
+                    if (playersList != null) {
+                        for (int i = 0; i < playersList.size(); i++) {
+                            System.out.println(playersList);
+                            if (playersList.get(i).toUpperCase().equals(nameToCheck.toUpperCase())) {
+                                sendServerRequest(new Request("Rejected"));
+                                out.close();
+                                in.close();
+                                socket.close();
+                                socket = null;
+                                return false;
+                            }
+                        }
+                    }
+                    break;
+                }
+            }
         } catch (ClassNotFoundException | IOException e) {
             // TODO Auto-generated catch block
-			e.printStackTrace();
+            e.printStackTrace();
         }
-    	sendServerRequest(new Request("Accepted"));
+        sendServerRequest(new Request("Accepted"));
         return true;
     }
-    
-    public void reshowLobby(){
-    	
-    	lobbyFrame = new LobbyFrame(this);
-    	lobbyFrame.setVisible(true);
-    	opponentName = null;
 
-    	if(shipPlacement !=null){
-    		shipPlacement.dispose();
-    	}
-    	if(gameUI !=null){
-    		gameUI.dispose();
-    	}
-    	sendServerRequest(new Request("RetrieveLobby", name));
-    }
-    
-    public void closeWelcomeFrame(String name){
-    	welcomeFrame.dispose();
-    	Player.name = name;
-    	lobbyFrame = new LobbyFrame(this);
-    	lobbyFrame.setVisible(true);
-    	newConnection();
-    }
-    
-    public void setBusy(boolean b){
-    	isBusy = b;
+    public void reshowLobby() {
+
+        lobbyFrame = new LobbyFrame(this);
+        lobbyFrame.setVisible(true);
+        opponentName = null;
+
+        if (shipPlacement != null) {
+            shipPlacement.dispose();
+        }
+        if (gameUI != null) {
+            gameUI.dispose();
+        }
+        sendServerRequest(new Request("RetrieveLobby", name));
     }
 
-    public String getOpponentName(){
-    	return opponentName;
+    public void closeWelcomeFrame(String name) {
+        welcomeFrame.dispose();
+        Player.name = name;
+        lobbyFrame = new LobbyFrame(this);
+        lobbyFrame.setVisible(true);
+        newConnection();
+    }
+
+    public void setBusy(boolean b) {
+        isBusy = b;
+    }
+
+    public String getOpponentName() {
+        return opponentName;
     }
 }
