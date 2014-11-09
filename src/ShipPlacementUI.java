@@ -331,7 +331,7 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
         btnHome.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                player.sendServerRequest(new Request("UserWentBackToLobby", player.getName(), opponentName));
+                player.sendServerRequest(new Request("UserWentBackToLobby", player.getName(), opponentName, "NotFinished"));
                 player.reshowLobby();
 
             }
