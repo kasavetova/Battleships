@@ -13,21 +13,33 @@ public class CountdownManager {
     private GameUI gui;
     private String opponentName;
     private Timer countdownTimer;
-    private int timeRemaining = 15;
+    private int timeRemaining = 20;
 
+    /**
+     * 
+     * @param timeLabel The label in which to display the ticker
+     * @param gui The contextual GameUI in which this ticker is being displayed
+     * @param opponentName The name of the opponent of the current Player
+     */
     public CountdownManager(JLabel timeLabel, GameUI gui, String opponentName) {
         this.timeLabel = timeLabel;
         this.gui = gui;
         this.opponentName = opponentName;
     }
 
+    /**
+     * Starts the timer counting down from int timeRemaining.
+     */
     public void start() {
-        timeRemaining = 15;
-        timeLabel.setText("Timer: (15)");
+        timeRemaining = 20;
+        timeLabel.setText("Timer: (20)");
         countdownTimer = new Timer(1000, new TimerListener());
         countdownTimer.start();
     }
 
+    /**
+     * An ActionListener to listen for the Timer.
+     */
     class TimerListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             String currentText = timeLabel.getText();

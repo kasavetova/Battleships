@@ -1,27 +1,16 @@
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Insets;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.WindowConstants;
-import javax.swing.border.EmptyBorder;
-
+/**
+ * A graphical user interface displaying the welcome screen of the game.
+ * Players enter their nickname to be identified with here.
+ */
 public class WelcomeFrame extends JFrame implements ActionListener{
 	
 	private JPanel content;
@@ -42,7 +31,11 @@ public class WelcomeFrame extends JFrame implements ActionListener{
     
     private Color backgroundColor = new Color(44, 62, 80);
     private Color textColor = new Color(236, 240, 241);
-    
+
+    /**
+     * Constructs and sets up the widgets of the interface.
+     * @param player The Player client running the game
+     */
 	public WelcomeFrame(Player player){
 		this.player = player;
 		backround = new JLabel(new ImageIcon("res/homeScreenImage.png"));
