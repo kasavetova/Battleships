@@ -1,10 +1,10 @@
+import javax.swing.*;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
-import javax.swing.JOptionPane;
 
 public class Player{
     private static String name;
@@ -67,6 +67,7 @@ public class Player{
                                             isBusy = true;
                                             confirmDialog = new ConfirmDialog(Player.this, input);
                                             confirmDialog.setVisible(true);
+                                            confirmDialog.setAlwaysOnTop(true);
                                         } else {
                                             out.writeObject(new Request("PlayerBusy", name, input.getOrigin()));
                                         }
