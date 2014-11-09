@@ -1,4 +1,5 @@
 import javax.swing.JOptionPane;
+
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -109,7 +110,6 @@ public class Player {
                                 gameUI.appendMessage((String) input.getObject(), input.getOrigin());
                                 break;
                             case "UserLeftGame":
-                                System.out.println("backtolobby");
                                 // Quitting game
                                 reshowLobby();
                                 JOptionPane.showMessageDialog(null, "Your opponent quit! You win (by default)",
@@ -117,10 +117,11 @@ public class Player {
                                 break;
                             case "UserWentBackToLobby":
                                 //Returning to lobby
-                                System.out.println("backtolobby");
                                 reshowLobby();
-                                JOptionPane.showMessageDialog(null, "Your opponent went back to lobby",
-                                        "Opponent Quit", JOptionPane.INFORMATION_MESSAGE);
+                                if(!input.getObject().equals("Finished")){
+                                	JOptionPane.showMessageDialog(null, "Your opponent went back to lobby",
+                                            "Opponent Quit", JOptionPane.INFORMATION_MESSAGE);
+                                }
                                 break;
                             case "MoveResult":
                                 GameMove gm = (GameMove) input.getObject();
@@ -159,6 +160,10 @@ public class Player {
                                 JOptionPane.showMessageDialog(null, "Player is busy. Please try again later",
                                         "Error", JOptionPane.ERROR_MESSAGE);
                                 break;
+                            case "GameFinished":
+                            	gameUI.appendMessage("Enemy has won", "GAME");
+                            	gameUI.setGameFinished(true);
+                            	break;
                             default:
                                 System.out.println(input);
                                 break;

@@ -149,6 +149,9 @@ public class ServerThread extends Thread {
                     case "PlayerBusy":
                         messageAll(input);
                         break;
+                    case "GameFinished":
+            			messageAll(input);
+            			break;
                 }
                 if (input.getActionType().startsWith("GameRequest")) {
                     messageAllActive(input);

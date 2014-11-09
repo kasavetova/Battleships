@@ -59,4 +59,10 @@ public class CountdownManager {
         countdownTimer.stop();
         timeLabel.setText(opponentName + "'s turn.");
     }
+    public void endGame(){
+    	if(countdownTimer != null){
+    		countdownTimer.stop();
+    	}
+    	timeLabel.setText("Game Finished");
+    }
 }

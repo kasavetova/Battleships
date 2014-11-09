@@ -3,6 +3,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
@@ -50,6 +51,9 @@ public class GameUI extends JFrame implements MouseListener {
     private Color textColor = new Color(236, 240, 241);
 
     private CountdownManager cm;
+    
+    private int shipsLeft = 5;
+    private boolean gameFinished = false;
 
     public GameUI(GameGrid myBoardGrid, Player player1, Board bo) {
 
@@ -152,9 +156,14 @@ public class GameUI extends JFrame implements MouseListener {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                player.sendServerRequest(new Request("UserWentBackToLobby", player.getName(), opponentName));
-                //player.sendServerRequest(new Request("UserJoinedLobby", player.getName()));
-                player.reshowLobby();
+            	if(gameFinished){
+					player.sendServerRequest(new Request("UserWentBackToLobby", player.getName(), opponentName, "Finished"));
+				}
+				else{
+					player.sendServerRequest(new Request("UserWentBackToLobby", player.getName(), opponentName, "NotFinished"));
+				}
+
+				player.reshowLobby();
 				
             }
         });
@@ -247,10 +256,12 @@ public class GameUI extends JFrame implements MouseListener {
         int row = ((GameButton) e.getSource()).getRow();
         int col = ((GameButton) e.getSource()).getColumn();
         Request request = new Request("Move", playerName, opponentName, new GameMove(new Point(row, col), playerName, null));
-        if (player.makeMove(request)) {
-            //enemyBoardGrid.getButton(row, col).setEnabled(false);
-            enemyBoardGrid.getButton(row, col).removeMouseListener(this);
-            cm.end();
+        if(!gameFinished){
+        	if (player.makeMove(request)) {
+        		//enemyBoardGrid.getButton(row, col).setEnabled(false);
+        		enemyBoardGrid.getButton(row, col).removeMouseListener(this);
+        		cm.end();
+        	}
         }
         //Disable Board
 
@@ -282,6 +293,7 @@ public class GameUI extends JFrame implements MouseListener {
             enemyBoardGrid.getButton(p.getX(), p.getY()).setBackground(Color.RED);
             //Tell which ship has been destroyed
             appendMessage("Enemy's " + x.substring(9) + " has been destroyed.", "GAME"); //add new line
+            decrementLife();
         } else {
             enemyBoardGrid.getButton(p.getX(), p.getY()).setIcon(null);
             enemyBoardGrid.getButton(p.getX(), p.getY()).setBackground(Color.CYAN);
@@ -360,5 +372,18 @@ public class GameUI extends JFrame implements MouseListener {
         Request request = new Request("MoveEnded", playerName, opponentName);
         player.finishMove(request);
     }
+    public void decrementLife(){
+    	if (--shipsLeft == 0){
+    		appendMessage("You have won", "GAME");
+    		player.makeMove(new Request("GameFinished", player.getName(), player.getOpponentName()));
+    		setGameFinished(true);
+    	}
+    }
+
+	public void setGameFinished(boolean b) {
+		gameFinished = b;
+		cm.endGame();
+		
+	}
 
 }
