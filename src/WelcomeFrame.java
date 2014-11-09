@@ -13,11 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
-/**
- * 
- * @author Dillan Patel
- *
- */
+
 public class WelcomeFrame extends JFrame implements ActionListener{
 	
 	private JLabel prompt;

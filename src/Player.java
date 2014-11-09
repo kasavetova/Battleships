@@ -217,6 +217,9 @@ public class Player{
 		if (isTheirTurn) {
 		    gameUI.startTimer();
 		}
+		else{
+			gameUI.setLabelText();
+		}
     }
 
     public boolean makeMove (Request request){

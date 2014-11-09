@@ -355,6 +355,9 @@ public class GameUI extends JFrame implements MouseListener {
     public void startTimer() {
         cm.start();
     }
+    public void setLabelText(){
+    	lblTimer.setText(opponentName + "'s turn.");
+    }
 
     public void endTurn() throws IOException {
         appendMessage("Your time ran out. You missed your turn.", "GAME");

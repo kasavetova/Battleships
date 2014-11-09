@@ -22,11 +22,7 @@ import javax.swing.WindowConstants;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-/**
- * 
- * @author Dillan Patel
- *
- */
+
 
 public class LobbyFrame extends JFrame{
 	
