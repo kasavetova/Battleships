@@ -1,4 +1,4 @@
-import javax.swing.*;
+import javax.swing.JOptionPane;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
