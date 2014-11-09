@@ -62,7 +62,8 @@ public class GameUI extends JFrame implements MouseListener {
         this.opponentName = player.getOpponentName();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 450, 300);
-        setSize(1200, 500);
+        setLocationRelativeTo(null);
+        setSize(1300, 500);
         content = new JPanel(new BorderLayout(5, 5));
         content.setBorder(BorderFactory.createLineBorder(backroundColor, 5));
         content.setBackground(backroundColor);
@@ -86,12 +87,7 @@ public class GameUI extends JFrame implements MouseListener {
         enemyBoardArray = new JComponent[11][11];
 
         myBoardArray[0][0] = new JLabel("");
-        //myBoardArray[0][0].setBackground(backroundColor);
-        //myBoardArray[0][0].setForeground(textColor);
-        
         enemyBoardArray[0][10] = new JLabel("");
-        //enemyBoardArray[0][0].setBackground(backroundColor);
-        //enemyBoardArray[0][0].setForeground(textColor);
         
         for (int a = 1; a < 11; a++) {
             myBoardArray[a][0] = new JLabel(Integer.toString(a),
@@ -117,7 +113,6 @@ public class GameUI extends JFrame implements MouseListener {
         for (int a = 1; a < 11; a++) {
             for (int b = 1; b < 11; b++) {
                 myBoardArray[a][b] = (myBoardGrid.getButton(a - 1, b - 1));
-                //myBoardArray[a][b].setEnabled(false);
                 enemyBoardArray[a][b - 1] = (enemyBoardGrid.getButton(a - 1,
                         b - 1));
                 enemyBoardArray[a][b - 1].addMouseListener(this);
@@ -148,7 +143,7 @@ public class GameUI extends JFrame implements MouseListener {
         pnlTimerHome.setBackground(backroundColor);
         
         lblTimer = new JLabel("TIMER",SwingConstants.CENTER);
-        lblTimer.setFont(new Font("EUROSTILE", Font.PLAIN, 18));
+        lblTimer.setFont(new Font("EUROSTILE", Font.BOLD, 18));
         lblTimer.setBorder(BorderFactory.createLineBorder(textColor, 1));
         lblTimer.setBackground(backroundColor);
         lblTimer.setForeground(textColor);
@@ -164,7 +159,7 @@ public class GameUI extends JFrame implements MouseListener {
 				
 			}
 		});
-        btnHome.setFont(new Font("EUROSTILE", Font.PLAIN, 18));
+        btnHome.setFont(new Font("EUROSTILE", Font.BOLD, 18));
         
         pnlTimerHome.add(lblTimer);
         pnlTimerHome.add(btnHome);

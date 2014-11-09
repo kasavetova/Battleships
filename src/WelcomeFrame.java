@@ -53,14 +53,11 @@ public class WelcomeFrame extends JFrame implements ActionListener{
         setLocationRelativeTo(null); // centers window on screen, must be called after setSize()
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         
-        
         content = new JPanel(new BorderLayout());
         content.setBackground(backgroundColor);
 		content.setBorder(new EmptyBorder(10,10,10,10));
         content.setOpaque(true);
 		setContentPane(content);
-		
-		//GridBagConstraints gc = new GridBagConstraints();
 		
 		jpBattleshipText = new JPanel(new GridLayout(2,1));
 		jpSouth = new JPanel(new GridLayout(2,1,4,4));
@@ -73,13 +70,6 @@ public class WelcomeFrame extends JFrame implements ActionListener{
         title.setOpaque(true);
         title.setFont(new Font("EUROSTILE", Font.BOLD,50));
         
-        /*gc.gridx = 0;
-        gc.gridy = 0;
-        gc.weightx = 0;
-        gc.weighty = 2;
-        gc.anchor = GridBagConstraints.PAGE_START;
-        gc.fill = GridBagConstraints.BOTH;
-        gc.insets = new Insets(5, 5, 5, 5);*/
         jpBattleshipText.add(title);
 
         prompt = new JLabel();
@@ -92,25 +82,11 @@ public class WelcomeFrame extends JFrame implements ActionListener{
                 + "then hit connect!" + "</p></div></html>");
         prompt.setFont(new Font("EUROSTILE", Font.BOLD,14));
         
-        /*gc.gridx = 0;
-        gc.gridy = 1;
-        gc.weightx = 0;
-        gc.weighty = 1;
-        gc.anchor = GridBagConstraints.PAGE_START;
-        gc.fill = GridBagConstraints.BOTH;
-        gc.insets = new Insets(5, 5, 5, 5);*/
         jpBattleshipText.add(prompt);
 
         enterName = new JTextField(30);
         enterName.setFont(new Font("EUROSTILE", Font.BOLD,18));
-        
-        /*gc.gridx = 0;
-        gc.gridy = 2;
-        gc.weightx = 0.5;
-        gc.weighty = 0;
-        gc.anchor = GridBagConstraints.CENTER;
-        gc.fill = GridBagConstraints.BOTH;
-        gc.insets = new Insets(10, 10, 10, 10);*/
+
         jpSouth.add(enterName);
 
         connectButton = new JButton();
@@ -120,13 +96,6 @@ public class WelcomeFrame extends JFrame implements ActionListener{
         connectButton.setFont(new Font("EUROSTILE", Font.BOLD,18));
         jpSouth.add(connectButton);
         
-        /*gc.gridx = 0;
-        gc.gridy = 3;
-        gc.weightx = 0;
-        gc.weighty = 0;
-        gc.anchor = GridBagConstraints.CENTER;
-        gc.fill = GridBagConstraints.NONE;
-        gc.insets = new Insets(5, 5, 10, 5);*/
         content.add(jpSouth, BorderLayout.SOUTH);
         content.add(jpBattleshipText,BorderLayout.CENTER);
         // Enter button actionlistener

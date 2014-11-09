@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -20,6 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.WindowConstants;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -27,15 +29,16 @@ import javax.swing.event.ListSelectionListener;
 
 public class LobbyFrame extends JFrame{
 	
-    private JPanel listPanel;
+    private JPanel content;
     private DefaultListModel<String> playersModel;
     private JButton playButton;
     private JScrollPane scrollPane;
-    private JPanel rightPanel;
-    private JPanel infoPanel;
-    private JPanel buttonPanel;
+    private TitledBorder tbListHeader;
     
     private Player player;
+    
+    private Color backgroundColor = new Color(44, 62, 80);
+    private Color textColor = new Color(236, 240, 241);
     
 	public LobbyFrame(Player player){
 		this.player = player;
@@ -44,21 +47,22 @@ public class LobbyFrame extends JFrame{
 	
 	public void initialiseUI(){
 		
-		setSize(new Dimension(260, 325));
+		setSize(350, 350);
         setResizable(false);
         setLocationRelativeTo(null); // centers window on screen, must be called after setSize()
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		setLayout(new BorderLayout());
+        
+        content = new JPanel(new BorderLayout(0,10));
+        content.setBorder(new EmptyBorder(10,10,10,10));
+        content.setBackground(backgroundColor);
+        
+        setContentPane(content);
 		
-		this.setTitle("You are logged in as: " + player.getName());
-        GridBagConstraints gc = new GridBagConstraints();
-
-        listPanel = new JPanel(new GridBagLayout());
-        add(listPanel, BorderLayout.CENTER);
-
-        playersModel = new DefaultListModel<String>();
+		setTitle("You are logged in as: " + player.getName());
+       
+		playersModel = new DefaultListModel<String>();
         final JList<String> players = new JList<String>(playersModel);
-        players.setFont(new Font("EUROSTILE", Font.BOLD,12));
+        players.setFont(new Font("EUROSTILE", Font.BOLD,14));
         players.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         players.addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent event) {
@@ -71,47 +75,18 @@ public class LobbyFrame extends JFrame{
         });
 
         scrollPane = new JScrollPane(players);
-        TitledBorder b = new TitledBorder("Currently online:");
-        b.setTitleFont(new Font("EUROSTILE", Font.BOLD,14));
-        b.setBorder(BorderFactory.createEmptyBorder());
-        scrollPane.setViewportBorder(b);
+        tbListHeader = new TitledBorder("CURRENTLY ONLINE:");
+        tbListHeader.setTitleFont(new Font("EUROSTILE", Font.BOLD,18));
+        tbListHeader.setBorder(BorderFactory.createEmptyBorder());
+        scrollPane.setViewportBorder(tbListHeader);
 
-        gc.gridx = 0;
-        gc.gridy = 0;
-        gc.weightx = 1;
-        gc.weighty = 1;
-        gc.anchor = GridBagConstraints.CENTER;
-        gc.fill = GridBagConstraints.BOTH;
-        gc.insets = new Insets(5, 5, 5, 5);
-        listPanel.add(scrollPane, gc);
+        content.add(scrollPane, BorderLayout.CENTER);
 
-        rightPanel = new JPanel(new GridBagLayout());
-        add(rightPanel, BorderLayout.EAST);
-
-        infoPanel = new JPanel();
-
-        gc.gridx = 0;
-        gc.gridy = 0;
-        gc.weightx = 0;
-        gc.weighty = 1;
-        gc.anchor = GridBagConstraints.FIRST_LINE_START;
-        gc.fill = GridBagConstraints.HORIZONTAL;
-        rightPanel.add(infoPanel, gc);
-
-        buttonPanel = new JPanel(new GridLayout());
         playButton = new JButton("PLAY");
         playButton.setFont(new Font("EUROSTILE", Font.BOLD,18));
         playButton.setEnabled(false);
-        buttonPanel.add(playButton);
 
-        gc.gridx = 0;
-        gc.gridy = 1;
-        gc.weightx = 0;
-        gc.weighty = 0;
-        gc.anchor = GridBagConstraints.PAGE_END;
-        gc.fill = GridBagConstraints.BOTH;
-        gc.insets = new Insets(5, 5, 5, 5);
-        rightPanel.add(buttonPanel, gc);
+        content.add(playButton, BorderLayout.SOUTH);
         
         this.addWindowListener(new WindowAdapter() {
             @Override
@@ -135,8 +110,6 @@ public class LobbyFrame extends JFrame{
                 }
             }
         });
-        setMinimumSize(new Dimension(520, 370));
-        pack();
 	}
 	public void addItem(String playername){
         playersModel.addElement(playername);
