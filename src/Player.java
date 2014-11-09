@@ -255,7 +255,7 @@ public class Player{
 					if(playersList != null){
 						for (int i = 0; i < playersList.size(); i++) {
 							System.out.println(playersList);
-							if (playersList.get(i).equals(nameToCheck)) {
+							if (playersList.get(i).toUpperCase().equals(nameToCheck.toUpperCase())) {
 								sendServerRequest(new Request("Rejected"));
 								out.close();
 								in.close();

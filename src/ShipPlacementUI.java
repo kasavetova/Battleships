@@ -1,5 +1,6 @@
 import javax.swing.*;
 import javax.swing.border.Border;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.io.ObjectInputStream;
@@ -225,13 +226,15 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
         btgHorizontalVertical.add(btnHorizontal);
         btgHorizontalVertical.add(btnVertical);
 
-        lblHorizontal = new JLabel("<html><b>HORIZONTAL");
+        lblHorizontal = new JLabel("HORIZONTAL");
         lblHorizontal.setBackground(backroundColor);
         lblHorizontal.setForeground(textColor);
+        lblHorizontal.setFont(new Font("EUROSTILE", Font.BOLD,12));
         
-        lblVertical = new JLabel("<html><b>VERTICAL</b></html>");
+        lblVertical = new JLabel("VERTICAL");
         lblVertical.setBackground(backroundColor);
         lblVertical.setForeground(textColor);
+        lblVertical.setFont(new Font("EUROSTILE", Font.BOLD,12));
         
         pnlHorizontalVertical = new JPanel(new FlowLayout(FlowLayout.LEADING));
         pnlHorizontalVertical.setBackground(backroundColor);
@@ -252,7 +255,7 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
        
         lblTitle =  new JLabel("SELECT THE SHIP YOU WISH TO PLACE",SwingConstants.CENTER);
         lblTitle.setForeground(textColor);
-        lblTitle.setFont(new Font("DejaVu Sans", Font.BOLD,14));
+        lblTitle.setFont(new Font("EUROSTILE", Font.BOLD,14));
         
         pnlNorth.add(lblTitle,BorderLayout.NORTH);
         pnlNorth.add(pnlShipHolder, BorderLayout.CENTER);
@@ -273,8 +276,8 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
                     SwingConstants.CENTER);
             arrayGrid[a][0].setBackground(backroundColor);
             arrayGrid[0][a].setBackground(backroundColor);
-            arrayGrid[a][0].setFont(new Font("DejaVu Sans", Font.BOLD,12));
-            arrayGrid[0][a].setFont(new Font("DejaVu Sans", Font.BOLD,12));
+            arrayGrid[a][0].setFont(new Font("EUROSTILE", Font.BOLD,12));
+            arrayGrid[0][a].setFont(new Font("EUROSTILE", Font.BOLD,12));
             arrayGrid[a][0].setForeground(textColor);
             arrayGrid[0][a].setForeground(textColor);
             arrayGrid[a][0].setOpaque(true);
@@ -304,14 +307,15 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
         bdrLoweredButton = BorderFactory.createLoweredBevelBorder();
 
         lblPlacementStatus = new JLabel("PLACE YOUR SHIPS!",SwingConstants.CENTER);
-        lblPlacementStatus.setFont(new Font("DejaVu Sans", Font.BOLD,14));
+        lblPlacementStatus.setFont(new Font("EUROSTILE", Font.BOLD,14));
         lblPlacementStatus.setForeground(textColor);
         lblPlacementStatus.setBorder(BorderFactory.createLineBorder(backroundColor, 2));
         
-        btnConfirm = new JButton("<html><b>CONFIRM</b></html>");
+        btnConfirm = new JButton("CONFIRM");
         btnConfirm.setEnabled(false);
         btnConfirm.setBackground(backroundColor);
         btnConfirm.setForeground(Color.GRAY);
+        btnConfirm.setFont(new Font("EUROSTILE", Font.BOLD,14));
         btnConfirm.setBorder(bdrLoweredButton);
         btnConfirm.setOpaque(true);
         btnConfirm.addActionListener(new ActionListener() {
@@ -331,6 +335,7 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
         btnHome = new JButton("<html><b>HOME</b></html>");
         btnHome.setBackground(backroundColor);
         btnHome.setForeground(textColor);
+        btnHome.setFont(new Font("EUROSTILE", Font.BOLD,14));
         btnHome.setBorder(bdrRaisedButton);
         btnHome.setOpaque(true);
         btnHome.addActionListener(new ActionListener() {

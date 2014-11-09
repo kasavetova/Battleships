@@ -135,12 +135,12 @@ public class GameUI extends JFrame implements MouseListener {
         pnlPlayerText.setBackground(backroundColor);
         
         lblPlayer1 = new JLabel("MY BOARD", SwingConstants.CENTER);
-        lblPlayer1.setFont(new Font("DejaVu Sans", Font.BOLD, 24));
+        lblPlayer1.setFont(new Font("EUROSTILE", Font.BOLD, 24));
         lblPlayer1.setBackground(backroundColor);
         lblPlayer1.setForeground(textColor);
 
         lblPlayer2 = new JLabel(opponentName.toUpperCase() + "'s BOARD", SwingConstants.CENTER);
-        lblPlayer2.setFont(new Font("DejaVu Sans", Font.BOLD, 24));
+        lblPlayer2.setFont(new Font("EUROSTILE", Font.BOLD, 24));
         lblPlayer2.setBackground(backroundColor);
         lblPlayer2.setForeground(textColor);
         
@@ -148,7 +148,7 @@ public class GameUI extends JFrame implements MouseListener {
         pnlTimerHome.setBackground(backroundColor);
         
         lblTimer = new JLabel("TIMER",SwingConstants.CENTER);
-        lblTimer.setFont(new Font("DejaVu Sans", Font.PLAIN, 18));
+        lblTimer.setFont(new Font("EUROSTILE", Font.PLAIN, 18));
         lblTimer.setBorder(BorderFactory.createLineBorder(textColor, 1));
         lblTimer.setBackground(backroundColor);
         lblTimer.setForeground(textColor);
@@ -164,7 +164,7 @@ public class GameUI extends JFrame implements MouseListener {
 				
 			}
 		});
-        btnHome.setFont(new Font("DejaVu Sans", Font.PLAIN, 18));
+        btnHome.setFont(new Font("EUROSTILE", Font.PLAIN, 18));
         
         pnlTimerHome.add(lblTimer);
         pnlTimerHome.add(btnHome);
@@ -188,7 +188,7 @@ public class GameUI extends JFrame implements MouseListener {
         pnlChatSender.setBackground(backroundColor);
         
         txtChat = new JTextField();
-
+        
         txtChat.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent evt) {
                 if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -198,7 +198,8 @@ public class GameUI extends JFrame implements MouseListener {
         });
 
         btnSend = new JButton("SEND");
-
+        btnSend.setFont(new Font("EUROSTILE", Font.BOLD,14));
+        
         btnSend.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 sendMessage(txtChat.getText());

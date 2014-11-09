@@ -1,5 +1,6 @@
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -57,6 +58,7 @@ public class LobbyFrame extends JFrame{
 
         playersModel = new DefaultListModel<String>();
         final JList<String> players = new JList<String>(playersModel);
+        players.setFont(new Font("EUROSTILE", Font.BOLD,12));
         players.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         players.addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent event) {
@@ -70,6 +72,7 @@ public class LobbyFrame extends JFrame{
 
         scrollPane = new JScrollPane(players);
         TitledBorder b = new TitledBorder("Currently online:");
+        b.setTitleFont(new Font("EUROSTILE", Font.BOLD,14));
         b.setBorder(BorderFactory.createEmptyBorder());
         scrollPane.setViewportBorder(b);
 
@@ -96,7 +99,8 @@ public class LobbyFrame extends JFrame{
         rightPanel.add(infoPanel, gc);
 
         buttonPanel = new JPanel(new GridLayout());
-        playButton = new JButton("Play");
+        playButton = new JButton("PLAY");
+        playButton.setFont(new Font("EUROSTILE", Font.BOLD,18));
         playButton.setEnabled(false);
         buttonPanel.add(playButton);
 

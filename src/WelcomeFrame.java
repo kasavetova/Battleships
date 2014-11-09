@@ -1,3 +1,4 @@
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -19,10 +20,13 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
+import javax.swing.border.EmptyBorder;
 
 public class WelcomeFrame extends JFrame implements ActionListener{
 	
 	private JPanel content;
+	private JPanel jpBattleshipText;
+	private JPanel jpSouth;
 	
 	private JLabel backround;
 	
@@ -44,31 +48,39 @@ public class WelcomeFrame extends JFrame implements ActionListener{
 		backround = new JLabel(new ImageIcon("res/homeScreenImage.png"));
 		
 		//initialise UI
-		setSize(new Dimension(350, 500));
+		setSize(new Dimension(350, 350));
         setResizable(false);
         setLocationRelativeTo(null); // centers window on screen, must be called after setSize()
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         
-        content = new JPanel(new GridBagLayout());
-		content.setBackground(backgroundColor);
-		content.setOpaque(true);
+        
+        content = new JPanel(new BorderLayout());
+        content.setBackground(backgroundColor);
+		content.setBorder(new EmptyBorder(10,10,10,10));
+        content.setOpaque(true);
 		setContentPane(content);
 		
-		GridBagConstraints gc = new GridBagConstraints();
+		//GridBagConstraints gc = new GridBagConstraints();
+		
+		jpBattleshipText = new JPanel(new GridLayout(2,1));
+		jpSouth = new JPanel(new GridLayout(2,1,4,4));
+		jpSouth.setBackground(backgroundColor);
+		jpSouth.setOpaque(true);
 		
         title = new JLabel("BATTLESHIP",SwingConstants.CENTER);
         title.setBackground(backgroundColor);
         title.setForeground(textColor);
         title.setOpaque(true);
         title.setFont(new Font("EUROSTILE", Font.BOLD,50));
-        gc.gridx = 0;
+        
+        /*gc.gridx = 0;
         gc.gridy = 0;
         gc.weightx = 0;
         gc.weighty = 2;
         gc.anchor = GridBagConstraints.PAGE_START;
         gc.fill = GridBagConstraints.BOTH;
-        gc.insets = new Insets(5, 5, 5, 5);
-        content.add(title, gc);
+        gc.insets = new Insets(5, 5, 5, 5);*/
+        jpBattleshipText.add(title);
 
         prompt = new JLabel();
         prompt.setBackground(backgroundColor);
@@ -78,46 +90,49 @@ public class WelcomeFrame extends JFrame implements ActionListener{
                 + "<h2>" + "Welcome to Battleship" + "</h2>" + "<p>"
                 + "Enter a nickname for players to identify you with, "
                 + "then hit connect!" + "</p></div></html>");
-        prompt.setFont(new Font("EUROSTILE", Font.BOLD,18));
+        prompt.setFont(new Font("EUROSTILE", Font.BOLD,14));
         
-        gc.gridx = 0;
+        /*gc.gridx = 0;
         gc.gridy = 1;
         gc.weightx = 0;
         gc.weighty = 1;
         gc.anchor = GridBagConstraints.PAGE_START;
         gc.fill = GridBagConstraints.BOTH;
-        gc.insets = new Insets(5, 5, 5, 5);
-        content.add(prompt, gc);
+        gc.insets = new Insets(5, 5, 5, 5);*/
+        jpBattleshipText.add(prompt);
 
         enterName = new JTextField(30);
         enterName.setFont(new Font("EUROSTILE", Font.BOLD,18));
-        gc.gridx = 0;
+        
+        /*gc.gridx = 0;
         gc.gridy = 2;
         gc.weightx = 0.5;
         gc.weighty = 0;
         gc.anchor = GridBagConstraints.CENTER;
         gc.fill = GridBagConstraints.BOTH;
-        gc.insets = new Insets(10, 10, 10, 10);
-        content.add(enterName, gc);
+        gc.insets = new Insets(10, 10, 10, 10);*/
+        jpSouth.add(enterName);
 
         connectButton = new JButton();
         connectButton.setText("Connect");
         connectButton.setBackground(backgroundColor);
         connectButton.setOpaque(true);
         connectButton.setFont(new Font("EUROSTILE", Font.BOLD,18));
-        gc.gridx = 0;
+        jpSouth.add(connectButton);
+        
+        /*gc.gridx = 0;
         gc.gridy = 3;
         gc.weightx = 0;
         gc.weighty = 0;
         gc.anchor = GridBagConstraints.CENTER;
         gc.fill = GridBagConstraints.NONE;
-        gc.insets = new Insets(5, 5, 10, 5);
-        content.add(connectButton, gc);
-
+        gc.insets = new Insets(5, 5, 10, 5);*/
+        content.add(jpSouth, BorderLayout.SOUTH);
+        content.add(jpBattleshipText,BorderLayout.CENTER);
         // Enter button actionlistener
         connectButton.addActionListener(this);
         // Text field listener
-        enterName.addActionListener(this);
+        enterName.addActionListener(this); 
 	}
 
 	@Override
@@ -143,7 +158,7 @@ public class WelcomeFrame extends JFrame implements ActionListener{
 			enterName.setText("");
 
 		} else {
-			boolean isUnique = player.checkName(nameToCheck);
+			boolean isUnique = player.checkName(nameToCheck.toUpperCase());
 			if (isUnique) {
 				player.closeWelcomeFrame(nameToCheck);
 			} else {
