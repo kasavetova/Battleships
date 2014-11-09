@@ -7,6 +7,9 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class Player{
+	private int portNumber = 4446;
+	private String serverIP = "localhost";
+	
     private static String name;
     private String opponentName;
     private boolean isTheirTurn;
@@ -247,7 +250,7 @@ public class Player{
     
     public boolean checkName(String nameToCheck){
     	try {
-    		socket = new Socket("localhost", 4446);
+    		socket = new Socket(serverIP, portNumber);
 			out = new ObjectOutputStream(socket.getOutputStream());
 			in = new ObjectInputStream(socket.getInputStream());
 			Request input;
