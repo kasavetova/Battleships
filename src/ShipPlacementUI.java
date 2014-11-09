@@ -73,9 +73,7 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
     // new ShipPlacementUI().setVisible(true);
     // }
 
-    public ShipPlacementUI(final Player player, final ObjectOutputStream out,
-                           final ObjectInputStream in, final String name,
-                           final String opponentName) {
+    public ShipPlacementUI(final Player player) {
 
         super("Place Your Ships!");
         this.player = player;
@@ -88,8 +86,9 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
         content.setBackground(backroundColor);
         setContentPane(content);
 
-        playerName = name;
-        this.opponentName = opponentName;
+        playerName = player.getName();
+        opponentName = player.getOpponentName();
+        
         btnShip5 = new JRadioButton();
         btnShip5.setActionCommand("5");
         btnShip5.addActionListener(this);
@@ -329,7 +328,7 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
         btnHome.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				player.sendServerRequest(new Request("UserWentBackToLobby", name, opponentName));
+				player.sendServerRequest(new Request("UserWentBackToLobby", player.getName(), opponentName));
 				player.reshowLobby();
 				
 			}
@@ -346,7 +345,7 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                    player.sendServerRequest(new Request("UserLeftGame", name,
+                    player.sendServerRequest(new Request("UserLeftGame", player.getName(),
                             opponentName));
             }
 

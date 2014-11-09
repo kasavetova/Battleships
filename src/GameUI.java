@@ -33,8 +33,7 @@ public class GameUI extends JFrame implements MouseListener {
     private JButton btnHome;
     
     private Player player; 
-    private ObjectOutputStream out;
-    private ObjectInputStream in;
+
     private Board bo;
 
     private JPanel pnlChatWindow;
@@ -53,16 +52,14 @@ public class GameUI extends JFrame implements MouseListener {
 
     private CountdownManager cm;
 
-    public GameUI(GameGrid myBoardGrid, ObjectOutputStream outStream,
-                  ObjectInputStream inStream, Player player1, Board bo,
-                  final String opponentName) {
+    public GameUI(GameGrid myBoardGrid, Player player1, Board bo) {
 
         super("Battleships");
         this.player = player1;
-        this.out = outStream;
-        this.in = inStream;
+
         this.bo = bo;
-        this.opponentName = opponentName;
+        this.playerName = player.getName();
+        this.opponentName = player.getOpponentName();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 450, 300);
         setSize(1200, 500);
@@ -225,14 +222,7 @@ public class GameUI extends JFrame implements MouseListener {
             @Override
             public void windowClosing(WindowEvent e) {
 
-                try {
-                    out.writeObject(new Request("UserLeftGame", player
-                            .getName(), opponentName));
-                    // out.writeObject(new Request("UserClosed", name));
-
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
+                player.sendServerRequest(new Request("UserLeftGame", player.getName(), opponentName));
             }
 
         });
@@ -261,18 +251,13 @@ public class GameUI extends JFrame implements MouseListener {
     public void mouseClicked(MouseEvent e) {
         int row = ((GameButton) e.getSource()).getRow();
         int col = ((GameButton) e.getSource()).getColumn();
-        try {
-            Request request = new Request("Move", playerName, opponentName, new GameMove(new Point(row, col), playerName, null));
-            if(player.makeMove(request)) {
-                //enemyBoardGrid.getButton(row, col).setEnabled(false);
-                enemyBoardGrid.getButton(row, col).removeMouseListener(this);
-                cm.end();
-            }
-            //Disable Board
-        } catch (IOException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
+        Request request = new Request("Move", playerName, opponentName, new GameMove(new Point(row, col), playerName, null));
+		if(player.makeMove(request)) {
+		    //enemyBoardGrid.getButton(row, col).setEnabled(false);
+		    enemyBoardGrid.getButton(row, col).removeMouseListener(this);
+		    cm.end();
+		}
+		//Disable Board
 
 		/*
 		if (x.equals("hit") || x.equals("destroyed")) {

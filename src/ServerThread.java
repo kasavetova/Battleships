@@ -100,6 +100,7 @@ public class ServerThread extends Thread {
                         messageAllActive(new Request("RetrieveLobby", "SERVER", input.getOrigin(), lobbyList));
                         break;
             		case "UserWentBackToLobby":
+            			System.out.println("backtolobby");
             			for (ServerThread st : serverThreads) {
                             if (st.getPlayerName().equals(input.getDestination())) {
                             	messageAllActive(new Request("UserJoinedLobby", "SERVER", "ALL", username));
@@ -160,6 +161,7 @@ public class ServerThread extends Thread {
             	//Handles closing connections
             	else if (input.getActionType().equals("UserClosed")) {
                     //If user closes on lobby screen
+            		
                     serverThreads.remove(this);
                     messageAll(new Request("UserLeftLobby", "SERVER", "ALL", username));
                     System.out.println(username + " has exited.");
@@ -184,107 +186,6 @@ public class ServerThread extends Thread {
                     break;
                     
                 }
-            	/*
-                if (input.getActionType().equals("UserJoinedLobby")) {
-                    username = input.getOrigin();
-                    messageAllActive(new Request("UserJoinedLobby", "SERVER", "ALL", username));
-                } else if (input.getActionType().equals("UserLeftLobby")) {
-                    messageAllActive(new Request("UserLeftLobby", "SERVER", "ALL", input.getOrigin()));
-                } else if (input.getActionType().equals("SendMessage")) {
-
-                    messageAll(new Request("ReceiveMessage", input.getOrigin(), input.getDestination(), input.getObject()));
-                } else if (input.getActionType().startsWith("GameRequest")) {
-                    messageAllActive(input);
-                    if (input.getActionType().equals("GameRequestAnswer") && input.getObject().equals("Yes")) {
-                        for (ServerThread st : serverThreads) {
-                            if (st.getPlayerName().equals(input.getOrigin())
-                                    || st.getPlayerName().equals(input.getDestination())) {
-                                st.setInGame(true);
-                                messageAllActive(new Request("UserLeftLobby", "SERVER", "ALL", st.getPlayerName()));
-                            }
-                        }
-                    }
-                } else if (input.getActionType().equals("RetrieveLobby")) {
-                    lobbyList = new ArrayList<String>();
-                    for (ServerThread st : serverThreads) {
-                        if (!st.inGame) {
-                            lobbyList.add(st.getPlayerName());
-                        }
-                    }
-                    messageAllActive(new Request("RetrieveLobby", "SERVER", input.getOrigin(), lobbyList));
-
-                }
-                //Handles closing connections
-                else if (input.getActionType().equals("UserClosed")) {
-                    //If user closes on lobby screen
-                    serverThreads.remove(this);
-                    messageAll(new Request("UserLeftLobby", "SERVER", "ALL", username));
-                    System.out.println(username + " has exited.");
-                    out.close();
-                    break;
-                    
-                } else if (input.getActionType().equals("UserLeftGame")) {
-                    //if user closes during shipselection/gameui
-                    System.out.println("Sending" + input);
-                    for (ServerThread st : serverThreads) {
-                        if (st.getPlayerName().equals(input.getDestination())) {
-                            st.message(input);
-                            st.setInGame(false);
-                            st.setPlayerStatus(false);
-                            break;
-                        }
-                    }
-                    serverThreads.remove(this);
-                    messageAll(new Request("UserLeftLobby", "SERVER", "ALL", username));
-                    System.out.println(username + " has exited.");
-                    out.close();  
-                    break;
-                    
-                } else if (input.getActionType().equals("UserWentBackToLobby")) {
-                    for (ServerThread st : serverThreads) {
-                        if (st.getPlayerName().equals(input.getDestination())) {
-                        	messageAllActive(new Request("UserJoinedLobby", "SERVER", "ALL", username));
-                        	messageAllActive(new Request("UserJoinedLobby", "SERVER", "ALL", st.getPlayerName()));
-                            st.setInGame(false);
-                            st.setPlayerStatus(false);
-                            st.message(input);
-                            setInGame(false);
-                            setPlayerStatus(false);
-                            break;
-                        }
-                    }
-                } else if (input.getActionType().equals("GameBoard")) {
-                    gameBoard = (Board) input.getObject();
-                } else if (input.getActionType().equals("Move")) {
-                    if (!input.getDestination().equals(username)) {
-                        for (ServerThread serverThread : serverThreads) {
-                            if (serverThread.getPlayerName().equals(input.getDestination())) {
-                                serverThread.completeMove(input);
-                                break;
-                            }
-                        }
-                    }
-
-                } else if (input.getActionType().equals("MoveEnded")) {
-                    messageAll(input);
-                } else if (input.getActionType().equals("PlayerReady")) {
-                    if (input.getOrigin().equals(username)) {
-                        isReady = true;
-                    }
-
-                    for (ServerThread st : serverThreads) {
-                        if (st.getPlayerName().equals(input.getDestination()) && st.getPlayerStatus()) {
-                            message(new Request("GameStart", input.getDestination(), username));
-                            st.message(new Request("GameStart", username, input.getDestination()));
-                            break;
-                        }
-                    }
-                } else if (input.getActionType().equals("PlayerBusy")) {
-                    messageAll(input);
-                } else {
-                    System.out.println(input);
-                }
-                */
             }
             in.close();
             clientSocket.close();
