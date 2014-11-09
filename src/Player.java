@@ -70,98 +70,115 @@ public class Player extends JFrame implements ActionListener {
                 @Override
                 public void run() {
                     try {
-
                         while ((input = (Request) in.readObject()) != null) {
+                            
                             if (input.getActionType().equals("UserJoinedLobby")) {
                                 if (!input.getObject().equals(name)) {
                                     playersModel.addElement((String) input
                                             .getObject());
                                 }
-                            } else if (input.getActionType().equals(
+                            } 
+                            
+                            else if (input.getActionType().equals(
                                     "UserLeftLobby")) {
                                 playersModel.removeElement(input.getObject());
-                            } else if (input.getDestination().equals(name)) {
-                                if (input.getActionType().equals("GameRequest")) {
-                                    if (!isBusy) {
-                                        isBusy = true;
+                            } 
+                           
+                            else if (input.getDestination().equals(name)) {
 
-                                        confirmDialog = new ConfirmDialog(Player.this, input);
-                                        confirmDialog.setVisible(true);
+                                String actionType = input.getActionType();
+                                switch (actionType) {
+                                    case "GameRequest":
+                                        if (!isBusy) {
+                                            isBusy = true;
 
-                                    } else {
-                                        out.writeObject(new Request("PlayerBusy", name, input.getOrigin()));
-                                    }
-                                } else if (input.getActionType().equals(
-                                        "GameRequestAnswer")) {
-                                    isBusy = false;
-                                    playButton.setEnabled(true);
-                                    if (input.getObject().equals("Yes")) {
-                                        gameFrame(input.getOrigin());
-                                        opponentName = input.getOrigin();
+                                            confirmDialog = new ConfirmDialog(Player.this, input);
+                                            confirmDialog.setVisible(true);
+
+                                        } else {
+                                            out.writeObject(new Request("PlayerBusy", name, input.getOrigin()));
+                                        }
+                                        break;
+                                    case "GameRequestAnswer":
+                                        isBusy = false;
+                                        playButton.setEnabled(true);
+                                        if (input.getObject().equals("Yes")) {
+                                            gameFrame(input.getOrigin());
+                                            opponentName = input.getOrigin();
+                                            isTheirTurn = true;
+                                        } else if (input.getObject().equals("No")) {
+                                            JOptionPane.showMessageDialog(null,
+                                                    "Game request denied from "
+                                                            + input.getOrigin()
+                                                            + ".",
+                                                    "Game request denied",
+                                                    JOptionPane.ERROR_MESSAGE);
+                                        }
+                                        break;
+                                    case "RetrieveLobby":
+                                        playersModel.clear();
+                                        ArrayList<String> playersList = (ArrayList<String>) input.getObject();
+                                        for (String aPlayersList : playersList) {
+                                            if (!aPlayersList.equals(name)) {
+                                                playersModel.addElement(aPlayersList);
+                                            }
+                                        }
+                                        break;
+                                    case "ReceiveMessage":
+                                        gui.appendMessage((String) input.getObject(), input.getOrigin());
+                                        break;
+                                    case "UserLeftGame":
+                                        // Quitting game
+                                        reshowLobby();
+                                        JOptionPane.showMessageDialog(null, "Your opponent quit! You win (by default)", 
+                                                "Opponent Quit", JOptionPane.INFORMATION_MESSAGE);
+                                        break;
+                                    case "UserWentBackToLobby":
+                                        //Returning to lobby
+                                        reshowLobby();
+                                        JOptionPane.showMessageDialog(null, "Your opponent went back to lobby",
+                                                "Opponent Quit", JOptionPane.INFORMATION_MESSAGE);
+                                        break;
+                                    case "MoveResult":
+                                        GameMove gm = (GameMove) input.getObject();
+                                        Point coordinates = gm.getMoveCoordinates();
+                                        String playerName = gm.getPlayerName();
+                                        String outcome = gm.getMoveResult();
+
+                                        if (name.equals(playerName)) {
+                                            //update enemy board
+                                            if (outcome.equals("hit") || outcome.startsWith("destroyed")) {
+                                                isTheirTurn = true;
+                                                gui.startTimer();
+                                            }
+                                            gui.updateEnemyBoard(outcome, coordinates);
+                                        } else {
+                                            //update own board
+                                            if (!outcome.equals("hit") && !outcome.startsWith("destroyed")) {
+                                                isTheirTurn = true;
+                                                gui.appendMessage("It's your turn to play.", "GAME");
+                                                gui.startTimer();
+                                            }
+                                            gui.updateOwnBoard(outcome, coordinates);
+                                        }
+                                        break;
+                                    case "MoveEnded":
                                         isTheirTurn = true;
-                                    } else if (input.getObject().equals("No")) {
-                                        JOptionPane.showMessageDialog(null,
-                                                "Game request denied from "
-                                                        + input.getOrigin()
-                                                        + ".",
-                                                "Game request denied",
-                                                JOptionPane.ERROR_MESSAGE);
-                                    }
-                                } else if (input.getActionType().equals(
-                                        "RetrieveLobby")) {
-                                	playersModel.clear();
-                                    ArrayList<String> playersList = (ArrayList<String>) input.getObject();
-                                    for (String aPlayersList : playersList) {
-                                        if (!aPlayersList.equals(name)) {
-                                            playersModel.addElement(aPlayersList);
-                                        }
-                                    }
-                                } else if (input.getActionType().equals(
-                                        "ReceiveMessage")) {
-                                    gui.appendMessage((String) input.getObject(), input.getOrigin());
-                                } else if (input.getActionType().equals("UserLeftGame")) {
-                                    // Quitting game
-                                    reshowLobby();
-                                    JOptionPane.showMessageDialog(null, "Your opponent quit! You win (by default)", "Opponent Quit", JOptionPane.INFORMATION_MESSAGE);
-                                } else if (input.getActionType().equals("UserWentBackToLobby")) {
-                                    //Returning to lobby
-                                    reshowLobby();
-                                    JOptionPane.showMessageDialog(null, "Your opponent went back to lobby", "Opponent Quit", JOptionPane.INFORMATION_MESSAGE);
-                                } else if (input.getActionType().equals("MoveResult")) {
-                                    GameMove gm = (GameMove) input.getObject();
-                                    Point coordinates = gm.getMoveCoordinates();
-                                    String playerName = gm.getPlayerName();
-                                    String outcome = gm.getMoveResult();
-
-                                    if (name.equals(playerName)) {
-                                        //update enemy board
-                                        if(outcome.equals("hit") || outcome.startsWith("destroyed")) {
-                                            isTheirTurn = true;
-                                            gui.startTimer();
-                                        }
-                                        gui.updateEnemyBoard(outcome, coordinates);
-                                    } else {
-                                        //update own board
-                                        if(!outcome.equals("hit") && !outcome.startsWith("destroyed")) {
-                                            isTheirTurn = true;
-                                            gui.appendMessage("It's your turn to play.", "GAME");
-                                            gui.startTimer();
-                                        }
-                                        gui.updateOwnBoard(outcome, coordinates);
-                                    }
-                                } else if (input.getActionType().equals("MoveEnded")) {
-                                    isTheirTurn = true;
-                                    gui.appendMessage("Enemy ran out of time.", "GAME");
-                                    gui.startTimer();
-                                } else if(input.getActionType().equals("GameStart")) {
-                                    sui.startGame();
-                                } else if (input.getActionType().equals("PlayerBusy")) {
-                                    isBusy = false;
-                                    playButton.setEnabled(true);
-                                    JOptionPane.showMessageDialog(null, "Player is busy. Please try again later", "Error", JOptionPane.ERROR_MESSAGE);
-                                }
-                                else {
-                                    System.out.println(input);
+                                        gui.appendMessage("Enemy ran out of time.", "GAME");
+                                        gui.startTimer();
+                                        break;
+                                    case "GameStart":
+                                        sui.startGame();
+                                        break;
+                                    case "PlayerBusy":
+                                        isBusy = false;
+                                        playButton.setEnabled(true);
+                                        JOptionPane.showMessageDialog(null, "Player is busy. Please try again later",
+                                                "Error", JOptionPane.ERROR_MESSAGE);
+                                        break;
+                                    default:
+                                        System.out.println(input);
+                                        break;
                                 }
                             }
                         }
@@ -172,9 +189,7 @@ public class Player extends JFrame implements ActionListener {
                         e.printStackTrace();
                         System.out.println("An error occurred.");
                         System.exit(1);
-                    } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
+                    } catch (ClassNotFoundException | IOException e) {
                         e.printStackTrace();
                     }
                 }
@@ -374,7 +389,7 @@ public class Player extends JFrame implements ActionListener {
                 if (socket != null) {
                     boolean isUnique = checkName(nameToCheck);
                     System.out.println(isUnique);
-                    if (isUnique == true) {
+                    if (isUnique) {
                         out.writeObject(new Request("Accepted"));
                         name = nameToCheck;
                         this.setTitle("You are logged in as: " + name);
