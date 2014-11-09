@@ -3,7 +3,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
-
+/**
+ * Handles the connection of an individual player
+ * @author Team 1-O
+ *
+ */
 
 public class ServerThread extends Thread {
     private static ArrayList<ServerThread> serverThreads = new ArrayList<ServerThread>();
@@ -67,7 +71,6 @@ public class ServerThread extends Thread {
         System.out.println("Player " + playerNumber + " connected");
         inGame = false;
         serverThreads.add(this);
-
         this.start();
     }
 
