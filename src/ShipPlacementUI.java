@@ -65,8 +65,14 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
 
     public ShipPlacementUI(final Player player) {
 
-        super("Place Your Ships!");
+        super();
         this.player = player;
+
+        playerName = player.getName();
+        opponentName = player.getOpponentName();
+        
+        setTitle(playerName + ", place your ships!");
+        
         b = new Board();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 450, 300);
@@ -76,9 +82,6 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
         content.setBorder(BorderFactory.createLineBorder(backgroundColor, 5));
         content.setBackground(backgroundColor);
         setContentPane(content);
-
-        playerName = player.getName();
-        opponentName = player.getOpponentName();
 
         btnShip5 = new JRadioButton();
         btnShip5.setActionCommand("5");
@@ -314,7 +317,7 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
             }
         });
 
-        btnHome = new JButton("<html><b>HOME</b></html>");
+        btnHome = new JButton("<html><b>QUIT</b></html>");
         btnHome.setFont(new Font("EUROSTILE", Font.BOLD, 14));
         btnHome.setBackground(backgroundColor);
         btnHome.addActionListener(new ActionListener() {
