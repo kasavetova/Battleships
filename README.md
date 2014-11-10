@@ -9,9 +9,8 @@ Both client and server must have Java 1.7 or higher installed.
 
 ### Server
 For server deployment, please ensure the portNumber variable in ServerMain.java in the 
-Server package has been assigned to the correct port number.	
-To run	the	server, run	the	file ServerMain.java
-
+Server package has been assigned to the correct port number.
+**To run the server, run the file ServerMain.java**
 *Please note: there is no graphical interface for the server*
 
 ### Client
