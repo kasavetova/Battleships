@@ -58,7 +58,7 @@ public class GameUI extends JFrame implements MouseListener {
     private String playerName;
     private String opponentName;
 
-    private Color backroundColor = new Color(44, 62, 80);
+    private Color backgroundColor = new Color(44, 62, 80);
     private Color textColor = new Color(255, 255, 255);
 
     private CountdownManager cm;
@@ -84,20 +84,20 @@ public class GameUI extends JFrame implements MouseListener {
         setSize(1300, 500);
         setLocationRelativeTo(null);
         content = new JPanel(new BorderLayout(5, 5));
-        content.setBorder(BorderFactory.createLineBorder(backroundColor, 5));
-        content.setBackground(backroundColor);
+        content.setBorder(BorderFactory.createLineBorder(backgroundColor, 5));
+        content.setBackground(backgroundColor);
         setContentPane(content);
 
         playerName = player1.getName();
 
         pnlBoards = new JPanel(new GridLayout(1, 2, 25, 0));
-        pnlBoards.setBackground(backroundColor);
+        pnlBoards.setBackground(backgroundColor);
 
         pnlMyBoard = new JPanel(new GridLayout(11, 11));
-        pnlMyBoard.setBackground(backroundColor);
+        pnlMyBoard.setBackground(backgroundColor);
 
         pnlEnemyBoard = new JPanel(new GridLayout(11, 11));
-        pnlEnemyBoard.setBackground(backroundColor);
+        pnlEnemyBoard.setBackground(backgroundColor);
 
         this.myBoardGrid = myBoardGrid;
         enemyBoardGrid = new GameGrid(10, 10);
@@ -113,9 +113,9 @@ public class GameUI extends JFrame implements MouseListener {
                     SwingConstants.CENTER);
             myBoardArray[0][a] = new JLabel(
                     Character.toString((char) (a + 64)), SwingConstants.CENTER);
-            myBoardArray[a][0].setBackground(backroundColor);
+            myBoardArray[a][0].setBackground(backgroundColor);
             myBoardArray[a][0].setForeground(textColor);
-            myBoardArray[0][a].setBackground(backroundColor);
+            myBoardArray[0][a].setBackground(backgroundColor);
             myBoardArray[0][a].setForeground(textColor);
 
 
@@ -123,9 +123,9 @@ public class GameUI extends JFrame implements MouseListener {
                     SwingConstants.CENTER);
             enemyBoardArray[0][a - 1] = new JLabel(
                     Character.toString((char) (a + 64)), SwingConstants.CENTER);
-            enemyBoardArray[a][10].setBackground(backroundColor);
+            enemyBoardArray[a][10].setBackground(backgroundColor);
             enemyBoardArray[a][10].setForeground(textColor);
-            enemyBoardArray[0][a - 1].setBackground(backroundColor);
+            enemyBoardArray[0][a - 1].setBackground(backgroundColor);
             enemyBoardArray[0][a - 1].setForeground(textColor);
         }
 
@@ -146,25 +146,25 @@ public class GameUI extends JFrame implements MouseListener {
         }
 
         pnlPlayerText = new JPanel(new GridLayout(1, 3));
-        pnlPlayerText.setBackground(backroundColor);
+        pnlPlayerText.setBackground(backgroundColor);
 
         lblPlayer1 = new JLabel("MY BOARD", SwingConstants.CENTER);
         lblPlayer1.setFont(new Font("EUROSTILE", Font.BOLD, 24));
-        lblPlayer1.setBackground(backroundColor);
+        lblPlayer1.setBackground(backgroundColor);
         lblPlayer1.setForeground(textColor);
 
         lblPlayer2 = new JLabel(opponentName.toUpperCase() + "'s BOARD", SwingConstants.CENTER);
         lblPlayer2.setFont(new Font("EUROSTILE", Font.BOLD, 24));
-        lblPlayer2.setBackground(backroundColor);
+        lblPlayer2.setBackground(backgroundColor);
         lblPlayer2.setForeground(textColor);
 
         pnlTimerHome = new JPanel(new GridLayout(1, 2));
-        pnlTimerHome.setBackground(backroundColor);
+        pnlTimerHome.setBackground(backgroundColor);
 
         lblTimer = new JLabel("TIMER", SwingConstants.CENTER);
         lblTimer.setFont(new Font("EUROSTILE", Font.BOLD, 18));
         lblTimer.setBorder(BorderFactory.createLineBorder(textColor, 1));
-        lblTimer.setBackground(backroundColor);
+        lblTimer.setBackground(backgroundColor);
         lblTimer.setForeground(textColor);
 
         btnHome = new JButton("QUIT");
@@ -192,7 +192,7 @@ public class GameUI extends JFrame implements MouseListener {
         pnlPlayerText.add(lblPlayer2);
 
         pnlChatWindow = new JPanel(new BorderLayout(5, 5));
-        pnlChatWindow.setBackground(backroundColor);
+        pnlChatWindow.setBackground(backgroundColor);
 
         txtAreaChat = new JEditorPane();
         txtAreaChat.setEditable(false);
@@ -203,7 +203,7 @@ public class GameUI extends JFrame implements MouseListener {
         jspAreaChat = new JScrollPane(txtAreaChat);
 
         pnlChatSender = new JPanel(new BorderLayout());
-        pnlChatSender.setBackground(backroundColor);
+        pnlChatSender.setBackground(backgroundColor);
 
         txtChat = new JTextField();
 

@@ -32,7 +32,7 @@ public class ServerThread extends Thread {
 
     /**
      * Initialises a new client socket for the user and checks if the user's name is unique.
-     * @param clientSocket
+     * @param clientSocket the client Socket
      */
     public ServerThread(Socket clientSocket) {
         this.clientSocket = clientSocket;
@@ -228,7 +228,6 @@ public class ServerThread extends Thread {
     /**
      * Sends a <code>Server.Request</code> to the {@link Client.Player}.
      * @param r the request to be sent
-     * @throws IOException when attempting to write to the output stream.
      * 
      * @see {@link Request}
      */

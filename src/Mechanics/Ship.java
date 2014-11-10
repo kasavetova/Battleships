@@ -13,7 +13,7 @@ public class Ship implements Serializable {
    private Point end; //this is the point where the ship ends
    private boolean destroyed;//this is to status of the ship, whether it was destroyed or not.
    private int size; //this is the size of the ship, that will be calculated automatically
-   private int life; //this is the life of the ship. Every time the ship gets hit but not destroyed, it will reduce from its life,when life==0 shis is destroyed
+   private int life; //this is the life of the ship. Every time the ship gets hit but not destroyed, it will reduce from its life,when life==0 ship is destroyed
    private char orientation;//H-horizontal , V-vertical
    private String name;
    private static boolean thirdShip = false;
@@ -138,7 +138,7 @@ public class Ship implements Serializable {
     /**
      * Sets the status of the ship to destroyed or not.
      *
-     * @param destroyed
+     * @param destroyed whether ship should be set to destroyed or not
      */
     public void setDestroyed(boolean destroyed) {
         this.destroyed = destroyed;

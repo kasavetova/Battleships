@@ -17,7 +17,6 @@ public class ServerMain extends Thread {
 	/**
 	 * Runs the server
 	 * @param args
-	 * @throws Exception When an error has occurred trying to connect
 	 */
 	public static void main(String[] args) {
 
