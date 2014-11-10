@@ -31,7 +31,7 @@ public class CountdownManager {
      */
     public void start() {
         timeRemaining = 30;
-        timeLabel.setText("Timer: (30)");
+        timeLabel.setText("Time left: (30)");
         countdownTimer = new Timer(1000, new TimerListener());
         countdownTimer.start();
     }
