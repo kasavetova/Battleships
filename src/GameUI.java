@@ -1,15 +1,47 @@
-import javax.swing.*;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
-import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.StyleConstants;
-
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Random;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.swing.BorderFactory;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JEditorPane;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
 
 public class GameUI extends JFrame implements MouseListener {
 
@@ -256,6 +288,8 @@ public class GameUI extends JFrame implements MouseListener {
         int row = ((GameButton) e.getSource()).getRow();
         int col = ((GameButton) e.getSource()).getColumn();
         Request request = new Request("Move", playerName, opponentName, new GameMove(new Point(row, col), playerName, null));
+        
+
         if(!gameFinished){
         	if (player.makeMove(request)) {
         		//enemyBoardGrid.getButton(row, col).setEnabled(false);
@@ -286,16 +320,49 @@ public class GameUI extends JFrame implements MouseListener {
 
     public void updateEnemyBoard(String x, Point p) {
         if (x.equals("hit")) {
-            enemyBoardGrid.getButton(p.getX(), p.getY()).setIcon(null);
-            enemyBoardGrid.getButton(p.getX(), p.getY()).setBackground(Color.RED);
+        	//sound effect
+        	playSound("hit");
+        	
+        	enemyBoardGrid.getButton(p.getX(), p.getY()).setBackground(Color.BLACK);   	
+        	
+        	//TODO fix the change of color when button is disabled!
+        	//START OF ANIMATION!
+        	enemyBoardGrid.getButton(p.getX(), p.getY()).setEnabled(true);//to be fixed!!!     
+        	//explodes
+            enemyBoardGrid.getButton(p.getX(), p.getY()).setIcon(new ImageIcon("res/explosion.gif"));
+            try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {//sleeps for a bit to show the explosion
+				e.printStackTrace();
+			}
+            //sets the flames to show that it was destroyed
+            enemyBoardGrid.getButton(p.getX(), p.getY()).setIcon(new ImageIcon("res/destroyed.gif"));
+            enemyBoardGrid.getButton(p.getX(), p.getY()).setBackground(null);//don't think is needed?
+            //END OF ANIMATION!
         } else if (x.startsWith("destroyed")) {
-            enemyBoardGrid.getButton(p.getX(), p.getY()).setIcon(null);
-            enemyBoardGrid.getButton(p.getX(), p.getY()).setBackground(Color.RED);
+            //sound effect
+        	playSound("destroyed");
+        	enemyBoardGrid.getButton(p.getX(), p.getY()).setBackground(Color.BLACK);
+        	//START OF ANIMATION!
+        	enemyBoardGrid.getButton(p.getX(), p.getY()).setEnabled(true);//to be fixed!!!     
+        	//explodes
+            enemyBoardGrid.getButton(p.getX(), p.getY()).setIcon(new ImageIcon("res/explosion.gif"));
+            try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {//sleeps for a bit to show the explosion
+				e.printStackTrace();
+			}
+            //sets the flames to show that it was destroyed
+            enemyBoardGrid.getButton(p.getX(), p.getY()).setIcon(new ImageIcon("res/destroyed.gif"));
+            enemyBoardGrid.getButton(p.getX(), p.getY()).setBackground(null);//don't think is needed?
+            //END OF ANIMATION!
             //Tell which ship has been destroyed
             appendMessage("Enemy's " + x.substring(9) + " has been destroyed.", "GAME"); //add new line
             decrementLife();
         } else {
-            enemyBoardGrid.getButton(p.getX(), p.getY()).setIcon(null);
+        	playSound("missed");
+            enemyBoardGrid.getButton(p.getX(), p.getY()).setIcon(new ImageIcon("res/splash.png"));
+            enemyBoardGrid.getButton(p.getX(), p.getY()).setEnabled(true);
             enemyBoardGrid.getButton(p.getX(), p.getY()).setBackground(Color.CYAN);
         }
     }
@@ -385,5 +452,38 @@ public class GameUI extends JFrame implements MouseListener {
 		cm.endGame();
 		
 	}
+	
+    public void playSound(String effect) {
+    	Random rand = new Random();
+    	String path = String.format("res/sounds/%s.wav", effect);
+    	System.out.println(path);
+        File in = new File(path);
+        Clip play;
+		try {
+			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(in);
+			play = AudioSystem.getClip();
+			play.open(audioInputStream);
+	        play.start();
+		} catch (UnsupportedAudioFileException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        //FloatControl volume= (FloatControl)play.getControl(FloatControl.Type.MASTER_GAIN);
+        //volume.setValue(1.0f); // Reduce volume by 10 decibels.
+
+         SwingUtilities.invokeLater(new Runnable() {
+             public void run() {
+                 // A GUI element to prevent the Clip's daemon Thread
+                 // from terminating at the end of the main()
+                 System.out.print("hiit!");
+            }
+         });
+     }
 
 }

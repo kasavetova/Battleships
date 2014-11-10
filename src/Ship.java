@@ -25,7 +25,7 @@ public class Ship implements Serializable {
         this.end = end;
         this.orientation = orientation;
         //the following if will tell if the ship is vertical or horizontal
-        /*
+        
         if(start.getX()-end.getX() == 0)
 			{
 			orientation = 'H';
@@ -34,7 +34,7 @@ public class Ship implements Serializable {
 			{
 			orientation = 'V';			
 			}
-			*/
+			
         size = start.getDistance(end) + 1; //calculates the size of the ship
         destroyed = false; //ship is initially not destroyed
         life = size; // the life of the ship is initially equal to its size

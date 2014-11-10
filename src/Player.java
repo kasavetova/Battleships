@@ -1,11 +1,13 @@
-import javax.swing.JOptionPane;
-
+import java.awt.Color;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+
+import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 
 public class Player {
     private int portNumber = 4446;
@@ -94,12 +96,13 @@ public class Player {
                                     gameFrame();
                                     isTheirTurn = true;
                                 } else if (input.getObject().equals("No")) {
-                                    JOptionPane.showMessageDialog(null,
-                                            "Game request denied from "
-                                                    + input.getOrigin()
-                                                    + ".",
-                                            "Game request denied",
-                                            JOptionPane.ERROR_MESSAGE);
+                                    String text = "Game request denied from "+input.getOrigin()+".";
+                                    UIManager UI=new UIManager();
+                                    UIManager.put("OptionPane.background", new Color(44, 62, 80));
+                                    UIManager.put("Panel.background", new Color(44, 62, 80));                                
+                                    JOptionPane.showMessageDialog(null,String.format("<html><<p style=\"color:rgb(135,206,235)\";font-weight:bold>%s</p></html>",text),
+                                            "Game request denied", JOptionPane.ERROR_MESSAGE);
+
                                 }
                                 break;
                             case "RetrieveLobby":
@@ -112,15 +115,27 @@ public class Player {
                             case "UserLeftGame":
                                 // Quitting game
                                 reshowLobby();
-                                JOptionPane.showMessageDialog(null, "Your opponent quit! You win (by default)",
+                                UIManager UI=new UIManager();
+                                UIManager.put("OptionPane.background", new Color(44, 62, 80));
+                                UIManager.put("Panel.background", new Color(44, 62, 80));
+
+                                
+                                JOptionPane.showMessageDialog(null, "<html><<p style=\"color:rgb(135,206,235)\";font-weight:bold>Your opponent quit! You win (by default)</p></html>",
                                         "Opponent Quit", JOptionPane.INFORMATION_MESSAGE);
+                                
                                 break;
                             case "UserWentBackToLobby":
                                 //Returning to lobby
                                 reshowLobby();
                                 if(!input.getObject().equals("Finished")){
-                                	JOptionPane.showMessageDialog(null, "Your opponent went back to lobby",
+                                    UIManager UI1=new UIManager();
+                                    UIManager.put("OptionPane.background", new Color(44, 62, 80));
+                                    UIManager.put("Panel.background", new Color(44, 62, 80));
+
+                                    
+                                    JOptionPane.showMessageDialog(null, "<html><<p style=\"color:rgb(135,206,235)\";font-weight:bold>Your opponent went back to the lobby.</p></html>",
                                             "Opponent Quit", JOptionPane.INFORMATION_MESSAGE);
+                                    ;
                                 }
                                 break;
                             case "MoveResult":
@@ -157,8 +172,14 @@ public class Player {
                             case "PlayerBusy":
                                 isBusy = false;
                                 lobbyFrame.enablePlayButton(true);
-                                JOptionPane.showMessageDialog(null, "Player is busy. Please try again later",
+                                UIManager UI2=new UIManager();
+                                UIManager.put("OptionPane.background", new Color(44, 62, 80));
+                                UIManager.put("Panel.background", new Color(44, 62, 80));
+
+                                
+                                JOptionPane.showMessageDialog(null, "<html><<p style=\"color:rgb(135,206,235)\";font-weight:bold>Player is busy. Please try again later</p></html>",
                                         "Error", JOptionPane.ERROR_MESSAGE);
+
                                 break;
                             case "GameFinished":
                             	gameUI.appendMessage("Enemy has won", "GAME");

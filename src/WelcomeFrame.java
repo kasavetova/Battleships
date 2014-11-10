@@ -30,7 +30,7 @@ public class WelcomeFrame extends JFrame implements ActionListener {
     private Player player;
 
     private Color backgroundColor = new Color(44, 62, 80);
-    private Color textColor = new Color(236, 240, 241);
+    private Color textColor = new Color(135,206,235);
 
     /**
      * Constructs and sets up the widgets of the interface.

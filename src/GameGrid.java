@@ -1,7 +1,9 @@
 public class GameGrid {
 
     private GameButton[][] gridHolder;
-    private int rows;
+
+
+	private int rows;
     private int cols;
 
     public GameGrid(int rows, int cols) {
@@ -22,5 +24,10 @@ public class GameGrid {
 
     public GameButton[][] getGrid() {
         return gridHolder;
+    }
+    
+    public void setButton(int row, int col, GameButton gameButton){
+    	
+    	gridHolder[row][col] = gameButton;
     }
 }

@@ -19,7 +19,7 @@ public class GameButton extends JButton {
         cellState = false;
         setOpaque(true);
         this.setBorder(BorderFactory.createLineBorder(shipBorder, 1));
-        this.setBackground(shipColor);
+        //this.setBackground(shipColor);
     }
 
     public GameButton(int row, int col) {

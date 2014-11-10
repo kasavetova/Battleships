@@ -26,7 +26,8 @@ public class ConfirmDialog extends JFrame implements ActionListener {
         textLabel = new JLabel("<html><div style=\"text-align:center\"><p>Would you like to play a game with <b>"
                 + input.getOrigin() + "</b>?   (20)</p></div></html>");
 
-        textLabel.setFont(new Font("", Font.PLAIN, 13));
+        textLabel.setFont(new Font("EUROSTILE", Font.BOLD, 14));
+        textLabel.setForeground(new Color(135,206,235));
         yesButton = new JButton("Yes");
         yesButton.addActionListener(this);
         noButton = new JButton("No");
@@ -35,7 +36,9 @@ public class ConfirmDialog extends JFrame implements ActionListener {
         JPanel mainPanel = new JPanel(new BorderLayout());
         JPanel centerPanel = new JPanel(new BorderLayout());
         JPanel buttonPanel = new JPanel(new FlowLayout());
-
+        mainPanel.setBackground(new Color(44, 62, 80));
+        centerPanel.setBackground(new Color(44, 62, 80));
+        buttonPanel.setBackground(new Color(44, 62, 80));
         buttonPanel.add(yesButton);
         buttonPanel.add(noButton);
         buttonPanel.setBorder(new EmptyBorder(10, 0, 0, 0));
