@@ -84,8 +84,8 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
         b = new Board();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 450, 300);
-        setLocationRelativeTo(null);
         setSize(470, 650);
+        setLocationRelativeTo(null);
         content = new JPanel(new BorderLayout(0, 5));
         content.setBorder(BorderFactory.createLineBorder(backgroundColor, 5));
         content.setBackground(backgroundColor);

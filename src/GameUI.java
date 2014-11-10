@@ -74,8 +74,8 @@ public class GameUI extends JFrame implements MouseListener {
         this.opponentName = player.getOpponentName();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 450, 300);
-        setLocationRelativeTo(null);
         setSize(1300, 500);
+        setLocationRelativeTo(null);
         content = new JPanel(new BorderLayout(5, 5));
         content.setBorder(BorderFactory.createLineBorder(backroundColor, 5));
         content.setBackground(backroundColor);

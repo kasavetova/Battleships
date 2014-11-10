@@ -78,7 +78,7 @@ public class ConfirmDialog extends JFrame implements ActionListener {
         setResizable(false);
         
         pack();
-
+        setLocationRelativeTo(null);
         this.addWindowListener(new WindowAdapter() {
 
             @Override
