@@ -226,7 +226,7 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
         lblVertical.setForeground(textColor);
         lblVertical.setFont(new Font("EUROSTILE", Font.BOLD, 12));
 
-        pnlHorizontalVertical = new JPanel(new FlowLayout(FlowLayout.LEADING));
+        pnlHorizontalVertical = new JPanel(new FlowLayout(FlowLayout.CENTER));
         pnlHorizontalVertical.setBackground(backgroundColor);
         pnlHorizontalVertical.add(lblHorizontal);
         pnlHorizontalVertical.add(btnHorizontal);

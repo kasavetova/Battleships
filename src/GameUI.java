@@ -369,12 +369,47 @@ public class GameUI extends JFrame implements MouseListener {
 
     public void updateOwnBoard(String x, Point p) {
         if (x.equals("hit")) {
-            myBoardGrid.getButton(p.getX(), p.getY()).setBackground(Color.lightGray);
+            playSound("hit");
+
+            myBoardGrid.getButton(p.getX(), p.getY()).setBackground(Color.BLACK);
+
+            //TODO fix the change of color when button is disabled!
+            //START OF ANIMATION!
+            myBoardGrid.getButton(p.getX(), p.getY()).setEnabled(true);//to be fixed!!!
+            //explodes
+            myBoardGrid.getButton(p.getX(), p.getY()).setIcon(new ImageIcon("res/explosion.gif"));
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {//sleeps for a bit to show the explosion
+                e.printStackTrace();
+            }
+            //sets the flames to show that it was destroyed
+            myBoardGrid.getButton(p.getX(), p.getY()).setIcon(new ImageIcon("res/destroyed.gif"));
+            myBoardGrid.getButton(p.getX(), p.getY()).setBackground(null);//don't think is needed?
+            //END OF ANIMATION!
         } else if (x.startsWith("destroyed")) {
-            myBoardGrid.getButton(p.getX(), p.getY()).setBackground(Color.lightGray);
+            playSound("destroyed");
+            myBoardGrid.getButton(p.getX(), p.getY()).setBackground(Color.BLACK);
+            //START OF ANIMATION!
+            myBoardGrid.getButton(p.getX(), p.getY()).setEnabled(true);//to be fixed!!!
+            //explodes
+            myBoardGrid.getButton(p.getX(), p.getY()).setIcon(new ImageIcon("res/explosion.gif"));
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {//sleeps for a bit to show the explosion
+                e.printStackTrace();
+            }
+            //sets the flames to show that it was destroyed
+            myBoardGrid.getButton(p.getX(), p.getY()).setIcon(new ImageIcon("res/destroyed.gif"));
+            myBoardGrid.getButton(p.getX(), p.getY()).setBackground(null);//don't think is needed?
+            //END OF ANIMATION!
             //Tell which ship has been destroyed
             appendMessage("Your " + x.substring(9) + " has been destroyed.", "GAME");
+            decrementLife();
         } else {
+            playSound("missed");
+            myBoardGrid.getButton(p.getX(), p.getY()).setIcon(new ImageIcon("res/splash.png"));
+            myBoardGrid.getButton(p.getX(), p.getY()).setEnabled(true);
             myBoardGrid.getButton(p.getX(), p.getY()).setBackground(Color.CYAN);
         }
     }
