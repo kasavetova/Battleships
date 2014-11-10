@@ -1,3 +1,5 @@
+package Mechanics;
+
 import java.io.Serializable;
 /**
  * Class that defines a point and its coordinates.

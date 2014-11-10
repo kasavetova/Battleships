@@ -1,11 +1,13 @@
+package Mechanics;
+
 import java.io.Serializable;
 
 /**
- * Represents a GameMove made by the user.
+ * Represents a Mechanics.GameMove made by the user.
  *
  * @author Tea 1-O
- * @see Player
- * @see GameUI
+ * @see Client.Player
+ * @see Client.GameUI
  */
 public class GameMove implements Serializable {
     private Point coordinates;

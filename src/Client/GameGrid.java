@@ -1,3 +1,5 @@
+package Client;
+
 /**
  * Represents the array of {@link GameButton}
  * @author Team I-O

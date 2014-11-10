@@ -1,3 +1,5 @@
+package Mechanics;
+
 import java.io.Serializable;
 
 /**
@@ -18,7 +20,7 @@ public class Ship implements Serializable {
 
 
     /**
-     * Initialises a new ship that starts at Point start and ends at Point end.
+     * Initialises a new ship that starts at Mechanics.Point start and ends at Mechanics.Point end.
      *
      * @param start The point where the new ship starts
      * @param end   The point where the new ship ends
@@ -62,7 +64,7 @@ public class Ship implements Serializable {
     /**
      * Getter for the start point.
      *
-     * @return Point start(the point where ship starts).
+     * @return Mechanics.Point start(the point where ship starts).
      * @see Point
      */
     public Point getStart() {
@@ -84,7 +86,7 @@ public class Ship implements Serializable {
     /**
      * Getter for the end point.
      *
-     * @return Point end(the point where ship ends).
+     * @return Mechanics.Point end(the point where ship ends).
      * @see Point
      */
     public Point getEnd() {

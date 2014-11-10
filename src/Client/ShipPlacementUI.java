@@ -1,3 +1,9 @@
+package Client;
+
+import Mechanics.Board;
+import Mechanics.Ship;
+import Server.Request;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
@@ -460,7 +466,7 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
 
         if (validPathCheck(col, row)) {
             if (shipHorVert == 1) {
-                b.addShip(new Ship(new Point(row, col), new Point(row, col
+                b.addShip(new Ship(new Mechanics.Point(row, col), new Mechanics.Point(row, col
                         + shipSize - 1), 'H'));
                 for (int i = 0; i < shipSize; i++) {
                     gameGrid.getButton(row, col + i).removeMouseListener(this);
@@ -472,7 +478,7 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
                     gameGrid.getButton(row, col + i).setBorderToDark();
                 }
             } else if (shipHorVert == 0) {
-                b.addShip(new Ship(new Point(row, col), new Point(row
+                b.addShip(new Ship(new Mechanics.Point(row, col), new Mechanics.Point(row
                         + shipSize - 1, col), 'V'));
                 for (int i = 0; i < shipSize; i++) {
                     gameGrid.getButton(row + i, col).removeMouseListener(this);

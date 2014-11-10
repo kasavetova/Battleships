@@ -1,3 +1,5 @@
+package Client;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,7 +21,7 @@ public class CountdownManager {
     /**
      * @param timeLabel    The label in which to display the ticker
      * @param gui          The contextual {@link GameUI} in which this ticker is being displayed
-     * @param opponentName The name of the opponent of the current Player
+     * @param opponentName The name of the opponent of the current Client.Player
      */
     public CountdownManager(JLabel timeLabel, GameUI gui, String opponentName) {
         this.timeLabel = timeLabel;

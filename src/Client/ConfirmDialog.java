@@ -1,3 +1,7 @@
+package Client;
+
+import Server.Request;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
@@ -41,7 +45,7 @@ public class ConfirmDialog extends JFrame implements ActionListener {
      */
     public ConfirmDialog(final Player player, final Request input) {
 
-        super("Game Request");
+        super("Game Server.Request");
         this.player = player;
         this.input = input;
         textLabel = new JLabel("<html><div style=\"text-align:center\"><p>Would you like to play a game with <b>"

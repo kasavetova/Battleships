@@ -1,3 +1,10 @@
+package Client;
+
+import Mechanics.Board;
+import Mechanics.GameMove;
+import Mechanics.Point;
+import Server.Request;
+
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
@@ -79,7 +86,7 @@ public class Player {
     }
 
     /**
-     * Handles requests from {@link ServerThread}.
+     * Handles requests from {@link Server.ServerThread}.
      *
      * @author Team 1-O
      */
@@ -87,7 +94,7 @@ public class Player {
         Request input;
 
         /**
-         * Reads objects from {@link ServerThread} and does the corresponding action.
+         * Reads objects from {@link Server.ServerThread} and does the corresponding action.
          */
         @Override
         public void run() {
@@ -196,7 +203,7 @@ public class Player {
 
                                 UIManager.put("OptionPane.background", new Color(44, 62, 80));
                                 UIManager.put("Panel.background", new Color(44, 62, 80));
-                                JOptionPane.showMessageDialog(null, "<html><<p style=\"color:rgb(255, 255, 255)\";font-weight:bold>Player is busy. Please try again later</p></html>",
+                                JOptionPane.showMessageDialog(null, "<html><<p style=\"color:rgb(255, 255, 255)\";font-weight:bold>Client.Player is busy. Please try again later</p></html>",
                                         "Error", JOptionPane.ERROR_MESSAGE);
 
                                 break;

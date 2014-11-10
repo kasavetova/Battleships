@@ -1,3 +1,8 @@
+package Server;
+
+import Mechanics.Board;
+import Mechanics.GameMove;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -85,14 +90,14 @@ public class ServerThread extends Thread {
      */
     public void createPlayerThread() {
         playerNumber = threadInstances++;
-        System.out.println("Player "+playerNumber + " has connected");
+        System.out.println("Client.Player "+playerNumber + " has connected");
         inGame = false;
         serverThreads.add(this);
         this.start();
     }
 
     /**
-     * Reads objects sent to the server steam from {@link Player} and does corresponding action. 
+     * Reads objects sent to the server steam from {@link Client.Player} and does corresponding action. 
      */
     public void run() {
         try {
@@ -221,7 +226,7 @@ public class ServerThread extends Thread {
     }
 
     /**
-     * Sends a <code>Request</code> to the {@link Player}.
+     * Sends a <code>Server.Request</code> to the {@link Client.Player}.
      * @param r the request to be sent
      * @throws IOException when attempting to write to the output stream.
      * 
@@ -236,7 +241,7 @@ public class ServerThread extends Thread {
     }
 
     /**
-     * Sends a server request to every {@link Player}.
+     * Sends a server request to every {@link Client.Player}.
      * @param r the request to be sent
      */
     public void messageAll(Request r) {
@@ -246,7 +251,7 @@ public class ServerThread extends Thread {
     }
 
     /**
-     * Sends a server request to every {@link Player} that is not in game.
+     * Sends a server request to every {@link Client.Player} that is not in game.
      * @param r the request to be sent
      */
     public void messageAllActive(Request r) {
@@ -258,24 +263,24 @@ public class ServerThread extends Thread {
     }
 
     /**
-     * Sets the game status for the {@link Player}.
-     * @param status the game status for the {@link Player}
+     * Sets the game status for the {@link Client.Player}.
+     * @param status the game status for the {@link Client.Player}
      */
     public void setInGame(Boolean status) {
         inGame = status;
     }
 
     /**
-     * Return the {@link Player} status.
-     * @return the Player status
+     * Return the {@link Client.Player} status.
+     * @return the Client.Player status
      */
     public boolean getPlayerStatus() {
         return isReady;
     }
 
     /**
-     * Sets the {@link Player} status.
-     * @param status the Player status
+     * Sets the {@link Client.Player} status.
+     * @param status the Client.Player status
      */
     public void setPlayerStatus(Boolean status) {
         isReady = status;

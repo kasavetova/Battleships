@@ -1,3 +1,9 @@
+package Client;
+
+
+import Mechanics.GameMove;
+import Server.Request;
+
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -15,6 +21,7 @@ import java.util.Date;
 
 /**
  * A graphical user interface displaying the main game frame.
+ *
  * @author Team I-O
  */
 public class GameUI extends JFrame implements MouseListener {
@@ -60,7 +67,7 @@ public class GameUI extends JFrame implements MouseListener {
     private boolean gameFinished = false;
 
     /**
-     * Creates an instance of GameUI that allows you to play against a competitor
+     * Creates an instance of Client.GameUI that allows you to play against a competitor
      *
      * @param myBoardGrid The {@link GameGrid} to be used
      * @param player1     An instance of the {@link Player} class for corresponding with the server and controlling the UI
@@ -263,7 +270,7 @@ public class GameUI extends JFrame implements MouseListener {
     public void mouseClicked(MouseEvent e) {
         int row = ((GameButton) e.getSource()).getRow();
         int col = ((GameButton) e.getSource()).getColumn();
-        Request request = new Request("Move", playerName, opponentName, new GameMove(new Point(row, col), playerName, null));
+        Request request = new Request("Move", playerName, opponentName, new GameMove(new Mechanics.Point(row, col), playerName, null));
 
 
         if (!gameFinished) {
@@ -289,7 +296,7 @@ public class GameUI extends JFrame implements MouseListener {
      * @param x Either "hit", "miss" or "destroyed"
      * @param p Coordinates of the move
      */
-    public void updateEnemyBoard(String x, Point p) {
+    public void updateEnemyBoard(String x, Mechanics.Point p) {
         if (x.equals("hit")) {
             //sound effect
             playSound("hit");
@@ -297,7 +304,7 @@ public class GameUI extends JFrame implements MouseListener {
             enemyBoardGrid.getButton(p.getX(), p.getY()).setBackground(Color.BLACK);
 
             //START OF ANIMATION!
-            enemyBoardGrid.getButton(p.getX(), p.getY()).setEnabled(true);   
+            enemyBoardGrid.getButton(p.getX(), p.getY()).setEnabled(true);
             //explodes
             enemyBoardGrid.getButton(p.getX(), p.getY()).setIcon(new ImageIcon("res/explosion.gif"));
             try {
@@ -343,7 +350,7 @@ public class GameUI extends JFrame implements MouseListener {
      * @param x Either "hit", "miss" or "destroyed"
      * @param p Coordinates of the move
      */
-    public void updateOwnBoard(String x, Point p) {
+    public void updateOwnBoard(String x, Mechanics.Point p) {
         if (x.equals("hit")) {
             playSound("hit");
 
@@ -357,7 +364,7 @@ public class GameUI extends JFrame implements MouseListener {
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
-            //sleeps for a bit to show the explosion
+                //sleeps for a bit to show the explosion
                 UIManager.put("OptionPane.background", new Color(44, 62, 80));
                 UIManager.put("Panel.background", new Color(44, 62, 80));
 
@@ -445,7 +452,7 @@ public class GameUI extends JFrame implements MouseListener {
             StyleConstants.setForeground(attr, Color.blue);
 
             Color gameMessagesColor = new Color(255, 122, 71);
-            
+
             if (username.equals("GAME")) StyleConstants.setForeground(attr, gameMessagesColor);
             StyleConstants.setBold(attr, true);
 
@@ -488,7 +495,7 @@ public class GameUI extends JFrame implements MouseListener {
     }
 
     /**
-     * Ends the user's turn when they have failed to make a move and sends a {@link Request} to the server.
+     * Ends the user's turn when they have failed to make a move and sends a {@link Server.Request} to the server.
      */
     public void endTurn() {
         appendMessage("Your time ran out. You missed your turn.", "GAME");
