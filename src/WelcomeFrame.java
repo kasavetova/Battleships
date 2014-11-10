@@ -29,7 +29,7 @@ public class WelcomeFrame extends JFrame implements ActionListener {
     /**
      * Constructs and sets up the widgets of the interface.
      *
-     * @param player The Player client running the game
+     * @param player The {@link Player} client running the game
      */
     public WelcomeFrame(Player player) {
         this.player = player;

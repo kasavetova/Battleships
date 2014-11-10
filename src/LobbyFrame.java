@@ -29,7 +29,7 @@ public class LobbyFrame extends JFrame {
     private Color backgroundColor = new Color(44, 62, 80);
 
     /**
-     * @param player Player that is currently playing
+     * @param player {@link Player} that is currently playing
      */
     public LobbyFrame(Player player) {
         this.player = player;
@@ -37,7 +37,7 @@ public class LobbyFrame extends JFrame {
     }
 
     /**
-     * Initialises and creates the frame and widgets.
+     * Initialises and creates the {@link javax.swing.JFrame} and widgets.
      */
     public void initialiseUI() {
 
@@ -109,7 +109,7 @@ public class LobbyFrame extends JFrame {
 
     /**
      * Add a String to the current online list widget model.
-     * @param playername The name of the player to be added.
+     * @param playername The name of the {@link Player} to be added.
      */
     public void addItem(String playername) {
         playersModel.addElement(playername);
@@ -117,7 +117,7 @@ public class LobbyFrame extends JFrame {
 
     /**
      * Remove a String from the current online list widget model.
-     * @param playername The name of the player to be removed.
+     * @param playername The name of the {@link Player} to be removed.
      */
     public void deleteItem(String playername) {
         playersModel.removeElement(playername);
@@ -133,7 +133,7 @@ public class LobbyFrame extends JFrame {
 
     /**
      * Update the lobby online list widget from the model.
-     * @param playersList The ArrayList of player names with which to populate the lobby
+     * @param playersList The {@link java.util.ArrayList} of {@link Player} names with which to populate the lobby
      */
     public void updateLobby(ArrayList<String> playersList) {
         playersModel.clear();
