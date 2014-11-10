@@ -523,7 +523,7 @@ public class GameUI extends JFrame implements MouseListener {
             play.open(audioInputStream);
             play.start();
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "<html><<p style=\"color:rgb(135,206,235)\";font-weight:bold>The following error has occurred</p><p>" + e.getMessage() + "</p></html>",
+            JOptionPane.showMessageDialog(null, "<html><<p style=\"color:rgb(255, 255, 255)\";font-weight:bold>The following error has occurred</p><p>" + e.getMessage() + "</p></html>",
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
 

@@ -23,7 +23,7 @@ public class ConfirmDialog extends JFrame implements ActionListener {
     private int timeRemaining = 20;
 
     private Color backgroundColor = new Color(44, 62, 80);
-    private Color textColor = new Color(236, 240, 241);
+    private Color textColor = new Color(255, 255, 255);
     
     public ConfirmDialog(final Player player, final Request input) {
 
