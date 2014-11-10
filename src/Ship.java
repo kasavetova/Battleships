@@ -1,23 +1,28 @@
 import java.io.Serializable;
 
-
+/**
+ * Class that defines a ship.
+ * @author Team 1-O
+ * @see Point
+ */
 public class Ship implements Serializable {
 
-    Point start; //this is the point where the ship begins
-    Point end; //this is the point where the ship ends
-    boolean destroyed;//this is to status of the ship, whether it was destroyed or not.
-    int size; //this is the size of the ship, that will be calculated automatically
-    int life; //this is the life of the ship. Every time the ship gets hit but not destroyed, it will reduce from its life,when life==0 shis is destroyed
-    char orientation;//H-horizontal , V-vertical
-    String name;
-    static boolean thirdShip = false;
+   private Point start; //this is the point where the ship begins
+   private Point end; //this is the point where the ship ends
+   private boolean destroyed;//this is to status of the ship, whether it was destroyed or not.
+   private int size; //this is the size of the ship, that will be calculated automatically
+   private int life; //this is the life of the ship. Every time the ship gets hit but not destroyed, it will reduce from its life,when life==0 shis is destroyed
+   private char orientation;//H-horizontal , V-vertical
+   private String name;
+   private static boolean thirdShip = false;
 
 
     /**
-     * This initializes a new ship that starts at Point start and ends at Point end.
+     * Initialises a new ship that starts at Point start and ends at Point end.
      *
      * @param start The point where the new ship starts
      * @param end   The point where the new ship ends
+     * @see Point
      */
     public Ship(Point start, Point end, char orientation) {
 
@@ -28,7 +33,27 @@ public class Ship implements Serializable {
         size = start.getDistance(end) + 1; //calculates the size of the ship
         destroyed = false; //ship is initially not destroyed
         life = size; // the life of the ship is initially equal to its size
-        name = getShipName();
+        switch (size) {
+        case 2:
+            name = "Patrol Boat";
+            break;
+        case 3:
+            if (!thirdShip) {
+                thirdShip = true;
+                name = "Destroyer";
+                break;
+            } else {
+                thirdShip = false;
+                name = "Submarine";
+                break;
+            }
+        case 4:
+            name = "Battleship";
+            break;
+        case 5:
+            name = "Aircraft Carrier";
+            break;
+    }
 
 
     }
@@ -38,6 +63,7 @@ public class Ship implements Serializable {
      * Getter for the start point.
      *
      * @return Point start(the point where ship starts).
+     * @see Point
      */
     public Point getStart() {
         return start;
@@ -48,6 +74,7 @@ public class Ship implements Serializable {
      * Setter for the start point.
      *
      * @param start The new point in which the ship will start.
+     * @see Point
      */
     public void setStart(Point start) {
         this.start = start;
@@ -58,6 +85,7 @@ public class Ship implements Serializable {
      * Getter for the end point.
      *
      * @return Point end(the point where ship ends).
+     * @see Point
      */
     public Point getEnd() {
         return end;
@@ -68,6 +96,7 @@ public class Ship implements Serializable {
      * Setter for the end point.
      *
      * @param end The new point in which the ship will end.
+     * @see Point
      */
     public void setEnd(Point end) {
         this.end = end;
@@ -125,9 +154,8 @@ public class Ship implements Serializable {
 
 
     /**
-     * Shoots the ship and reduces the life by one. If life is 0 after it was shot, it will set destroyed.
-     *
-     * @return
+     * Shoots the ship and decreases the life by one. If life is 0 after it was shot, it will set destroyed.
+     * @return The life of the ship after it was shot.
      */
     public int shoot() {
         if (life > 0)
@@ -138,27 +166,11 @@ public class Ship implements Serializable {
 
     }
 
-    public String getShipName() {
 
-        switch (size) {
-            case 2:
-                return "Patrol Boat";
-            case 3:
-                if (!thirdShip) {
-                    thirdShip = true;
-                    return "Destroyer";
-                } else {
-                    thirdShip = false;
-                    return "Submarine";
-                }
-            case 4:
-                return "Battleship";
-            case 5:
-                return "Aircraft Carrier";
-        }
-        return "Ship";
-    }
-
+    /**
+     * Getter for the name of the ship.
+     * @return The name of the ship.
+     */
     public String getName() {
         return name;
     }

@@ -12,13 +12,14 @@ public class CountdownManager {
 
     private JLabel timeLabel;
     private GameUI gui;
+    
     private String opponentName;
     private Timer countdownTimer;
     private int timeRemaining = 30;
 
     /**
      * @param timeLabel    The label in which to display the ticker
-     * @param gui          The contextual GameUI in which this ticker is being displayed
+     * @param gui          The contextual {@link GameUI} in which this ticker is being displayed
      * @param opponentName The name of the opponent of the current Player
      */
     public CountdownManager(JLabel timeLabel, GameUI gui, String opponentName) {
@@ -38,7 +39,7 @@ public class CountdownManager {
     }
 
     /**
-     * An ActionListener to listen for the Timer.
+     * An ActionListener to listen for the {@link javax.swing.Timer}.
      */
     class TimerListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {

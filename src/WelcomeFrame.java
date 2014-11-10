@@ -29,7 +29,7 @@ public class WelcomeFrame extends JFrame implements ActionListener {
     /**
      * Constructs and sets up the widgets of the interface.
      *
-     * @param player The Player client running the game
+     * @param player The {@link Player} client running the game
      */
     public WelcomeFrame(Player player) {
         this.player = player;
@@ -109,7 +109,7 @@ public class WelcomeFrame extends JFrame implements ActionListener {
                     + "<h2>" + "Welcome to Battleship" + "</h2>" + "<p>"
                     + "Enter a nickname for players to identify you with, "
                     + "then hit connect!" + "</p><br><p style=\"color:red\">" +
-                    "Your username can't be longer than 16 characters.</p></div></html>");
+                    "Can't be longer than 16 characters.</p></div></html>");
             enterName.setText("");
 
         } else {
@@ -121,7 +121,7 @@ public class WelcomeFrame extends JFrame implements ActionListener {
                         + "<h2>" + "Welcome to Battleship" + "</h2>" + "<p>"
                         + "Enter a nickname for players to identify you with, "
                         + "then hit connect!" + "</p><br><p style=\"color:red\">This " +
-                        "username has been taken. Please pick another.</p></div></html>");
+                        "username has been taken.</p></div></html>");
                 enterName.setText("");
                 //need to catch java.net.SocketException: Socket closed if user closes
                 //at this stage without proceeding to lobby.

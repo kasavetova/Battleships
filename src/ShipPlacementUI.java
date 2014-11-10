@@ -3,7 +3,11 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
-
+/**
+ * 
+ * @author Team 1-O
+ *
+ */
 public class ShipPlacementUI extends JFrame implements ActionListener,
         MouseListener {
 
@@ -62,7 +66,11 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
 
     private Color backgroundColor = new Color(44, 62, 80);
     private Color textColor = new Color(236, 240, 241);
-
+    /**
+     * Creates an instance of {@link ShipPlacementUI} to allow the player to place there ships
+     * 
+     * @param player An instance of the {@link Player} class for corresponding with the server and controlling the UI
+     */
     public ShipPlacementUI(final Player player) {
 
         super();
@@ -347,6 +355,15 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
         });
     }
 
+    
+    /**
+     * From a give grid location give by col and row it determines if a ship of a give size can
+     * be placed, starting in this grid square without exceeding the limits of the grid
+     * 
+     * @param col The column number of the mouse over grid square
+     * @param row The row number of the mouse over grid square
+     * @return true if the path is valid and false if not
+     */
     public boolean validPathCheck(int col, int row) {
         boolean validPath = true;
 
@@ -503,6 +520,9 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
     public void mouseReleased(MouseEvent e) {
     }
 
+    /**
+     * Closes the {@link ShipPlacementUI} and opens a new {@link GameUI}, starting the game
+     */
     public void startGame() {
         setVisible(false);
         player.placementFinished(gameGrid, b);
