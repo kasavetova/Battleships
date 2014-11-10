@@ -109,7 +109,7 @@ public class WelcomeFrame extends JFrame implements ActionListener {
                     + "<h2>" + "Welcome to Battleship" + "</h2>" + "<p>"
                     + "Enter a nickname for players to identify you with, "
                     + "then hit connect!" + "</p><br><p style=\"color:red\">" +
-                    "Your username can't be longer than 16 characters.</p></div></html>");
+                    "Can't be longer than 16 characters.</p></div></html>");
             enterName.setText("");
 
         } else {
