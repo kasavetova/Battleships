@@ -1,5 +1,6 @@
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,6 +19,9 @@ public class ConfirmDialog extends JFrame implements ActionListener {
     private Timer time;
     private int timeRemaining = 20;
 
+    private Color backgroundColor = new Color(44, 62, 80);
+    private Color textColor = new Color(236, 240, 241);
+    
     public ConfirmDialog(final Player player, final Request input) {
 
         super("Game Request");
@@ -27,7 +31,7 @@ public class ConfirmDialog extends JFrame implements ActionListener {
                 + input.getOrigin() + "</b>?   (20)</p></div></html>");
 
         textLabel.setFont(new Font("EUROSTILE", Font.BOLD, 14));
-        textLabel.setForeground(new Color(135,206,235));
+        textLabel.setForeground(textColor);
         yesButton = new JButton("Yes");
         yesButton.addActionListener(this);
         noButton = new JButton("No");
@@ -36,9 +40,9 @@ public class ConfirmDialog extends JFrame implements ActionListener {
         JPanel mainPanel = new JPanel(new BorderLayout());
         JPanel centerPanel = new JPanel(new BorderLayout());
         JPanel buttonPanel = new JPanel(new FlowLayout());
-        mainPanel.setBackground(new Color(44, 62, 80));
-        centerPanel.setBackground(new Color(44, 62, 80));
-        buttonPanel.setBackground(new Color(44, 62, 80));
+        mainPanel.setBackground(backgroundColor);
+        centerPanel.setBackground(backgroundColor);
+        buttonPanel.setBackground(backgroundColor);
         buttonPanel.add(yesButton);
         buttonPanel.add(noButton);
         buttonPanel.setBorder(new EmptyBorder(10, 0, 0, 0));
@@ -50,12 +54,13 @@ public class ConfirmDialog extends JFrame implements ActionListener {
         mainPanel.add(centerPanel, BorderLayout.CENTER);
         mainPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
-        pack();
+        
         getContentPane().add(mainPanel);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
-        setSize(new Dimension(450, 140));
         setResizable(false);
+        
+        pack();
 
         this.addWindowListener(new WindowAdapter() {
 
