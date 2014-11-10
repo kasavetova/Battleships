@@ -130,8 +130,7 @@ public class Player {
                                     UIManager.put("OptionPane.background", new Color(44, 62, 80));
                                     UIManager.put("Panel.background", new Color(44, 62, 80));
 
-                                    
-                                    JOptionPane.showMessageDialog(null, "<html><<p style=\"color:rgb(135,206,235)\";font-weight:bold>Your opponent went back to the lobby.</p></html>",
+                                    JOptionPane.showMessageDialog(null, "<html><<p style=\"color:rgb(135,206,235)\";font-weight:bold>Your opponent quit! You win (by default)</p></html>",
                                             "Opponent Quit", JOptionPane.INFORMATION_MESSAGE);
                                 }
                                 break;
