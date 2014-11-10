@@ -112,10 +112,10 @@ public class WelcomeFrame extends JFrame implements ActionListener {
             enterName.setText("");
 
         } else {
-            boolean isUnique = player.checkName(nameToCheck.toUpperCase());
-            if (isUnique) {
+            int result = player.checkName(nameToCheck.toUpperCase());
+            if (result == 2) {
                 player.closeWelcomeFrame(nameToCheck);
-            } else {
+            } else if (result == 1){
                 prompt.setText("<html>" + "<div style=\"text-align: center;\">"
                         + "<h2>" + "Welcome to Battleship" + "</h2>" + "<p>"
                         + "Enter a nickname for players to identify you with, "
@@ -125,6 +125,7 @@ public class WelcomeFrame extends JFrame implements ActionListener {
                 //need to catch java.net.SocketException: Socket closed if user closes
                 //at this stage without proceeding to lobby.
             }
+
         }
 
     }

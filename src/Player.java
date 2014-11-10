@@ -334,8 +334,9 @@ public class Player {
      * @param nameToCheck the name to be checked
      * @return true if the name is unique; false otherwise.
      */
-    public boolean checkName(String nameToCheck) {
+    public int checkName(String nameToCheck) {
         try {
+        	
             socket = new Socket(serverIP, portNumber);
             out = new ObjectOutputStream(socket.getOutputStream());
             in = new ObjectInputStream(socket.getInputStream());
@@ -351,13 +352,15 @@ public class Player {
                                 in.close();
                                 socket.close();
                                 socket = null;
-                                return false;
+                                return 1;
                             }
                         }
                     }
                     break;
                 }
             }
+            sendServerRequest(new Request("Accepted"));
+            return 2;
         } catch (Exception e) {
 
             UIManager.put("OptionPane.background", new Color(44, 62, 80));
@@ -365,9 +368,9 @@ public class Player {
 
             JOptionPane.showMessageDialog(null, "<html><<p style=\"color:rgb(255, 255, 255)\";font-weight:bold>The following error has occurred: <br>" + e.getMessage() + "</p></html>",
                     "Error", JOptionPane.ERROR_MESSAGE);
+            return 0;
         }
-        sendServerRequest(new Request("Accepted"));
-        return true;
+        
     }
 
     /**
