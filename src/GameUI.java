@@ -505,7 +505,7 @@ public class GameUI extends JFrame implements MouseListener {
      * Ends the game for both players and sets the game to finished.
      */
     public void setGameFinished() {
-        gameFinished = false;
+        gameFinished = true;
         cm.endGame();
 
     }
