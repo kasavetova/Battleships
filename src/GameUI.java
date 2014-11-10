@@ -4,6 +4,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -12,6 +13,11 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * 
+ * @author Team I-O
+ *
+ */
 public class GameUI extends JFrame implements MouseListener {
 
     private JPanel content;
@@ -54,6 +60,12 @@ public class GameUI extends JFrame implements MouseListener {
     private int shipsLeft = 5;
     private boolean gameFinished = false;
 
+    /**
+     * Creates an instance of GameUI that allows you to play against a competitor
+     * 
+     * @param myBoardGrid The {@link GameGrid} to be used
+     * @param player1 An instance of the {@link Player} class for corresponding with the server and controlling the UI
+     */
     public GameUI(GameGrid myBoardGrid, Player player1) {
 
         super("Battleships");
@@ -271,7 +283,11 @@ public class GameUI extends JFrame implements MouseListener {
     @Override
     public void mouseReleased(MouseEvent e) {
     }
-
+    /**
+     * Updates the enemy board, when a move is made
+     * @param x Either "hit", "miss" or "destroyed"
+     * @param p Coordinates of the move
+     */
     public void updateEnemyBoard(String x, Point p) {
         if (x.equals("hit")) {
             //sound effect
@@ -320,7 +336,11 @@ public class GameUI extends JFrame implements MouseListener {
             enemyBoardGrid.getButton(p.getX(), p.getY()).setBackground(Color.CYAN);
         }
     }
-
+    /**
+     * Updates the the own board, when a move is made
+     * @param x Either "hit", "miss" or "destroyed"
+     * @param p Coordinates of the move
+     */
     public void updateOwnBoard(String x, Point p) {
         if (x.equals("hit")) {
             playSound("hit");
@@ -371,7 +391,10 @@ public class GameUI extends JFrame implements MouseListener {
             myBoardGrid.getButton(p.getX(), p.getY()).setBackground(Color.CYAN);
         }
     }
-
+    /**
+     * Sends a chat message
+     * @param message message to be sent
+     */
     public void sendMessage(String message) {
         if (message.length() > 0) {
             DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
@@ -395,7 +418,11 @@ public class GameUI extends JFrame implements MouseListener {
             txtChat.setText("");
         }
     }
-
+    /**
+     * Receives the chat message
+     * @param message message to be received 
+     * @param username username of sender
+     */
     public void appendMessage(String message, String username) {
         if (message.length() > 0) {
             DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
@@ -417,7 +444,9 @@ public class GameUI extends JFrame implements MouseListener {
             scrollToBottom();
         }
     }
-
+    /**
+     * Scrolls to chat to the bottom
+     */
     public void scrollToBottom() {
         jspAreaChat.getVerticalScrollBar().addAdjustmentListener(new AdjustmentListener() {
             public void adjustmentValueChanged(AdjustmentEvent e) {
@@ -425,7 +454,9 @@ public class GameUI extends JFrame implements MouseListener {
             }
         });
     }
-
+    /**
+     * Starts {@link CountdownManager}
+     */
     public void startTimer() {
         cm.start();
     }
@@ -453,7 +484,11 @@ public class GameUI extends JFrame implements MouseListener {
         cm.endGame();
 
     }
-
+    /**
+     * Loads and plays a sound file
+     * 
+     * @param effect The sound to be play
+     */
     public void playSound(String effect) {
         
         String path = String.format("res/sounds/%s.wav", effect);
