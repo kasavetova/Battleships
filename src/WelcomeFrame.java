@@ -121,7 +121,7 @@ public class WelcomeFrame extends JFrame implements ActionListener {
                         + "<h2>" + "Welcome to Battleship" + "</h2>" + "<p>"
                         + "Enter a nickname for players to identify you with, "
                         + "then hit connect!" + "</p><br><p style=\"color:red\">This " +
-                        "username has been taken. Please pick another.</p></div></html>");
+                        "username has been taken.</p></div></html>");
                 enterName.setText("");
                 //need to catch java.net.SocketException: Socket closed if user closes
                 //at this stage without proceeding to lobby.
