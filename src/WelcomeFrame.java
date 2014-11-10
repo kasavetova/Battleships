@@ -3,9 +3,6 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
 
 /**
  * A graphical user interface displaying the welcome screen of the game.
@@ -17,16 +14,11 @@ public class WelcomeFrame extends JFrame implements ActionListener {
     private JPanel jpBattleshipText;
     private JPanel jpSouth;
 
-    private JLabel background;
-
     private JLabel title;
     private JLabel prompt;
     private JTextField enterName;
     private JButton connectButton;
 
-    private ObjectOutputStream out;
-    private ObjectInputStream in;
-    private Socket socket;
     private Player player;
 
     private Color backgroundColor = new Color(44, 62, 80);
@@ -39,9 +31,7 @@ public class WelcomeFrame extends JFrame implements ActionListener {
      */
     public WelcomeFrame(Player player) {
         this.player = player;
-        background = new JLabel(new ImageIcon("res/homeScreenImage.png"));
 
-        //initialise UI
         setSize(new Dimension(350, 350));
         setResizable(false);
         setLocationRelativeTo(null); // centers window on screen, must be called after setSize()

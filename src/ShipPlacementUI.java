@@ -249,9 +249,8 @@ public class ShipPlacementUI extends JFrame implements ActionListener,
 
         pnlNorth.add(lblTitle, BorderLayout.NORTH);
         pnlNorth.add(pnlShipHolder, BorderLayout.CENTER);
-        pnlNorth.add(pnlHorizontalVertical,BorderLayout.SOUTH);
-       
-        
+        pnlNorth.add(pnlHorizontalVertical, BorderLayout.SOUTH);
+
         gameGrid = new GameGrid(rows, cols);
         pnlGrid = new JPanel(new GridLayout(11, 11));
         pnlGrid.setBackground(backgroundColor);

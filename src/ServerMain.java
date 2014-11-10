@@ -17,6 +17,7 @@ public class ServerMain extends Thread {
         System.out.println("Connecting players");
         
         serverSocket.setReuseAddress(true);
+        
         while (true) {
             Socket clientSocket = serverSocket.accept();
             clientSocket.setReuseAddress(true);

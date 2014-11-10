@@ -31,12 +31,14 @@ public class ServerThread extends Thread {
     public void checkName() {
         try {
             out = new ObjectOutputStream(clientSocket.getOutputStream());
-            lobbyList = new ArrayList<String>();
+            lobbyList = new ArrayList<>();
+            
             for (ServerThread st : serverThreads) {
                 if (st.getName() != null) {
                     lobbyList.add(st.getPlayerName());
                 }
             }
+            
             message(new Request("RetrieveLobby", "SERVER", "", lobbyList));
             in = new ObjectInputStream(clientSocket.getInputStream());
             Request input;
@@ -55,9 +57,7 @@ public class ServerThread extends Thread {
 
             }
 
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (ClassNotFoundException | IOException e) {
             e.printStackTrace();
         }
 
@@ -95,7 +95,7 @@ public class ServerThread extends Thread {
                         messageAll(new Request("ReceiveMessage", input.getOrigin(), input.getDestination(), input.getObject()));
                         break;
                     case "RetrieveLobby":
-                        lobbyList = new ArrayList<String>();
+                        lobbyList = new ArrayList<>();
                         for (ServerThread st : serverThreads) {
                             if (!st.inGame) {
                                 lobbyList.add(st.getPlayerName());
@@ -200,7 +200,7 @@ public class ServerThread extends Thread {
             System.out.println("Exception caught when trying to listen on port "
                     + " or listening for a connection");
         } catch (ClassNotFoundException e) {
-
+            e.printStackTrace();
         }
     }
 

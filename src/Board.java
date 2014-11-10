@@ -13,7 +13,7 @@ public class Board implements Serializable {
         for (int i = 0; i < 10; i++)
             for (int j = 0; j < 10; j++)
                 board[i][j] = -1;
-        ships = new ArrayList<Ship>();
+        ships = new ArrayList<>();
         indexOfShips = 0;
     }
 
@@ -26,16 +26,6 @@ public class Board implements Serializable {
                 board[ship.getStart().getX()][i] = indexOfShips;
 
             }
-
-			/*
-            for(int i = ship.getStart().getY();i<ship.getEnd().getY();i++)
-			{
-				if(board[ship.getStart().getX()][i] != -1)
-					return false;
-				else
-					board[ship.getStart().getX()][i] = indexOfShips;
-			}
-			*/
         } else {
 
             System.out.println("V" + ship.getStart().getX() + " " + ship.getStart().getY());
@@ -44,15 +34,6 @@ public class Board implements Serializable {
                 board[i][ship.getStart().getY()] = indexOfShips;
 
             }
-            /*
-            for(int i = ship.getStart().getX();i<ship.getEnd().getX();i++)
-			{	
-				if(board[i][ship.getStart().getY()] != 0)
-					return false;
-				else
-					board[i][ship.getStart().getY()] = indexOfShips;
-			}
-			*/
         }
         ships.add(ship);
         indexOfShips++;
@@ -64,6 +45,9 @@ public class Board implements Serializable {
         return board;
     }
 
+    /**
+     * For debugging purposes. Prints current board to console.
+     */
     public void printBoard() {
         for (int i = 0; i < 10; i++) {
             System.out.println();

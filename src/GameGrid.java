@@ -2,7 +2,6 @@ public class GameGrid {
 
     private GameButton[][] gridHolder;
 
-
 	private int rows;
     private int cols;
 

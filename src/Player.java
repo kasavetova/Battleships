@@ -1,13 +1,11 @@
-import java.awt.Color;
+import javax.swing.*;
+import java.awt.*;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
-
-import javax.swing.JOptionPane;
-import javax.swing.UIManager;
 
 public class Player {
     private int portNumber = 4446;
@@ -115,7 +113,7 @@ public class Player {
                             case "UserLeftGame":
                                 // Quitting game
                                 reshowLobby();
-                                UIManager UI=new UIManager();
+
                                 UIManager.put("OptionPane.background", new Color(44, 62, 80));
                                 UIManager.put("Panel.background", new Color(44, 62, 80));
 
@@ -128,14 +126,13 @@ public class Player {
                                 //Returning to lobby
                                 reshowLobby();
                                 if(!input.getObject().equals("Finished")){
-                                    UIManager UI1=new UIManager();
+
                                     UIManager.put("OptionPane.background", new Color(44, 62, 80));
                                     UIManager.put("Panel.background", new Color(44, 62, 80));
 
                                     
                                     JOptionPane.showMessageDialog(null, "<html><<p style=\"color:rgb(135,206,235)\";font-weight:bold>Your opponent went back to the lobby.</p></html>",
                                             "Opponent Quit", JOptionPane.INFORMATION_MESSAGE);
-                                    ;
                                 }
                                 break;
                             case "MoveResult":
@@ -172,7 +169,7 @@ public class Player {
                             case "PlayerBusy":
                                 isBusy = false;
                                 lobbyFrame.enablePlayButton(true);
-                                UIManager UI2=new UIManager();
+                                
                                 UIManager.put("OptionPane.background", new Color(44, 62, 80));
                                 UIManager.put("Panel.background", new Color(44, 62, 80));
 
@@ -239,7 +236,7 @@ public class Player {
     }
 
     public void placementFinished(GameGrid grid, Board b) {
-        gameUI = new GameUI(grid, this, b);
+        gameUI = new GameUI(grid, this);
         gameUI.setVisible(true);
         sendServerRequest(new Request("GameBoard", name, "SERVER", b));
         if (isTheirTurn) {

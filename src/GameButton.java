@@ -11,15 +11,15 @@ public class GameButton extends JButton {
 
     private ImageIcon iiSea = new ImageIcon("res/sea.png");
     private Color borderColor = new Color(0, 66, 90);
-    private Color shipColor = Color.GRAY;
     private Color shipBorder = new Color(46, 46, 46);
+    //  private Color shipColor = Color.GRAY;
 
     public GameButton() {
         super();
         cellState = false;
         setOpaque(true);
         this.setBorder(BorderFactory.createLineBorder(shipBorder, 1));
-        //this.setBackground(shipColor);
+        // this.setBackground(shipColor);
     }
 
     public GameButton(int row, int col) {

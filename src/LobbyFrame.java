@@ -22,7 +22,6 @@ public class LobbyFrame extends JFrame {
     private Player player;
 
     private Color backgroundColor = new Color(44, 62, 80);
-    private Color textColor = new Color(236, 240, 241);
 
     public LobbyFrame(Player player) {
         this.player = player;
@@ -44,7 +43,7 @@ public class LobbyFrame extends JFrame {
 
         setTitle("You are logged in as: " + player.getName());
 
-        playersModel = new DefaultListModel<String>();
+        playersModel = new DefaultListModel<>();
         final JList<String> players = new JList<String>(playersModel);
         players.setFont(new Font("EUROSTILE", Font.BOLD, 14));
         players.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -72,12 +71,13 @@ public class LobbyFrame extends JFrame {
 
         content.add(playButton, BorderLayout.SOUTH);
 
-        this.addWindowListener(new WindowAdapter() {
-                                   @Override
-                                   public void windowClosing(WindowEvent e) {
-                                       player.sendServerRequest((new Request("UserClosed", player.getName())));
-                                   }
-                               }
+        this.addWindowListener(
+                new WindowAdapter() {
+                    @Override
+                    public void windowClosing(WindowEvent e) {
+                        player.sendServerRequest((new Request("UserClosed", player.getName())));
+                    }
+                }
         );
 
         playButton.addActionListener(new ActionListener() {

@@ -11,11 +11,14 @@ import java.awt.event.WindowEvent;
  * Created by Kristin on 07-11-14.
  */
 public class ConfirmDialog extends JFrame implements ActionListener {
+    
     private JLabel textLabel;
     private JButton yesButton;
     private JButton noButton;
+    
     private Player player;
     private Request input;
+    
     private Timer time;
     private int timeRemaining = 20;
 
