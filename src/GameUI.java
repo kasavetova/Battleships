@@ -440,13 +440,16 @@ public class GameUI extends JFrame implements MouseListener {
             SimpleAttributeSet attr = new SimpleAttributeSet();
 
             StyleConstants.setForeground(attr, Color.blue);
-            if (username.equals("GAME")) StyleConstants.setForeground(attr, Color.ORANGE);
+
+            Color gameMessagesColor = new Color(255, 122, 71);
+            
+            if (username.equals("GAME")) StyleConstants.setForeground(attr, gameMessagesColor);
             StyleConstants.setBold(attr, true);
 
             try {
                 doc.insertString(doc.getLength(), "\n" + "[" + timeStamp + "] " + username + ": " + message, attr);
             } catch (BadLocationException e) {
-                e.printStackTrace();
+                e.printStackTrace(); // TODO
             }
             scrollToBottom();
         }
@@ -524,7 +527,7 @@ public class GameUI extends JFrame implements MouseListener {
             play.open(audioInputStream);
             play.start();
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "<html><<p style=\"color:rgb(255, 255, 255)\";font-weight:bold>The following error has occurred</p><p>" + e.getMessage() + "</p></html>",
+            JOptionPane.showMessageDialog(null, "<html><<p style=\"color:rgb(255, 255, 255)\";font-weight:bold>The following error has occurred: <br>" + e.getMessage() + "</p></html>",
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
 

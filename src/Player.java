@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class Player {
     
-    private int portNumber = 4446;
+    private int portNumber = 4444;
     private String serverIP = "localhost";
 
     private static String name;
@@ -70,7 +70,10 @@ public class Player {
                     JOptionPane.WARNING_MESSAGE);
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "<html><<p style=\"color:rgb(255, 255, 255)\";font-weight:bold>The following error has occurred</p><p>" + e.getMessage() + "</p></html>",
+
+            UIManager.put("OptionPane.background", new Color(44, 62, 80));
+            UIManager.put("Panel.background", new Color(44, 62, 80));
+            JOptionPane.showMessageDialog(null, "<html><<p style=\"color:rgb(255, 255, 255)\";font-weight:bold>The following error has occurred: <br>" + e.getMessage() + "</p></html>",
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -120,7 +123,7 @@ public class Player {
                                     isTheirTurn = true;
                                 } else if (input.getObject().equals("No")) {
                                     String text = "Game request denied from " + input.getOrigin() + ".";
-                                    UIManager UI = new UIManager();
+                                    
                                     UIManager.put("OptionPane.background", new Color(44, 62, 80));
                                     UIManager.put("Panel.background", new Color(44, 62, 80));
                                     JOptionPane.showMessageDialog(null, String.format("<html><<p style=\"color:rgb(255, 255, 255)\";font-weight:bold>%s</p></html>", text),
@@ -141,8 +144,6 @@ public class Player {
 
                                 UIManager.put("OptionPane.background", new Color(44, 62, 80));
                                 UIManager.put("Panel.background", new Color(44, 62, 80));
-
-
                                 JOptionPane.showMessageDialog(null, "<html><<p style=\"color:rgb(255, 255, 255)\";font-weight:bold>Your opponent quit! You win (by default)</p></html>",
                                         "Opponent Quit", JOptionPane.INFORMATION_MESSAGE);
 
@@ -154,7 +155,6 @@ public class Player {
 
                                     UIManager.put("OptionPane.background", new Color(44, 62, 80));
                                     UIManager.put("Panel.background", new Color(44, 62, 80));
-
                                     JOptionPane.showMessageDialog(null, "<html><<p style=\"color:rgb(255, 255, 255)\";font-weight:bold>Your opponent quit! You win (by default)</p></html>",
                                             "Opponent Quit", JOptionPane.INFORMATION_MESSAGE);
                                 }
@@ -196,8 +196,6 @@ public class Player {
 
                                 UIManager.put("OptionPane.background", new Color(44, 62, 80));
                                 UIManager.put("Panel.background", new Color(44, 62, 80));
-
-
                                 JOptionPane.showMessageDialog(null, "<html><<p style=\"color:rgb(255, 255, 255)\";font-weight:bold>Player is busy. Please try again later</p></html>",
                                         "Error", JOptionPane.ERROR_MESSAGE);
 
@@ -211,7 +209,10 @@ public class Player {
                     }
                 }
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, "<html><<p style=\"color:rgb(255, 255, 255)\";font-weight:bold>The following error has occurred</p><p>" + e.getMessage() + "</p></html>",
+
+                UIManager.put("OptionPane.background", new Color(44, 62, 80));
+                UIManager.put("Panel.background", new Color(44, 62, 80));
+                JOptionPane.showMessageDialog(null, "<html><<p style=\"color:rgb(255, 255, 255)\";font-weight:bold>The following error has occurred: <br>" + e.getMessage() + "</p></html>",
                         "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -235,7 +236,10 @@ public class Player {
         try {
             out.writeObject(request);
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "<html><<p style=\"color:rgb(255, 255, 255)\";font-weight:bold>The following error has occurred</p><p>" + e.getMessage() + "</p></html>",
+
+            UIManager.put("OptionPane.background", new Color(44, 62, 80));
+            UIManager.put("Panel.background", new Color(44, 62, 80));
+            JOptionPane.showMessageDialog(null, "<html><<p style=\"color:rgb(255, 255, 255)\";font-weight:bold>The following error has occurred: <br>" + e.getMessage() + "</p></html>",
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -355,7 +359,11 @@ public class Player {
                 }
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "<html><<p style=\"color:rgb(255, 255, 255)\";font-weight:bold>The following error has occurred</p><p>" + e.getMessage() + "</p></html>",
+
+            UIManager.put("OptionPane.background", new Color(44, 62, 80));
+            UIManager.put("Panel.background", new Color(44, 62, 80));
+
+            JOptionPane.showMessageDialog(null, "<html><<p style=\"color:rgb(255, 255, 255)\";font-weight:bold>The following error has occurred: <br>" + e.getMessage() + "</p></html>",
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
         sendServerRequest(new Request("Accepted"));
