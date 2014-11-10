@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
+ * A graphical user interface displaying the main game frame.
  * @author Team I-O
  */
 public class GameUI extends JFrame implements MouseListener {

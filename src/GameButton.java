@@ -2,7 +2,7 @@ import javax.swing.*;
 
 import java.awt.*;
 /**
- * 
+ * Represents a single button on the board
  * @author Team I-O
  *
  */

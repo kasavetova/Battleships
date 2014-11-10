@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 /**
- * 
+ * A graphical user interface displaying ship the placement screen.
  * @author Team 1-O
  *
  */
