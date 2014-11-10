@@ -1,12 +1,16 @@
 import javax.swing.*;
 import java.awt.*;
-import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
-
+/**
+ * Establishes a connection to the server and controls the user interface.
+ * 
+ * @author Team 1-O
+ *
+ */
 public class Player {
     private int portNumber = 4446;
     private String serverIP = "localhost";
@@ -24,16 +28,24 @@ public class Player {
     private ShipPlacementUI shipPlacement;
     private GameUI gameUI;
     private ConfirmDialog confirmDialog;
-
+    /**
+     * Runs the client side of the program.
+     * @param args 
+     */
     public static void main(String[] args) {
         new Player();
     }
-
+    /**
+     * Initialises the {@link WelcomeFrame}.
+     */
     public Player() {
         welcomeFrame = new WelcomeFrame(this);
         welcomeFrame.setVisible(true);
     }
-
+    /**
+     * Informs the server a new player has connected.
+     * 
+     */
     public void newConnection() {
         try {
             out = new ObjectOutputStream(socket.getOutputStream());
@@ -46,21 +58,28 @@ public class Player {
 
             ReceivingThread receivingThread = new ReceivingThread();
             receivingThread.start();
-        } catch (EOFException e) {
-            // EOFException - if this input stream reaches the end before
-            // reading eight bytes
+
         } catch (IOException e) {
 
             JOptionPane.showMessageDialog(null,
                     "Failed to connect to the server", "Server Error",
                     JOptionPane.WARNING_MESSAGE);
 
-        }
+        } catch (Exception e) {
+        	JOptionPane.showMessageDialog(null, "<html><<p style=\"color:rgb(135,206,235)\";font-weight:bold>The following error has occurred</p><p>"+e.getMessage()+"</p></html>",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        } 
     }
-
+    /**
+     * Handles requests from {@link ServerThread}.
+     * @author Team 1-O
+     *
+     */
     class ReceivingThread extends Thread {
         Request input;
-
+        /**
+         * Reads objects from {@link ServerThread} and does the corresponding action.
+         */
         @Override
         public void run() {
             try {
@@ -181,39 +200,40 @@ public class Player {
                             	gameUI.appendMessage("Enemy has won", "GAME");
                             	gameUI.setGameFinished(true);
                             	break;
-                            default:
-                                System.out.println(input);
-                                break;
+
                         }
                     }
                 }
-            } catch (EOFException e) {
-                // EOFException - if this input stream reaches the end
-                // before reading eight bytes
-            } catch (ClassCastException e) {
-                e.printStackTrace();
-                System.out.println("An error occurred.");
-                System.exit(1);
-            } catch (ClassNotFoundException | IOException e) {
-                e.printStackTrace();
-            }
+            } catch (Exception e) {
+            	JOptionPane.showMessageDialog(null, "<html><<p style=\"color:rgb(135,206,235)\";font-weight:bold>The following error has occurred</p><p>"+e.getMessage()+"</p></html>",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            } 
         }
     }
-
+    /**
+     * Closes {@link LobbyFrame} and opens {@link ShipPlacementUI}.
+     */
     public void gameFrame() {
         lobbyFrame.dispose();
         shipPlacement = new ShipPlacementUI(this);
         shipPlacement.setVisible(true);
     }
-
+    /**
+     * Sends a request to the server.
+     * @param request The request to be sent to the server
+     */
     public void sendServerRequest(Request request) {
         try {
             out.writeObject(request);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) {
+        	JOptionPane.showMessageDialog(null, "<html><<p style=\"color:rgb(135,206,235)\";font-weight:bold>The following error has occurred</p><p>"+e.getMessage()+"</p></html>",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        } 
     }
-
+    /**
+     * Denies the game request sent to the user, closes {@link ConfirmDialog}.
+     * @param input The request the user received from the server
+     */
     public void refuseRequest(Request input) {
         isBusy = false;
         lobbyFrame.enablePlayButton(true);
@@ -222,7 +242,10 @@ public class Player {
                 input.getOrigin(), "No"));
         confirmDialog.dispose();
     }
-
+    /**
+     * Accepts the game request sent to the user, closes {@link ConfirmDialog}.
+     * @param input the request the user received from the server
+     */
     public void acceptRequest(Request input) {
         isBusy = false;
         lobbyFrame.enablePlayButton(true);
@@ -233,7 +256,11 @@ public class Player {
         gameFrame();
         confirmDialog.dispose();
     }
-
+    /**
+     * Starts a new game for the user by creating a new instance of {@link GameGrid} and {@link Board}.
+     * @param grid the game grid to be created
+     * @param b the board to be created
+     */
     public void placementFinished(GameGrid grid, Board b) {
         gameUI = new GameUI(grid, this);
         gameUI.setVisible(true);
@@ -245,6 +272,12 @@ public class Player {
         }
     }
 
+    /**
+     * Checks if it's the user's turn to play and sends a new request to the server with the details 
+     * of the game move the user has made.
+     * @param request the request to be sent to the server
+     * @return true if it's the user's turn to play and they are successful in making a move; false otherwise. 
+     */
     public boolean makeMove(Request request) {
         if (isTheirTurn) {
             sendServerRequest(request);
@@ -256,15 +289,28 @@ public class Player {
         }
     }
 
+    /**
+     * Sends a request to the server informing that the user has finished their move.
+     * @param request the request sent to the server
+     */
     public void finishMove(Request request) {
         sendServerRequest(request);
         isTheirTurn = false;
     }
 
+    /**
+     * Returns the user's name
+     * @return user's name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Checks if the name is unique to play with.
+     * @param nameToCheck the name to be checked
+     * @return true if the name is unique; false otherwise.
+     */
     public boolean checkName(String nameToCheck) {
         try {
             socket = new Socket(serverIP, portNumber);
@@ -276,7 +322,6 @@ public class Player {
                     ArrayList<String> playersList = (ArrayList<String>) input.getObject();
                     if (playersList != null) {
                         for (int i = 0; i < playersList.size(); i++) {
-                            System.out.println(playersList);
                             if (playersList.get(i).toUpperCase().equals(nameToCheck.toUpperCase())) {
                                 sendServerRequest(new Request("Rejected"));
                                 out.close();
@@ -290,14 +335,17 @@ public class Player {
                     break;
                 }
             }
-        } catch (ClassNotFoundException | IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        } catch (Exception e) {
+        	JOptionPane.showMessageDialog(null, "<html><<p style=\"color:rgb(135,206,235)\";font-weight:bold>The following error has occurred</p><p>"+e.getMessage()+"</p></html>",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        } 
         sendServerRequest(new Request("Accepted"));
         return true;
     }
 
+    /**
+     * Closes other frames and opens up the {@link LobbyFrame}.
+     */
     public void reshowLobby() {
 
         lobbyFrame = new LobbyFrame(this);
@@ -313,6 +361,10 @@ public class Player {
         sendServerRequest(new Request("RetrieveLobby", name));
     }
 
+    /**
+     * Closes the {@link WelcomeFrame} and opens up {@link LobbyFrame} with the user's name added to it.
+     * @param name the user name to be added to the lobby
+     */
     public void closeWelcomeFrame(String name) {
         welcomeFrame.dispose();
         Player.name = name;
@@ -321,10 +373,18 @@ public class Player {
         newConnection();
     }
 
+    /**
+     * Sets the active status of a user.
+     * @param b the user's status
+     */
     public void setBusy(boolean b) {
         isBusy = b;
     }
 
+    /**
+     * Returns the name for the user's opponent.
+     * @return the opponent name
+     */
     public String getOpponentName() {
         return opponentName;
     }

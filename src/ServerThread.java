@@ -5,7 +5,9 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 /**
- * Handles the connection of an individual player
+ * Creates a new <code>Thread</code> and handles the server connection of an individual player.
+ *
+ * @see Thread
  *
  * @author Team 1-O
  */
@@ -23,11 +25,18 @@ public class ServerThread extends Thread {
     private Board gameBoard;
     private ArrayList<String> lobbyList;
 
+    /**
+     * Initialises a new client socket for the user and checks if the user's name is unique.
+     * @param clientSocket
+     */
     public ServerThread(Socket clientSocket) {
         this.clientSocket = clientSocket;
         checkName();
     }
 
+    /**
+     * Performs a check to see if the user's name is unique and sends a response back to the user informing them of the outcome.
+     */
     public void checkName() {
         try {
             out = new ObjectOutputStream(clientSocket.getOutputStream());
@@ -63,19 +72,28 @@ public class ServerThread extends Thread {
 
     }
 
+    /**
+     * Returns the user's name.
+     * @return the user's name
+     */
     public String getPlayerName() {
         return username;
     }
 
+    /**
+     * Creates a new server thread for the player.
+     */
     public void createPlayerThread() {
         playerNumber = threadInstances++;
-        System.out.println("Player " + playerNumber + " connected");
+        System.out.println(username + " has connected");
         inGame = false;
         serverThreads.add(this);
         this.start();
     }
 
-
+    /**
+     * Reads objects sent to the server steam from {@link Player} and does corresponding action. 
+     */
     public void run() {
         try {
             out = new ObjectOutputStream(clientSocket.getOutputStream());
@@ -199,22 +217,41 @@ public class ServerThread extends Thread {
         } catch (IOException e) {
             System.out.println("Exception caught when trying to listen on port "
                     + " or listening for a connection");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+        	System.out.println("The following error has occurred: \n" + e.getMessage());	
         }
     }
 
-    public void message(Request r) throws IOException {
-        out.writeObject(r);
+    /**
+     * Sends a <code>Request</code> to the {@link Player}.
+     * @param r the request to be sent
+     * @throws IOException when attempting to write to the output stream.
+     * 
+     * @see {@link Request}
+     */
+    public void message(Request r) {
+        try {
+			out.writeObject(r);
+		} catch (IOException e) {
+			System.out.println("The following error has occurred: \n" + e.getMessage());			
+		}
     }
 
-    public void messageAll(Request r) throws IOException {
+    /**
+     * Sends a server request to every {@link Player}.
+     * @param r the request to be sent
+     */
+    public void messageAll(Request r) {
         for (ServerThread st : serverThreads) {
             st.message(r);
         }
     }
 
-    public void messageAllActive(Request r) throws IOException {
+    /**
+     * Sends a server request to every {@link Player} that is not in game.
+     * @param r the request to be sent
+     */
+    public void messageAllActive(Request r) {
         for (ServerThread st : serverThreads) {
             if (!st.inGame) {
                 st.message(r);
@@ -222,29 +259,42 @@ public class ServerThread extends Thread {
         }
     }
 
-    public void setInGame(Boolean x) throws IOException {
-        inGame = x;
+    /**
+     * Sets the game status for the {@link Player}.
+     * @param status the game status for the {@link Player}
+     */
+    public void setInGame(Boolean status) {
+        inGame = status;
     }
 
+    /**
+     * Return the {@link Player} status.
+     * @return the Player status
+     */
     public boolean getPlayerStatus() {
         return isReady;
     }
 
+    /**
+     * Sets the {@link Player} status.
+     * @param status the Player status
+     */
     public void setPlayerStatus(Boolean status) {
         isReady = status;
     }
 
+    /**
+     * Sends a request to both players with the <code>Move</code> result.
+     * @param input the request received.
+     * 
+     * @see GameMove
+     */
     public void completeMove(Request input) {
         GameMove gm = (GameMove) input.getObject();
         String outcome = gameBoard.shoot(gm.getMoveCoordinates());
         gm.setMoveResult(outcome);
-        try {
-            message(new Request("MoveResult", input.getOrigin(), input.getDestination(), gm));
-            messageAll(new Request("MoveResult", input.getDestination(), input.getOrigin(), gm));
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        message(new Request("MoveResult", input.getOrigin(), input.getDestination(), gm));
+		messageAll(new Request("MoveResult", input.getDestination(), input.getOrigin(), gm));
 
     }
 
