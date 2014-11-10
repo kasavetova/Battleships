@@ -364,7 +364,6 @@ public class GameUI extends JFrame implements MouseListener {
             
             //Tell which ship has been destroyed
             appendMessage("Your " + x.substring(9) + " has been destroyed.", "GAME");
-            decrementLife();
         } else {
             playSound("missed");
             myBoardGrid.getButton(p.getX(), p.getY()).setIcon(new ImageIcon("res/splash.png"));
