@@ -8,23 +8,23 @@ Both client and server must have Java 1.7 or higher installed.
 ## Deployment
 
 ### Server
-For server deployment, please ensure the portNumber variable in Server.ServerMain.java in the 
+For server deployment, please ensure the portNumber variable in ServerMain.java in the 
 Server package has been assigned to the correct port number.
-**To run the server, run the file Server.ServerMain.java**
+**To run the server, run the file ServerMain.java**
 *Please note: there is no graphical interface for the server*
 
 ### Client
 
-For clients to connect to the server correctly, be sure the portNumber variable in Client.Player.java in the Client package has
-been assigned to the correct port number. To connect to a specific server ensure serverIP in Client.Player.java contains IP address of the 
+For clients to connect to the server correctly, be sure the portNumber variable in Player.java in the Client package has
+been assigned to the correct port number. To connect to a specific server ensure serverIP in Player.java contains IP address of the 
 server. To connect to a local server keep serverIP = "localhost";
-**To run the client, run the file Client.Player.java**
+**To run the client, run the file Player.java**
 
 ## Game Instructions
 *Please note: A server must have already been started before running the client. Otherwise you will get a 'Connect
 to Server' error when trying to enter a username.*
 
-1. Run Client.Player.java
+1. Run Player.java
 2. You will be met with a screen to enter a username; this will be used to identify yourself throughout the course of 
 the game.
 3. Once a valid username is entered, you will now be able to see all active users (those not in a game already) and can request
