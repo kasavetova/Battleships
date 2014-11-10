@@ -455,39 +455,53 @@ public class GameUI extends JFrame implements MouseListener {
         });
     }
     /**
-     * Starts {@link CountdownManager}
+     * Starts {@link CountdownManager}.
+     * 
      */
     public void startTimer() {
         cm.start();
     }
 
+    /**
+     * Set's the timer label to indicate it's the user's opponent's turn.
+     */
     public void setLabelText() {
         lblTimer.setText(opponentName + "'s turn.");
     }
 
-    public void endTurn() throws IOException {
+    /**
+     * Ends the user's turn when they have failed to make a move and sends a {@link Request} to the server.
+     */
+    public void endTurn() {
         appendMessage("Your time ran out. You missed your turn.", "GAME");
         Request request = new Request("MoveEnded", playerName, opponentName);
         player.finishMove(request);
     }
 
+    /**
+     * Decrements the opponent's life based on the number of ships that are destroyed. When all of the ships 
+     * are destroyed, the user is informed of their win. 
+     */
     public void decrementLife() {
         if (--shipsLeft == 0) {
             appendMessage("You have won", "GAME");
             player.makeMove(new Request("GameFinished", player.getName(), player.getOpponentName()));
-            setGameFinished(true);
+            setGameFinished();
         }
     }
 
-    public void setGameFinished(boolean b) {
-        gameFinished = b;
+    /**
+     * Ends the game for both players and sets the game to finished.
+     */
+    public void setGameFinished() {
+        gameFinished = false;
         cm.endGame();
 
     }
     /**
-     * Loads and plays a sound file
+     * Loads and plays a sound file.
      * 
-     * @param effect The sound to be play
+     * @param effect The sound to play
      */
     public void playSound(String effect) {
         
@@ -500,20 +514,11 @@ public class GameUI extends JFrame implements MouseListener {
             play = AudioSystem.getClip();
             play.open(audioInputStream);
             play.start();
-        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        } catch (Exception e) {
+        	JOptionPane.showMessageDialog(null, "<html><<p style=\"color:rgb(135,206,235)\";font-weight:bold>The following error has occurred</p><p>"+e.getMessage()+"</p></html>",
+                    "Error", JOptionPane.ERROR_MESSAGE);
         }
-        //FloatControl volume= (FloatControl)play.getControl(FloatControl.Type.MASTER_GAIN);
-        //volume.setValue(1.0f); // Reduce volume by 10 decibels.
 
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                // A GUI element to prevent the Clip's daemon Thread
-                // from terminating at the end of the main()
-                System.out.print("hiit!");
-            }
-        });
     }
 
 }
