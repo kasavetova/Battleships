@@ -1,7 +1,6 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 
 /**
  * Manages the player turns timer used in game.
@@ -48,11 +47,7 @@ public class CountdownManager {
                 timeLabel.setText(currentText.substring(0, currentText.lastIndexOf('(') + 1) + timeRemaining + ")");
             } else {
                 end();
-                try {
-                    gui.endTurn();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
+                gui.endTurn();
             }
         }
     }

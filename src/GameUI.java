@@ -1,22 +1,20 @@
-import javax.sound.sampled.*;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
-import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * 
  * @author Team I-O
- *
  */
 public class GameUI extends JFrame implements MouseListener {
 
@@ -53,7 +51,7 @@ public class GameUI extends JFrame implements MouseListener {
     private String opponentName;
 
     private Color backroundColor = new Color(44, 62, 80);
-    private Color textColor = new Color(236, 240, 241);
+    private Color textColor = new Color(255, 255, 255);
 
     private CountdownManager cm;
 
@@ -62,9 +60,9 @@ public class GameUI extends JFrame implements MouseListener {
 
     /**
      * Creates an instance of GameUI that allows you to play against a competitor
-     * 
+     *
      * @param myBoardGrid The {@link GameGrid} to be used
-     * @param player1 An instance of the {@link Player} class for corresponding with the server and controlling the UI
+     * @param player1     An instance of the {@link Player} class for corresponding with the server and controlling the UI
      */
     public GameUI(GameGrid myBoardGrid, Player player1) {
 
@@ -283,8 +281,10 @@ public class GameUI extends JFrame implements MouseListener {
     @Override
     public void mouseReleased(MouseEvent e) {
     }
+
     /**
      * Updates the enemy board, when a move is made
+     *
      * @param x Either "hit", "miss" or "destroyed"
      * @param p Coordinates of the move
      */
@@ -336,8 +336,10 @@ public class GameUI extends JFrame implements MouseListener {
             enemyBoardGrid.getButton(p.getX(), p.getY()).setBackground(Color.CYAN);
         }
     }
+
     /**
      * Updates the the own board, when a move is made
+     *
      * @param x Either "hit", "miss" or "destroyed"
      * @param p Coordinates of the move
      */
@@ -352,22 +354,22 @@ public class GameUI extends JFrame implements MouseListener {
             myBoardGrid.getButton(p.getX(), p.getY()).setEnabled(true);//to be fixed!!!
             //explodes
             myBoardGrid.getButton(p.getX(), p.getY()).setIcon(new ImageIcon("res/explosion.gif"));
-            
+
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {//sleeps for a bit to show the explosion
                 e.printStackTrace();
             }
-            
+
             //sets the flames to show that it was destroyed
             myBoardGrid.getButton(p.getX(), p.getY()).setIcon(new ImageIcon("res/destroyed.gif"));
             myBoardGrid.getButton(p.getX(), p.getY()).setBackground(null);//don't think is needed?
             //END OF ANIMATION!
-            
+
         } else if (x.startsWith("destroyed")) {
             playSound("destroyed");
             myBoardGrid.getButton(p.getX(), p.getY()).setBackground(Color.BLACK);
-            
+
             //START OF ANIMATION!
             myBoardGrid.getButton(p.getX(), p.getY()).setEnabled(true); //to be fixed!!!
             //explodes
@@ -381,7 +383,7 @@ public class GameUI extends JFrame implements MouseListener {
             myBoardGrid.getButton(p.getX(), p.getY()).setIcon(new ImageIcon("res/destroyed.gif"));
             myBoardGrid.getButton(p.getX(), p.getY()).setBackground(null);//don't think is needed?
             //END OF ANIMATION!
-            
+
             //Tell which ship has been destroyed
             appendMessage("Your " + x.substring(9) + " has been destroyed.", "GAME");
         } else {
@@ -391,51 +393,55 @@ public class GameUI extends JFrame implements MouseListener {
             myBoardGrid.getButton(p.getX(), p.getY()).setBackground(Color.CYAN);
         }
     }
+
     /**
      * Sends a chat message
+     *
      * @param message message to be sent
      */
     public void sendMessage(String message) {
         if (message.length() > 0) {
             DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
             Date date = new Date();
-            
+
             String timeStamp = dateFormat.format(date).substring(11);
             Document doc = txtAreaChat.getDocument();
-            
+
             SimpleAttributeSet attr = new SimpleAttributeSet();
             StyleConstants.setForeground(attr, Color.darkGray);
             StyleConstants.setBold(attr, true);
-            
+
             try {
                 doc.insertString(doc.getLength(), "\n" + "[" + timeStamp + "] " + playerName + ": " + message, attr);
             } catch (BadLocationException e) {
                 e.printStackTrace();
             }
-            
+
             player.sendServerRequest(new Request("SendMessage", playerName, opponentName, message));
             //scrollToBottom();
             txtChat.setText("");
         }
     }
+
     /**
      * Receives the chat message
-     * @param message message to be received 
+     *
+     * @param message  message to be received
      * @param username username of sender
      */
     public void appendMessage(String message, String username) {
         if (message.length() > 0) {
             DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
             Date date = new Date();
-            
+
             String timeStamp = dateFormat.format(date).substring(11);
             Document doc = txtAreaChat.getDocument();
             SimpleAttributeSet attr = new SimpleAttributeSet();
-            
+
             StyleConstants.setForeground(attr, Color.blue);
             if (username.equals("GAME")) StyleConstants.setForeground(attr, Color.ORANGE);
             StyleConstants.setBold(attr, true);
-            
+
             try {
                 doc.insertString(doc.getLength(), "\n" + "[" + timeStamp + "] " + username + ": " + message, attr);
             } catch (BadLocationException e) {
@@ -444,6 +450,7 @@ public class GameUI extends JFrame implements MouseListener {
             scrollToBottom();
         }
     }
+
     /**
      * Scrolls to chat to the bottom
      */
@@ -454,43 +461,58 @@ public class GameUI extends JFrame implements MouseListener {
             }
         });
     }
+
     /**
-     * Starts {@link CountdownManager}
+     * Starts {@link CountdownManager}.
      */
     public void startTimer() {
         cm.start();
     }
 
+    /**
+     * Set's the timer label to indicate it's the user's opponent's turn.
+     */
     public void setLabelText() {
         lblTimer.setText(opponentName + "'s turn.");
     }
 
-    public void endTurn() throws IOException {
+    /**
+     * Ends the user's turn when they have failed to make a move and sends a {@link Request} to the server.
+     */
+    public void endTurn() {
         appendMessage("Your time ran out. You missed your turn.", "GAME");
         Request request = new Request("MoveEnded", playerName, opponentName);
         player.finishMove(request);
     }
 
+    /**
+     * Decrements the opponent's life based on the number of ships that are destroyed. When all of the ships
+     * are destroyed, the user is informed of their win.
+     */
     public void decrementLife() {
         if (--shipsLeft == 0) {
             appendMessage("You have won", "GAME");
             player.makeMove(new Request("GameFinished", player.getName(), player.getOpponentName()));
-            setGameFinished(true);
+            setGameFinished();
         }
     }
 
-    public void setGameFinished(boolean b) {
-        gameFinished = b;
+    /**
+     * Ends the game for both players and sets the game to finished.
+     */
+    public void setGameFinished() {
+        gameFinished = false;
         cm.endGame();
 
     }
+
     /**
-     * Loads and plays a sound file
-     * 
-     * @param effect The sound to be play
+     * Loads and plays a sound file.
+     *
+     * @param effect The sound to play
      */
     public void playSound(String effect) {
-        
+
         String path = String.format("res/sounds/%s.wav", effect);
         System.out.println(path);
         File in = new File(path);
@@ -500,20 +522,11 @@ public class GameUI extends JFrame implements MouseListener {
             play = AudioSystem.getClip();
             play.open(audioInputStream);
             play.start();
-        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "<html><<p style=\"color:rgb(255, 255, 255)\";font-weight:bold>The following error has occurred</p><p>" + e.getMessage() + "</p></html>",
+                    "Error", JOptionPane.ERROR_MESSAGE);
         }
-        //FloatControl volume= (FloatControl)play.getControl(FloatControl.Type.MASTER_GAIN);
-        //volume.setValue(1.0f); // Reduce volume by 10 decibels.
 
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                // A GUI element to prevent the Clip's daemon Thread
-                // from terminating at the end of the main()
-                System.out.print("hiit!");
-            }
-        });
     }
 
 }

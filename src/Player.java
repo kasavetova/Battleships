@@ -5,13 +5,14 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+
 /**
  * Establishes a connection to the server and controls the user interface.
- * 
- * @author Team 1-O
  *
+ * @author Team 1-O
  */
 public class Player {
+    
     private int portNumber = 4446;
     private String serverIP = "localhost";
 
@@ -28,13 +29,16 @@ public class Player {
     private ShipPlacementUI shipPlacement;
     private GameUI gameUI;
     private ConfirmDialog confirmDialog;
+
     /**
      * Runs the client side of the program.
-     * @param args 
+     *
+     * @param args
      */
     public static void main(String[] args) {
         new Player();
     }
+
     /**
      * Initialises the {@link WelcomeFrame}.
      */
@@ -42,9 +46,9 @@ public class Player {
         welcomeFrame = new WelcomeFrame(this);
         welcomeFrame.setVisible(true);
     }
+
     /**
      * Informs the server a new player has connected.
-     * 
      */
     public void newConnection() {
         try {
@@ -66,17 +70,19 @@ public class Player {
                     JOptionPane.WARNING_MESSAGE);
 
         } catch (Exception e) {
-        	JOptionPane.showMessageDialog(null, "<html><<p style=\"color:rgb(135,206,235)\";font-weight:bold>The following error has occurred</p><p>"+e.getMessage()+"</p></html>",
+            JOptionPane.showMessageDialog(null, "<html><<p style=\"color:rgb(255, 255, 255)\";font-weight:bold>The following error has occurred</p><p>" + e.getMessage() + "</p></html>",
                     "Error", JOptionPane.ERROR_MESSAGE);
-        } 
+        }
     }
+
     /**
      * Handles requests from {@link ServerThread}.
-     * @author Team 1-O
      *
+     * @author Team 1-O
      */
     class ReceivingThread extends Thread {
         Request input;
+
         /**
          * Reads objects from {@link ServerThread} and does the corresponding action.
          */
@@ -113,11 +119,11 @@ public class Player {
                                     gameFrame();
                                     isTheirTurn = true;
                                 } else if (input.getObject().equals("No")) {
-                                    String text = "Game request denied from "+input.getOrigin()+".";
-                                    UIManager UI=new UIManager();
+                                    String text = "Game request denied from " + input.getOrigin() + ".";
+                                    UIManager UI = new UIManager();
                                     UIManager.put("OptionPane.background", new Color(44, 62, 80));
-                                    UIManager.put("Panel.background", new Color(44, 62, 80));                                
-                                    JOptionPane.showMessageDialog(null,String.format("<html><<p style=\"color:rgb(135,206,235)\";font-weight:bold>%s</p></html>",text),
+                                    UIManager.put("Panel.background", new Color(44, 62, 80));
+                                    JOptionPane.showMessageDialog(null, String.format("<html><<p style=\"color:rgb(255, 255, 255)\";font-weight:bold>%s</p></html>", text),
                                             "Game request denied", JOptionPane.ERROR_MESSAGE);
 
                                 }
@@ -136,20 +142,20 @@ public class Player {
                                 UIManager.put("OptionPane.background", new Color(44, 62, 80));
                                 UIManager.put("Panel.background", new Color(44, 62, 80));
 
-                                
-                                JOptionPane.showMessageDialog(null, "<html><<p style=\"color:rgb(135,206,235)\";font-weight:bold>Your opponent quit! You win (by default)</p></html>",
+
+                                JOptionPane.showMessageDialog(null, "<html><<p style=\"color:rgb(255, 255, 255)\";font-weight:bold>Your opponent quit! You win (by default)</p></html>",
                                         "Opponent Quit", JOptionPane.INFORMATION_MESSAGE);
-                                
+
                                 break;
                             case "UserWentBackToLobby":
                                 //Returning to lobby
                                 reshowLobby();
-                                if(!input.getObject().equals("Finished")){
+                                if (!input.getObject().equals("Finished")) {
 
                                     UIManager.put("OptionPane.background", new Color(44, 62, 80));
                                     UIManager.put("Panel.background", new Color(44, 62, 80));
 
-                                    JOptionPane.showMessageDialog(null, "<html><<p style=\"color:rgb(135,206,235)\";font-weight:bold>Your opponent quit! You win (by default)</p></html>",
+                                    JOptionPane.showMessageDialog(null, "<html><<p style=\"color:rgb(255, 255, 255)\";font-weight:bold>Your opponent quit! You win (by default)</p></html>",
                                             "Opponent Quit", JOptionPane.INFORMATION_MESSAGE);
                                 }
                                 break;
@@ -187,29 +193,30 @@ public class Player {
                             case "PlayerBusy":
                                 isBusy = false;
                                 lobbyFrame.enablePlayButton(true);
-                                
+
                                 UIManager.put("OptionPane.background", new Color(44, 62, 80));
                                 UIManager.put("Panel.background", new Color(44, 62, 80));
 
-                                
-                                JOptionPane.showMessageDialog(null, "<html><<p style=\"color:rgb(135,206,235)\";font-weight:bold>Player is busy. Please try again later</p></html>",
+
+                                JOptionPane.showMessageDialog(null, "<html><<p style=\"color:rgb(255, 255, 255)\";font-weight:bold>Player is busy. Please try again later</p></html>",
                                         "Error", JOptionPane.ERROR_MESSAGE);
 
                                 break;
                             case "GameFinished":
-                            	gameUI.appendMessage("Enemy has won", "GAME");
-                            	gameUI.setGameFinished(true);
-                            	break;
+                                gameUI.appendMessage("Enemy has won", "GAME");
+                                gameUI.setGameFinished();
+                                break;
 
                         }
                     }
                 }
             } catch (Exception e) {
-            	JOptionPane.showMessageDialog(null, "<html><<p style=\"color:rgb(135,206,235)\";font-weight:bold>The following error has occurred</p><p>"+e.getMessage()+"</p></html>",
+                JOptionPane.showMessageDialog(null, "<html><<p style=\"color:rgb(255, 255, 255)\";font-weight:bold>The following error has occurred</p><p>" + e.getMessage() + "</p></html>",
                         "Error", JOptionPane.ERROR_MESSAGE);
-            } 
+            }
         }
     }
+
     /**
      * Closes {@link LobbyFrame} and opens {@link ShipPlacementUI}.
      */
@@ -218,20 +225,24 @@ public class Player {
         shipPlacement = new ShipPlacementUI(this);
         shipPlacement.setVisible(true);
     }
+
     /**
      * Sends a request to the server.
+     *
      * @param request The request to be sent to the server
      */
     public void sendServerRequest(Request request) {
         try {
             out.writeObject(request);
         } catch (Exception e) {
-        	JOptionPane.showMessageDialog(null, "<html><<p style=\"color:rgb(135,206,235)\";font-weight:bold>The following error has occurred</p><p>"+e.getMessage()+"</p></html>",
+            JOptionPane.showMessageDialog(null, "<html><<p style=\"color:rgb(255, 255, 255)\";font-weight:bold>The following error has occurred</p><p>" + e.getMessage() + "</p></html>",
                     "Error", JOptionPane.ERROR_MESSAGE);
-        } 
+        }
     }
+
     /**
      * Denies the game request sent to the user, closes {@link ConfirmDialog}.
+     *
      * @param input The request the user received from the server
      */
     public void refuseRequest(Request input) {
@@ -242,8 +253,10 @@ public class Player {
                 input.getOrigin(), "No"));
         confirmDialog.dispose();
     }
+
     /**
      * Accepts the game request sent to the user, closes {@link ConfirmDialog}.
+     *
      * @param input the request the user received from the server
      */
     public void acceptRequest(Request input) {
@@ -256,10 +269,12 @@ public class Player {
         gameFrame();
         confirmDialog.dispose();
     }
+
     /**
      * Starts a new game for the user by creating a new instance of {@link GameGrid} and {@link Board}.
+     *
      * @param grid the game grid to be created
-     * @param b the board to be created
+     * @param b    the board to be created
      */
     public void placementFinished(GameGrid grid, Board b) {
         gameUI = new GameUI(grid, this);
@@ -273,10 +288,11 @@ public class Player {
     }
 
     /**
-     * Checks if it's the user's turn to play and sends a new request to the server with the details 
+     * Checks if it's the user's turn to play and sends a new request to the server with the details
      * of the game move the user has made.
+     *
      * @param request the request to be sent to the server
-     * @return true if it's the user's turn to play and they are successful in making a move; false otherwise. 
+     * @return true if it's the user's turn to play and they are successful in making a move; false otherwise.
      */
     public boolean makeMove(Request request) {
         if (isTheirTurn) {
@@ -291,6 +307,7 @@ public class Player {
 
     /**
      * Sends a request to the server informing that the user has finished their move.
+     *
      * @param request the request sent to the server
      */
     public void finishMove(Request request) {
@@ -300,6 +317,7 @@ public class Player {
 
     /**
      * Returns the user's name
+     *
      * @return user's name
      */
     public String getName() {
@@ -308,6 +326,7 @@ public class Player {
 
     /**
      * Checks if the name is unique to play with.
+     *
      * @param nameToCheck the name to be checked
      * @return true if the name is unique; false otherwise.
      */
@@ -336,9 +355,9 @@ public class Player {
                 }
             }
         } catch (Exception e) {
-        	JOptionPane.showMessageDialog(null, "<html><<p style=\"color:rgb(135,206,235)\";font-weight:bold>The following error has occurred</p><p>"+e.getMessage()+"</p></html>",
+            JOptionPane.showMessageDialog(null, "<html><<p style=\"color:rgb(255, 255, 255)\";font-weight:bold>The following error has occurred</p><p>" + e.getMessage() + "</p></html>",
                     "Error", JOptionPane.ERROR_MESSAGE);
-        } 
+        }
         sendServerRequest(new Request("Accepted"));
         return true;
     }
@@ -363,6 +382,7 @@ public class Player {
 
     /**
      * Closes the {@link WelcomeFrame} and opens up {@link LobbyFrame} with the user's name added to it.
+     *
      * @param name the user name to be added to the lobby
      */
     public void closeWelcomeFrame(String name) {
@@ -375,6 +395,7 @@ public class Player {
 
     /**
      * Sets the active status of a user.
+     *
      * @param b the user's status
      */
     public void setBusy(boolean b) {
@@ -383,6 +404,7 @@ public class Player {
 
     /**
      * Returns the name for the user's opponent.
+     *
      * @return the opponent name
      */
     public String getOpponentName() {
