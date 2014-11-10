@@ -198,7 +198,7 @@ public class Player {
                                 break;
                             case "GameFinished":
                             	gameUI.appendMessage("Enemy has won", "GAME");
-                            	gameUI.setGameFinished(true);
+                            	gameUI.setGameFinished();
                             	break;
 
                         }
