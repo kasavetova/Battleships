@@ -90,7 +90,7 @@ public class ServerThread extends Thread {
      */
     public void createPlayerThread() {
         playerNumber = threadInstances++;
-        System.out.println("Client.Player "+playerNumber + " has connected");
+        System.out.println("Player "+playerNumber + " has connected");
         inGame = false;
         serverThreads.add(this);
         this.start();
