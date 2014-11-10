@@ -10,7 +10,10 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
-
+/**
+ * A graphical user interface displaying current list of online players.
+ * Players select who they want to play with here.
+ */
 public class LobbyFrame extends JFrame {
 
     private JPanel content;
@@ -23,11 +26,17 @@ public class LobbyFrame extends JFrame {
 
     private Color backgroundColor = new Color(44, 62, 80);
 
+    /**
+     * @param player Player that is currently playing
+     */
     public LobbyFrame(Player player) {
         this.player = player;
         initialiseUI();
     }
 
+    /**
+     * Initialises and creates the frame and widgets.
+     */
     public void initialiseUI() {
 
         setSize(350, 350);
@@ -96,18 +105,34 @@ public class LobbyFrame extends JFrame {
         });
     }
 
+    /**
+     * Add a String to the current online list widget model.
+     * @param playername The name of the player to be added.
+     */
     public void addItem(String playername) {
         playersModel.addElement(playername);
     }
 
+    /**
+     * Remove a String from the current online list widget model.
+     * @param playername The name of the player to be removed.
+     */
     public void deleteItem(String playername) {
         playersModel.removeElement(playername);
     }
 
+    /**
+     * Enable the play button.
+     * @param b Whether or not the button should be enabled
+     */
     public void enablePlayButton(boolean b) {
         playButton.setEnabled(b);
     }
 
+    /**
+     * Update the lobby online list widget from the model.
+     * @param playersList The ArrayList of player names with which to populate the lobby
+     */
     public void updateLobby(ArrayList<String> playersList) {
         playersModel.clear();
         for (String aPlayersList : playersList) {
