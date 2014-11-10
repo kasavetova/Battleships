@@ -55,10 +55,17 @@ public class CountdownManager {
         }
     }
 
+    /**
+     * Signals the timer to end, and sets text to other player's turn.
+     */
     public void end() {
         countdownTimer.stop();
         timeLabel.setText(opponentName + "'s turn.");
     }
+
+    /**
+     * Stops the timer, signals the end of the game.
+     */
     public void endGame(){
     	if(countdownTimer != null){
     		countdownTimer.stop();
