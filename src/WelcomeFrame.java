@@ -17,7 +17,7 @@ public class WelcomeFrame extends JFrame implements ActionListener {
     private JPanel jpBattleshipText;
     private JPanel jpSouth;
 
-    private JLabel backround;
+    private JLabel background;
 
     private JLabel title;
     private JLabel prompt;
@@ -39,7 +39,7 @@ public class WelcomeFrame extends JFrame implements ActionListener {
      */
     public WelcomeFrame(Player player) {
         this.player = player;
-        backround = new JLabel(new ImageIcon("res/homeScreenImage.png"));
+        background = new JLabel(new ImageIcon("res/homeScreenImage.png"));
 
         //initialise UI
         setSize(new Dimension(350, 350));
