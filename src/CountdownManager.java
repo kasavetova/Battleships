@@ -13,7 +13,7 @@ public class CountdownManager {
     private GameUI gui;
     private String opponentName;
     private Timer countdownTimer;
-    private int timeRemaining = 20;
+    private int timeRemaining = 30;
 
     /**
      * @param timeLabel    The label in which to display the ticker
@@ -30,8 +30,8 @@ public class CountdownManager {
      * Starts the timer counting down from int timeRemaining.
      */
     public void start() {
-        timeRemaining = 20;
-        timeLabel.setText("Timer: (20)");
+        timeRemaining = 30;
+        timeLabel.setText("Timer: (30)");
         countdownTimer = new Timer(1000, new TimerListener());
         countdownTimer.start();
     }
