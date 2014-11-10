@@ -13,6 +13,8 @@ import java.util.ArrayList;
 /**
  * A graphical user interface displaying current list of online players.
  * Players select who they want to play with here.
+ * 
+ * @author Team 1-O
  */
 public class LobbyFrame extends JFrame {
 

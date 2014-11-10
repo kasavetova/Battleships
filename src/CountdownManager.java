@@ -4,7 +4,8 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 
 /**
- * @author Muntasir Syed
+ * Manages the player turns timer used in game.
+ * @author Team 1-O
  */
 
 public class CountdownManager {

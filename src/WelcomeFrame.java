@@ -7,6 +7,8 @@ import java.awt.event.ActionListener;
 /**
  * A graphical user interface displaying the welcome screen of the game.
  * Players enter their nickname to be identified with here.
+ * 
+ * @author Team 1-O
  */
 public class WelcomeFrame extends JFrame implements ActionListener {
 
