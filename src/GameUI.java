@@ -518,7 +518,6 @@ public class GameUI extends JFrame implements MouseListener {
     public void playSound(String effect) {
 
         String path = String.format("res/sounds/%s.wav", effect);
-        System.out.println(path);
         File in = new File(path);
         Clip play;
         try {

@@ -85,7 +85,7 @@ public class ServerThread extends Thread {
      */
     public void createPlayerThread() {
         playerNumber = threadInstances++;
-        System.out.println(username + " has connected");
+        System.out.println("Player "+playerNumber + " has connected");
         inGame = false;
         serverThreads.add(this);
         this.start();
@@ -122,7 +122,6 @@ public class ServerThread extends Thread {
                         messageAllActive(new Request("RetrieveLobby", "SERVER", input.getOrigin(), lobbyList));
                         break;
                     case "UserWentBackToLobby":
-                        System.out.println("backtolobby");
                         for (ServerThread st : serverThreads) {
                             if (st.getPlayerName().equals(input.getDestination())) {
                                 messageAllActive(new Request("UserJoinedLobby", "SERVER", "ALL", username));
@@ -194,7 +193,6 @@ public class ServerThread extends Thread {
                     break;
                 } else if (input.getActionType().equals("UserLeftGame")) {
                     //If user closes during shipselection/gameui
-                    System.out.println("Sending" + input);
                     for (ServerThread st : serverThreads) {
                         if (st.getPlayerName().equals(input.getDestination())) {
                             st.message(input);

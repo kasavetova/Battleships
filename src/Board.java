@@ -84,7 +84,6 @@ public class Board implements Serializable {
     public String shoot(Point point) {
 
         int shot = board[point.getX()][point.getY()];
-        System.out.println(shot);
         if (shot >= 0) {
             ships.get(shot).shoot();
             if (ships.get(shot).isDestroyed()) {
