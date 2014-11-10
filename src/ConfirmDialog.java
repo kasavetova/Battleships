@@ -8,7 +8,14 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 /**
- * Created by Kristin on 07-11-14.
+ * A custom dialog box class represented in a <code>JFrame</code>. Used to send game requests between players.
+ *
+ * @author Team 1-O
+ *
+ * @see javax.swing.Timer
+ * @see javax.swing.JFrame
+ * @see java.awt.event.ActionListener
+ * @see Player
  */
 public class ConfirmDialog extends JFrame implements ActionListener {
     
@@ -24,7 +31,13 @@ public class ConfirmDialog extends JFrame implements ActionListener {
 
     private Color backgroundColor = new Color(44, 62, 80);
     private Color textColor = new Color(236, 240, 241);
-    
+
+    /**
+     * Initialises the dialog box for the {@link Player} when a {@link Request} has been received.
+     *
+     * @param player the player to receive the dialog box
+     * @param input  the request received from the server
+     */
     public ConfirmDialog(final Player player, final Request input) {
 
         super("Game Request");
@@ -89,6 +102,10 @@ public class ConfirmDialog extends JFrame implements ActionListener {
         time.start();
     }
 
+    /**
+     * Handles the the user's answer for the game request.
+     * @param e the event that occurred
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == yesButton) {

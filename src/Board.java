@@ -5,15 +5,16 @@ import java.util.ArrayList;
 /**
  * Class that defines a board with ships of type Ship as a 2d array of integers.
  * -4 = DESTROYED, -3 = HIT, -2 = MISSED, -1 is EMPTY and 0 = SHIP
+ *
  * @author Team 1-O
  * @see Ship
  */
 
 public class Board implements Serializable {
 
-	private int[][] board;
-	private  ArrayList<Ship> ships;
-	private int indexOfShips;
+    private int[][] board;
+    private ArrayList<Ship> ships;
+    private int indexOfShips;
 
 
     /**
@@ -30,22 +31,18 @@ public class Board implements Serializable {
 
     /**
      * Adds a new Ship to the board.
+     *
      * @param ship The ship of type Ship to be added to the board.
      * @see Ship
      */
     public void addShip(Ship ship) {
-
         if (ship.getOrientation() == 'H') {
-            System.out.println("H" + ship.getStart().getX() + " " + ship.getStart().getY());
-            System.out.println(ship.getEnd().getX() + " " + ship.getEnd().getY());
             for (int i = ship.getStart().getY(); i <= ship.getEnd().getY(); i++) {
                 board[ship.getStart().getX()][i] = indexOfShips;
 
             }
         } else {
 
-            System.out.println("V" + ship.getStart().getX() + " " + ship.getStart().getY());
-            System.out.println(ship.getEnd().getX() + " " + ship.getEnd().getY());
             for (int i = ship.getStart().getX(); i <= ship.getEnd().getX(); i++) {
                 board[i][ship.getStart().getY()] = indexOfShips;
 
@@ -53,19 +50,18 @@ public class Board implements Serializable {
         }
         ships.add(ship);
         indexOfShips++;
-
-
     }
 
     /**
      * Getter for the board.
+     *
      * @return Returns the board in a 2D array of integers format.
      */
     public int[][] getBoard() {
         return board;
     }
 
-    /** 
+    /**
      * For debugging purposes. Prints current board to console.
      */
     public void printBoard() {
@@ -80,6 +76,7 @@ public class Board implements Serializable {
 
     /**
      * Method to shoot at a given point.
+     *
      * @param point The point towards which the shot is directed.
      * @return Returns a String with the outcome of the shot. "destroyed" if the entire ship was destroyed, "hit" if a part of the ship was hit but the ship is still alive, "missed" if the point shot is empty and "invalid" in case the move is invalid.
      * @see Point Ship
@@ -93,12 +90,10 @@ public class Board implements Serializable {
             if (ships.get(shot).isDestroyed()) {
                 board[point.getX()][point.getY()] = -4;
                 return "destroyed" + ships.get(shot).getName();
-
             }
 
             board[point.getX()][point.getY()] = -3;
             return "hit";
-
         }
 
         if (shot == -1) {
@@ -107,7 +102,6 @@ public class Board implements Serializable {
         }
 
         return "invalid";
-
     }
 
 }
