@@ -92,7 +92,6 @@ public class WelcomeFrame extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        // TODO Auto-generated method stub
 
         String text = enterName.getText();
         String nameToCheck = text.replaceAll("\\s+", "");

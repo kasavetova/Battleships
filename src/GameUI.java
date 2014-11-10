@@ -296,9 +296,8 @@ public class GameUI extends JFrame implements MouseListener {
 
             enemyBoardGrid.getButton(p.getX(), p.getY()).setBackground(Color.BLACK);
 
-            //TODO fix the change of color when button is disabled!
             //START OF ANIMATION!
-            enemyBoardGrid.getButton(p.getX(), p.getY()).setEnabled(true);//to be fixed!!!     
+            enemyBoardGrid.getButton(p.getX(), p.getY()).setEnabled(true);   
             //explodes
             enemyBoardGrid.getButton(p.getX(), p.getY()).setIcon(new ImageIcon("res/explosion.gif"));
             try {
@@ -350,16 +349,20 @@ public class GameUI extends JFrame implements MouseListener {
 
             myBoardGrid.getButton(p.getX(), p.getY()).setBackground(Color.BLACK);
 
-            //TODO fix the change of color when button is disabled!
             //START OF ANIMATION!
-            myBoardGrid.getButton(p.getX(), p.getY()).setEnabled(true);//to be fixed!!!
+            myBoardGrid.getButton(p.getX(), p.getY()).setEnabled(true);
             //explodes
             myBoardGrid.getButton(p.getX(), p.getY()).setIcon(new ImageIcon("res/explosion.gif"));
 
             try {
                 Thread.sleep(500);
-            } catch (InterruptedException e) {//sleeps for a bit to show the explosion
-                e.printStackTrace();
+            } catch (InterruptedException e) {
+            //sleeps for a bit to show the explosion
+                UIManager.put("OptionPane.background", new Color(44, 62, 80));
+                UIManager.put("Panel.background", new Color(44, 62, 80));
+
+                JOptionPane.showMessageDialog(null, "<html><<p style=\"color:rgb(255, 255, 255)\";font-weight:bold>The following error has occurred: <br>" + e.getMessage() + "</p></html>",
+                        "Error", JOptionPane.ERROR_MESSAGE);
             }
 
             //sets the flames to show that it was destroyed
@@ -449,7 +452,11 @@ public class GameUI extends JFrame implements MouseListener {
             try {
                 doc.insertString(doc.getLength(), "\n" + "[" + timeStamp + "] " + username + ": " + message, attr);
             } catch (BadLocationException e) {
-                e.printStackTrace(); // TODO
+                UIManager.put("OptionPane.background", new Color(44, 62, 80));
+                UIManager.put("Panel.background", new Color(44, 62, 80));
+
+                JOptionPane.showMessageDialog(null, "<html><<p style=\"color:rgb(255, 255, 255)\";font-weight:bold>The following error has occurred: <br>" + e.getMessage() + "</p></html>",
+                        "Error", JOptionPane.ERROR_MESSAGE);
             }
             scrollToBottom();
         }
@@ -526,6 +533,9 @@ public class GameUI extends JFrame implements MouseListener {
             play.open(audioInputStream);
             play.start();
         } catch (Exception e) {
+            UIManager.put("OptionPane.background", new Color(44, 62, 80));
+            UIManager.put("Panel.background", new Color(44, 62, 80));
+
             JOptionPane.showMessageDialog(null, "<html><<p style=\"color:rgb(255, 255, 255)\";font-weight:bold>The following error has occurred: <br>" + e.getMessage() + "</p></html>",
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
