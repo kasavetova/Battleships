@@ -88,7 +88,6 @@ public class WelcomeFrame extends JFrame implements ActionListener {
         connectButton.addActionListener(this);
         // Text field listener
         enterName.addActionListener(this);
-        pack();
     }
 
     @Override
